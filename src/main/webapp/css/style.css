@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+}
+
+div {
+    display: inline-block;
+    font-size: 18px;
+    margin: 5px;
+}
+
+#loginForm div, #registrationForm div, #userForm div {
+    width: 160px;
+    height: 24px;
+}
+
+#loginForm, #registrationForm, #userForm {
+    width: 380px;
+}
+
+div#roles {
+    width: 380px;
+}
+
+button {
+    width: 170px;
+    font-size: 16px;
+    height: 24px;
+    margin: 5px;
+}
+
+h3, h4 {
+    margin: 10px 20px;
+}
+
+.error {
+    font-size: 14px;
+    color: red;
+    display: block;
+    width: 100%;
+}
+
+.grey {
+    color: grey;
+}
+
+.green {
+    color: green;
+}
+
+/*            NAVIGATION MENU            */
+.navbar, .week {
+    margin: 0;
+    background-color: lightblue;
+    width: 100%;
+}
+
+.navbar div, .week div {
+    margin: 0;
+}
+
+.navbar a, .week a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    height: 30px;
+    padding: 5px;
+}
+
+.week div {
+    font-size: 16px;
+    height: 24px;
+    width: calc(100%/7 - 5px);
+}
+
+.week a {
+    height: 24px;
+    padding: 0px 0px 0px 10px;
+}
+
+.navbar a:hover, .week a:hover {
+    background-color: darkcyan;
+}
+
+div#authorized {
+    width: 150px;
+    float: right;
+}
+
+div span {
+    font-size: 14px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: cadetblue;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.lang {
+    min-width: 50px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/*********************************/
+
+div#shownDay, div#shownPage {
+    float: right;
+}
+
+#shownDay div a{
+    text-decoration: none;
+}
+
+/*            TABLES            */
+
+table {
+    width: calc(100% - 20px);
+    min-width: 800px;
+    margin: 10px;
+    font-size: 1.2em;
+}
+
+th, td {
+    padding: 5px;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: lightblue;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

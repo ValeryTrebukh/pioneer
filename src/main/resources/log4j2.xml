@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="Warn">
+    <Properties>
+        <Property name="path">${log4j:configParentLocation}/../../log/</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%date{DEFAULT} %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green} [%t] %F:%L - %msg%n"/>
+        </Console>
+
+        <RollingFile name="RollingFileDebug" fileName="${path}app.log"
+                     filePattern="${path}app-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz">
+            <PatternLayout pattern="%date{DEFAULT} %-5level [%t] %F:%L - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="2048 kB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+        <RollingFile name="RollingFileInfo" fileName="${path}app.log"
+                     filePattern="${path}app-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz">
+            <PatternLayout pattern="%date{DEFAULT} %-5level - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="512 kB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.elesson.pioneer" level="DEBUG" additivity="false">
+            <AppenderRef ref="RollingFileDebug"/>
+            <AppenderRef ref="RollingFileInfo"/>
+        </Logger>
+
+        <Root level="WARN">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
