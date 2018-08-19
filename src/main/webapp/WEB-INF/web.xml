@@ -36,6 +36,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>ticket</servlet-name>
+        <servlet-class>com.elesson.pioneer.web.servlet.TicketServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ticket</servlet-name>
+        <url-pattern>/ticket</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.elesson.pioneer.web.servlet.LoginServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
@@ -64,6 +74,10 @@
         <servlet-name>lang</servlet-name>
         <url-pattern>/lang</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>login</welcome-file>
+    </welcome-file-list>
 
     <filter>
         <filter-name>CharacterSetFilter</filter-name>

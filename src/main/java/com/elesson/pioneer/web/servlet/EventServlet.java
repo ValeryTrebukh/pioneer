@@ -3,6 +3,7 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.model.Event;
 import com.elesson.pioneer.model.Hall;
 import com.elesson.pioneer.model.Ticket;
+import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,28 +30,44 @@ public class EventServlet extends HttpServlet {
         String action = req.getParameter("action");
         String eid = req.getParameter("eid");
         String date = req.getParameter("date");
+        User aUser = (User)req.getSession().getAttribute("authUser");
 
         switch (action == null ? "view" : action) {
             case "create":
-                req.setAttribute("event", new Event(LocalDate.parse(date)));
-                req.setAttribute("action", action);
-                req.setAttribute("movies", mService.getActiveMovies());
-                req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+                if(aUser.getRole()==User.Role.ADMIN) {
+                    req.setAttribute("event", new Event(LocalDate.parse(date)));
+                    req.setAttribute("action", action);
+                    req.setAttribute("movies", mService.getActiveMovies());
+                    req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+                }
                 break;
             case "delete":
-                Event e = service.delete(Integer.parseInt(eid));
-                resp.sendRedirect("schedule?date=" + e.getDate().toString());
+                if(aUser.getRole()==User.Role.ADMIN) {
+                    Event e = service.delete(Integer.parseInt(eid));
+                    resp.sendRedirect("schedule?date=" + e.getDate().toString());
+                }
                 break;
             case "view":
-                req.setAttribute("event", service.getEvent(Integer.parseInt(eid)));
-                Hall hall = new Hall(4, 8);
-                hall.place(tService.getAllTicketsByEventId(Integer.parseInt(eid)));
+                int eventId = Integer.parseInt(eid);
+                req.setAttribute("event", service.getEvent(eventId));
+                Hall hall = new Hall(5, 8);
+                hall.place(tService.getAllTicketsByEventId(eventId));
+                validatePreorders(req, resp);
+                hall.place((List<Ticket>) req.getSession().getAttribute("tickets"));
                 req.setAttribute("hall", hall);
                 req.getRequestDispatcher("jsp/eventView.jsp").forward(req, resp);
                 break;
             default:
                 resp.sendRedirect("schedule");
                 break;
+        }
+    }
+
+    private void validatePreorders(HttpServletRequest req, HttpServletResponse resp) {
+        List<Ticket> tickets = (List<Ticket>) req.getSession().getAttribute("tickets");
+        if(tickets!=null && !tickets.isEmpty() && tickets.get(0).getEventId()!=Integer.parseInt(req.getParameter("eid"))) {
+            logger.info("Invalidation pre-orders: {} removed", tickets.size());
+            tickets.clear();
         }
     }
 

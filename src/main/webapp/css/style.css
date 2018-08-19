@@ -47,6 +47,10 @@ h3, h4 {
     color: green;
 }
 
+.blue {
+    color: blue;
+}
+
 /*            NAVIGATION MENU            */
 .navbar, .week {
     margin: 0;

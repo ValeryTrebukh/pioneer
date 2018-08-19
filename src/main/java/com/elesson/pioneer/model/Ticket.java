@@ -23,6 +23,10 @@ public class Ticket extends Entity {
         this(null, eventId, row, seat);
     }
 
+    public Ticket(Integer row, Integer seat) {
+        this(null, row, seat);
+    }
+
     public Integer getUserId() {
         return userId;
     }

@@ -13,7 +13,10 @@
             <div><a href="schedule?date=${day}"><fmt:message key="sch.${day.dayOfWeek}"/></a></div>
         </c:forEach>
     </div>
-    <div><a href="event?action=create&date=${date}"><fmt:message key="entity.add"/></a></div>
+    <c:if test="${sessionScope.authUser.role == 'ADMIN'}">
+        <div><a href="event?action=create&date=${date}"><fmt:message key="entity.add"/></a></div>
+    </c:if>
+    <br>
     <div id="chosenDay">
         <div><fmt:message key="sch.seances"/>${date}</div>
     </div>

@@ -10,12 +10,6 @@
         <div><a href="registration"><fmt:message key="app.register"/></a></div>
         <div class="dropdown">
             <div><a href="schedule"><fmt:message key="app.schedule"/></a></div>
-            <div class="dropdown-content">
-                <c:forEach items="${sessionScope.masters}" var="master">
-                    <jsp:useBean id="master" type="com.elesson.pioneer.model.User"/>
-                    <a href="schedule?mid=${master.id}">${master.name}</a>
-                </c:forEach>
-            </div>
         </div>
         <c:if test="${sessionScope.authUser != null}">
             <div><a href="schedule?action=my"><fmt:message key="app.my"/></a></div>
