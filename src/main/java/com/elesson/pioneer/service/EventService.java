@@ -11,4 +11,6 @@ public interface EventService {
     Event getEvent(Integer id);
 
     Event delete(int id);
+
+    Event save(Event event, Integer mid, Integer sid);
 }

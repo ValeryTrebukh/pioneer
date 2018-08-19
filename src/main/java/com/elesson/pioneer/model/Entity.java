@@ -1,15 +1,13 @@
 package com.elesson.pioneer.model;
 
-public class Entity {
+public abstract class Entity {
     protected Integer id;
-    protected String name;
 
     public Entity() {
     }
 
-    public Entity(Integer id, String name) {
+    public Entity(Integer id) {
         this.id = id;
-        this.name = name;
     }
 
     public Integer getId() {
@@ -18,10 +16,6 @@ public class Entity {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean isNew() {

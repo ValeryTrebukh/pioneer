@@ -28,7 +28,7 @@
         <c:forEach items="${events}" var="event">
             <jsp:useBean id="event" type="com.elesson.pioneer.model.Event"/>
             <tr>
-                <td><a href="event?action=view&eid=${event.id}"><c:out value="${event.name}"/></a></td>
+                <td><a href="event?action=view&eid=${event.id}"><c:out value="${event.movie.name}"/></a></td>
                 <td>${event.seance.start}</td>
                 <td><a href="event?action=delete&eid=${event.id}"><fmt:message key="entity.delete"/></a></td>
             </tr>

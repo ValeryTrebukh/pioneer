@@ -13,13 +13,18 @@ ${event.movie.name}<br>
 ${event.movie.genre}<br>
 ${event.movie.duration}<br>
 ${event.movie.year}
-<br>
+<br><br>
 select sits
-<br>
-<c:forEach items="${nextWeek}" var="day">
-    <jsp:useBean id="day" type="java.time.LocalDate"/>
-    <div><a href="schedule?date=${day}"><fmt:message key="sch.${day.dayOfWeek}"/></a></div>
-</c:forEach>
+<table>
+    <jsp:useBean id="hall" scope="request" type="com.elesson.pioneer.model.Hall"/>
+    <c:forEach items="${hall.rows}" var="row">
+        <tr>
+        <c:forEach items="${row.seats}" var="seat">
+            <td><c:out value="${seat}"/></td>
+        </c:forEach>
+        </tr>
+    </c:forEach>
+</table>
 
 
 </body>

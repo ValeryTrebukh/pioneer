@@ -7,7 +7,7 @@ public class Seance extends Entity {
     private LocalTime start;
 
     public Seance(Integer id, LocalTime start) {
-        super(id, null);
+        super(id);
         this.start = start;
     }
 

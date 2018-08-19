@@ -47,7 +47,12 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getMovies() {
-        return movieDao.getMovies();
+    public List<Movie> getAllMovies() {
+        return movieDao.getAllMovies();
+    }
+
+    @Override
+    public List<Movie> getActiveMovies() {
+        return movieDao.getActiveMovies();
     }
 }

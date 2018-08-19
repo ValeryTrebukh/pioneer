@@ -28,6 +28,7 @@
         <th><fmt:message key="movie.genre"/></th>
         <th><fmt:message key="movie.duration"/></th>
         <th><fmt:message key="movie.year"/></th>
+        <th><fmt:message key="movie.status"/></th>
         <th></th>
         <th></th>
     </tr>
@@ -39,8 +40,10 @@
             <td>${movie.genre}</td>
             <td>${movie.duration}</td>
             <td>${movie.year}</td>
-            <td><a href="movies?action=edit&movieid=${movie.id}"><fmt:message key="entity.edit"/></a></td>
-            <td><a href="movies?action=delete&movieid=${movie.id}"><fmt:message key="entity.delete"/></a></td>
+            <td><c:if test="${movie.isActive()}">Active</c:if>
+                <c:if test="${!movie.isActive()}">Archived</c:if></td>
+            <td><a href="movies?action=edit&mid=${movie.id}"><fmt:message key="entity.edit"/></a></td>
+            <td><a href="movies?action=delete&mid=${movie.id}"><fmt:message key="entity.delete"/></a></td>
         </tr>
     </c:forEach>
 </table>

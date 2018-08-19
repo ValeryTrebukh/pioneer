@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface MovieDao {
 
-    List<Movie> getMovies();
+    List<Movie> getAllMovies();
+
+    List<Movie> getActiveMovies();
 
     Movie save(Movie movie);
 

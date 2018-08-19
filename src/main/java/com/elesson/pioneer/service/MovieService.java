@@ -14,5 +14,7 @@ public interface MovieService {
 
     void update(Movie movie);
 
-    List<Movie> getMovies();
+    List<Movie> getAllMovies();
+
+    List<Movie> getActiveMovies();
 }

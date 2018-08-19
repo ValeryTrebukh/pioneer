@@ -20,7 +20,8 @@ CREATE TABLE movies
   name        VARCHAR (255) NOT NULL,
   genre       VARCHAR (255) NOT NULL,
   duration    INTEGER NOT NULL,
-  year        INTEGER NOT NULL
+  year        INTEGER NOT NULL,
+  active      BOOLEAN NOT NULL
 );
 
 CREATE TABLE seances
@@ -59,12 +60,12 @@ INSERT INTO users (name, email, password, role) VALUES
   ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
   ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9', 'CLIENT');
 
-INSERT INTO movies (name, genre, duration, year) VALUES
-  ('Terminator', 'science-fiction action', 107, 1984),
-  ('Titanic', 'epic romance', 195, 1997),
-  ('Fifty Shades of Grey', 'erotic romantic drama', 125, 2015),
-  ('Monsters, Inc.', 'computer-animated comedy', 92, 2001),
-  ('Левиафан', 'драма', 142, 2014);
+INSERT INTO movies (name, genre, duration, year, active) VALUES
+  ('Terminator', 'science-fiction action', 107, 1984, true),
+  ('Titanic', 'epic romance', 195, 1997, true),
+  ('Fifty Shades of Grey', 'erotic romantic drama', 125, 2015, true),
+  ('Monsters, Inc.', 'computer-animated comedy', 92, 2001, true),
+  ('Левиафан', 'драма', 142, 2014, true);
 
 INSERT INTO seances (time) VALUES
   ('9:00:00'),

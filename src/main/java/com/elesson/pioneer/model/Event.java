@@ -13,7 +13,7 @@ public class Event extends Entity {
     }
 
     public Event(Integer id, LocalDate date, Seance seance, Movie movie) {
-        super(id, movie==null?null:movie.getName());
+        super(id);
         this.date = date;
         this.seance = seance;
         this.movie = movie;
@@ -33,6 +33,10 @@ public class Event extends Entity {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public void setSeance(Seance seance) {
+        this.seance = seance;
     }
 
     @Override

@@ -34,17 +34,27 @@ public class MovieDaoImpl implements MovieDao {
     }
 
     @Override
-    public List<Movie> getMovies() {
+    public List<Movie> getAllMovies() {
+        return getMovies("SELECT * FROM movies");
+    }
+
+    @Override
+    public List<Movie> getActiveMovies() {
+        return getMovies("SELECT * FROM movies WHERE active=true");
+    }
+
+    private List<Movie> getMovies(String query) {
         List<Movie> movies = new ArrayList<>();
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM movies");
+            ResultSet rs = st.executeQuery(query);
             while(rs.next()) {
                 Movie movie = new Movie(rs.getInt("movies.mid"),
                         rs.getString("movies.name"),
                         rs.getString("movies.genre"),
                         rs.getInt("movies.duration"),
-                        rs.getInt("movies.year"));
+                        rs.getInt("movies.year"),
+                        rs.getBoolean("active"));
                 movies.add(movie);
                 logger.info("Movie obtained: " + movie.toString());
             }
@@ -60,18 +70,18 @@ public class MovieDaoImpl implements MovieDao {
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             PreparedStatement pst;
             if(movie.isNew()) {
-                String query = "INSERT INTO movies (name, genre, duration, year) VALUES (?, ?, ?, ?)";
-                pst = con.prepareInsertStatement(query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear());
+                String query = "INSERT INTO movies (name, genre, duration, year, active) VALUES (?, ?, ?, ?, ?)";
+                pst = con.prepareInsertStatement(query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive());
                 if(pst.executeUpdate()==1) {
                     ResultSet rs = pst.getGeneratedKeys();
                     rs.next();
                     movie.setId(rs.getInt(1));
                     rs.close();
                 }
-                logger.info("New film created with id={}", movie.getId());
+                logger.info("New movie created with id={}", movie.getId());
             } else {
-                String query = "UPDATE movies SET name=?, genre=?, duration=?, year=? WHERE mid=?";
-                pst = con.prepareStatement(query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.getId());
+                String query = "UPDATE movies SET name=?, genre=?, duration=?, year=?, active=? WHERE mid=?";
+                pst = con.prepareStatement(query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive(), movie.getId());
 
                 if(pst.executeUpdate()!=1) {
                     logger.error("Movie was not not created");
@@ -117,7 +127,7 @@ public class MovieDaoImpl implements MovieDao {
             if(rs.next()) {
                 movie = new Movie(rs.getInt("mid"), rs.getString("name"),
                         rs.getString("genre"), rs.getInt("duration"),
-                        rs.getInt("year"));
+                        rs.getInt("year"), rs.getBoolean("active"));
             }
             rs.close();
         } catch (SQLException e) {

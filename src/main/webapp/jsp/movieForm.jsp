@@ -16,7 +16,7 @@
 <jsp:useBean id="movie" type="com.elesson.pioneer.model.Movie" scope="request"/>
 <div id="movieForm">
     <form method="post" action="movies">
-        <input type="hidden" name="movieid" value="${movie.id}">
+        <input type="hidden" name="mid" value="${movie.id}">
 
         <div><label><fmt:message key="entity.name"/></label></div>
         <div><input type="text" value="${movie.name}" name="name" required></div> <br>
@@ -42,6 +42,11 @@
         <div><label><fmt:message key="movie.year"/></label></div>
         <div><input type="text" value="${movie.year}" name="year" required></div> <br>
 
+        <div><label><fmt:message key="movie.status"/></label></div>
+        <div><select name="status">
+                <option value="true"><fmt:message key="movie.active"/></option>
+                <option value="false"><fmt:message key="movie.archived"/></option>
+            </select></div>
         </br>
         <button type="submit"><fmt:message key="entity.save"/></button>
         <button onclick="window.history.back()" type="button"><fmt:message key="entity.cancel"/></button>

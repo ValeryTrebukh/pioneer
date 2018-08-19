@@ -13,19 +13,22 @@
     <form method="post" action="event">
         <input type="hidden" name="eid" value="${event.id}">
 
+        <div><input type="hidden" name="date" value="${event.date}"></div> <br>
+
         <div><label><fmt:message key="entity.name"/></label></div>
-        <select name="name">
+        <select name="mid">
             <c:forEach items="${movies}" var="movie">
                 <jsp:useBean id="movie" type="com.elesson.pioneer.model.Movie"/>
-                <option value="${movie.id}">${movie.id}</option>
+                <option value="${movie.id}">${movie.name}</option>
             </c:forEach>
         </select>
 
-        <select name="seance">
+        <div><label><fmt:message key="movie.start"/></label></div>
+        <select name="sid">
             <option value="1">9:00</option>
-            <option value="1">13:00</option>
-            <option value="1">18:00</option>
-            <option value="1">22:00</option>
+            <option value="2">13:00</option>
+            <option value="3">18:00</option>
+            <option value="4">22:00</option>
         </select>
 
         </br>

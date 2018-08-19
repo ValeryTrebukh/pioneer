@@ -1,6 +1,7 @@
 package com.elesson.pioneer.model;
 
 public class User extends Entity {
+    private String name;
     private String email;
     private String password;
     private Role role;
@@ -9,7 +10,8 @@ public class User extends Entity {
     }
 
     public User(Integer id, String name, String email, String password, Role role) {
-        super(id, name);
+        super(id);
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -17,6 +19,10 @@ public class User extends Entity {
 
     public User(String name, String email, String password, Role role) {
         this(null, name, email, password, role);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {

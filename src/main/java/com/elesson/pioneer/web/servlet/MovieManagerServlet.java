@@ -27,17 +27,17 @@ public class MovieManagerServlet extends HttpServlet {
             case "edit":
             case "create":
                 final Movie movie = "create".equals(action) ?
-                        new Movie() : service.get(Integer.parseInt(req.getParameter("movieid")));
+                        new Movie() : service.get(Integer.parseInt(req.getParameter("mid")));
                 logger.debug("movie received");
                 req.setAttribute("movie", movie);
                 req.getRequestDispatcher("jsp/movieForm.jsp").forward(req, resp);
                 break;
             case "delete":
-                service.delete(Integer.parseInt(req.getParameter("movieid")));
+                service.delete(Integer.parseInt(req.getParameter("mid")));
                 resp.sendRedirect("movies");
                 break;
             case "all":
-                List<Movie> movies = service.getMovies();
+                List<Movie> movies = service.getAllMovies();
 
                 req.setAttribute("movies", movies);
                 req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
@@ -55,15 +55,16 @@ public class MovieManagerServlet extends HttpServlet {
         String genre = req.getParameter("genre");
         String duration = req.getParameter("duration");
         String year = req.getParameter("year");
+        String active = req.getParameter("status");
 
-        Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year));
+        Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year), Boolean.valueOf(active));
 
         MovieService service = MovieServiceImpl.getMovieService();
-        if (req.getParameter("movieid").isEmpty()) {
+        if (req.getParameter("mid").isEmpty()) {
             service.create(movie);
         }
         else {
-            movie.setId(Integer.parseInt(req.getParameter("movieid")));
+            movie.setId(Integer.parseInt(req.getParameter("mid")));
             service.update(movie);
         }
         resp.sendRedirect("movies");

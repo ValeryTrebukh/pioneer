@@ -10,7 +10,7 @@ public interface EventDao {
 
     Event getEvent(Integer id);
 
-    Event save(Event movie);
+    Event save(Event event, Integer mid, Integer sid);
 
     Event delete(int id);
 }

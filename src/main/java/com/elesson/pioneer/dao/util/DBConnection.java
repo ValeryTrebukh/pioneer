@@ -66,6 +66,9 @@ public class DBConnection implements AutoCloseable {
             if (values[i] instanceof Date) {
                 pst.setDate(i+1, (Date) values[i]);
             }
+            else if (values[i] instanceof Boolean) {
+                pst.setBoolean(i+1, (Boolean) values[i]);
+            }
             else if (values[i] instanceof Integer) {
                 pst.setInt(i+1, (Integer) values[i]);
             }

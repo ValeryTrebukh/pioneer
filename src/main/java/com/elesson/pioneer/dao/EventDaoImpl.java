@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,8 @@ public class EventDaoImpl implements EventDao {
                                 rs.getString("m.name"),
                                 rs.getString("m.genre"),
                                 rs.getInt("m.duration"),
-                                rs.getInt("m.year")));
+                                rs.getInt("m.year"),
+                                rs.getBoolean("active")));
             }
             rs.close();
         } catch (SQLException e) {
@@ -81,7 +83,8 @@ public class EventDaoImpl implements EventDao {
                                 rs.getString("m.name"),
                                 rs.getString("m.genre"),
                                 rs.getInt("m.duration"),
-                                rs.getInt("m.year")));
+                                rs.getInt("m.year"),
+                                rs.getBoolean("active")));
                 events.add(event);
                 logger.info("Event obtained: " + event.toString());
             }
@@ -93,8 +96,28 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
-    public Event save(Event movie) {
-        return null;
+    public Event save(Event event, Integer mid, Integer sid) {
+        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
+            PreparedStatement pst;
+
+            String query = "INSERT INTO events (movie_id, date, seance_id) VALUES (?, ?, ?)";
+            pst = con.prepareInsertStatement(query, mid, Date.valueOf(event.getDate()), sid);
+            if(pst.executeUpdate()==1) {
+                ResultSet rs = pst.getGeneratedKeys();
+                rs.next();
+                event.setId(rs.getInt(1));
+                rs.close();
+            }
+            logger.info("New event created with id={}", event.getId());
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate")) {
+                logger.error(e);
+//                throw new DuplicateEntityException();
+            }
+            logger.error(e);
+//            throw new DBException("Unable to save new record");
+        }
+        return event;
     }
 
     @Override
