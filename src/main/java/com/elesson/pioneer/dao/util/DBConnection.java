@@ -34,6 +34,18 @@ public class DBConnection implements AutoCloseable {
         }
     }
 
+    public void setAutoCommit(boolean value) throws SQLException {
+        connection.setAutoCommit(value);
+    }
+
+    public void commit() throws SQLException {
+        connection.commit();
+    }
+
+    public void rollback() throws SQLException {
+        connection.rollback();
+    }
+
     public Statement createStatement() throws SQLException {
         st = connection.createStatement();
         return st;

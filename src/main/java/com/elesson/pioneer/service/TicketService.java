@@ -10,7 +10,5 @@ public interface TicketService {
 
     List<Ticket> getAllTicketsByUserId(Integer id);
 
-    Ticket delete(Integer id);
-
-    Ticket save(Ticket ticket);
+    int save(List<Ticket> tickets);
 }

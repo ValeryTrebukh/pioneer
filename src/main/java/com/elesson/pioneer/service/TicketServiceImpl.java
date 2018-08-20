@@ -37,12 +37,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket delete(Integer id) {
-        return ticketDao.delete(id);
-    }
-
-    @Override
-    public Ticket save(Ticket ticket) {
-        return ticketDao.save(ticket);
+    public int save(List<Ticket> tickets) {
+        return ticketDao.save(tickets);
     }
 }

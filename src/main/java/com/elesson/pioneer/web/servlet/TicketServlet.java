@@ -63,4 +63,16 @@ public class TicketServlet extends HttpServlet {
         }
         return true;
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
+        if(preOrdered!=null && !preOrdered.isEmpty()) {
+            TicketService service = TicketServiceImpl.getTicketService();
+            service.save(preOrdered);
+        }
+        int eid = Integer.parseInt(req.getParameter("eid"));
+        resp.sendRedirect("event?action=view&eid=" + eid);
+    }
 }

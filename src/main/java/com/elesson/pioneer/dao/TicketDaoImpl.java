@@ -65,12 +65,46 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public Ticket delete(Integer id) {
-        return null;
-    }
-
-    @Override
-    public Ticket save(Ticket ticket) {
-        return null;
+    public int save(List<Ticket> tickets) {
+        int count = 0;
+        DBConnection con = ConnectionPool.getPool().getConnection();
+        try {
+            PreparedStatement pst;
+            String query = "INSERT INTO tickets (event_id, user_id, row, seat) VALUES (?, ?, ?, ?)";
+            con.setAutoCommit(false);
+            for(Ticket t : tickets) {
+                pst = con.prepareInsertStatement(query, t.getEventId(), t.getUserId(), t.getRow(), t.getSeat());
+                if(pst.executeUpdate()==1) {
+                    ResultSet rs = pst.getGeneratedKeys();
+                    rs.next();
+                    t.setId(rs.getInt(1));
+                    rs.close();
+                }
+                logger.info("New ticket created with id={}", t.getId());
+                count++;
+            }
+            con.commit();
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate")) {
+                logger.error(e);
+//                throw new DuplicateEntityException();
+            }
+            logger.error(e);
+            try {
+                con.rollback();
+            } catch (SQLException e1) {
+                logger.error(e1);
+            }
+//            throw new DBException("Unable to save new records");
+        }
+        finally {
+            try {
+                con.setAutoCommit(true);
+                con.close();
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
+        return count;
     }
 }
