@@ -12,7 +12,7 @@
             <div><a href="schedule"><fmt:message key="app.schedule"/></a></div>
         </div>
         <c:if test="${sessionScope.authUser != null}">
-            <div><a href="schedule?action=my"><fmt:message key="app.my"/></a></div>
+            <div><a href="my"><fmt:message key="app.my"/></a></div>
             <c:if test="${sessionScope.authUser.role == 'ADMIN'}">
                 <div><a href="users"><fmt:message key="app.users"/></a></div>
                 <div><a href="movies"><fmt:message key="app.movies"/></a></div>

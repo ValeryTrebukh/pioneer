@@ -6,6 +6,8 @@ public class Ticket extends Entity {
     private Integer eventId;
     private Integer row;
     private Integer seat;
+    private User user;
+    private Event event;
 
     public Ticket(Integer id, Integer userId, Integer eventId, Integer row, Integer seat) {
         super(id);
@@ -41,6 +43,22 @@ public class Ticket extends Entity {
 
     public Integer getSeat() {
         return seat;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Override

@@ -56,13 +56,23 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>scheduleServlet</servlet-name>
+        <servlet-name>schedule</servlet-name>
         <servlet-class>com.elesson.pioneer.web.servlet.ScheduleServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>scheduleServlet</servlet-name>
+        <servlet-name>schedule</servlet-name>
         <url-pattern>/schedule</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>my</servlet-name>
+        <servlet-class>com.elesson.pioneer.web.servlet.MyServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>my</servlet-name>
+        <url-pattern>/my</url-pattern>
     </servlet-mapping>
 
     <servlet>

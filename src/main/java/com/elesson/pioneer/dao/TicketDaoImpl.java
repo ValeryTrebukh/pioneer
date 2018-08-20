@@ -2,7 +2,7 @@ package com.elesson.pioneer.dao;
 
 import com.elesson.pioneer.dao.util.ConnectionPool;
 import com.elesson.pioneer.dao.util.DBConnection;
-import com.elesson.pioneer.model.Ticket;
+import com.elesson.pioneer.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,13 +33,23 @@ public class TicketDaoImpl implements TicketDao {
     }
     @Override
     public List<Ticket> getAllTicketsByEventId(Integer id) {
-        String query = "SELECT * FROM tickets WHERE event_id=?";
+        String query = "SELECT * FROM tickets t " +
+                "INNER JOIN events e ON t.event_id = e.eid " +
+                "INNER JOIN users u ON t.user_id = u.uid " +
+                "INNER JOIN movies m on e.movie_id = m.mid " +
+                "INNER JOIN seances s on e.seance_id = s.sid " +
+                "WHERE event_id=?";
         return getAllById(query, id);
     }
 
     @Override
     public List<Ticket> getAllTicketsByUserId(Integer id) {
-        String query = "SELECT * FROM tickets WHERE user_id=?";
+        String query = "SELECT * FROM tickets t " +
+                "INNER JOIN events e ON t.event_id = e.eid " +
+                "INNER JOIN users u ON t.user_id = u.uid " +
+                "INNER JOIN movies m on e.movie_id = m.mid " +
+                "INNER JOIN seances s on e.seance_id = s.sid " +
+                "WHERE user_id=?";
         //TODO date after today
         return getAllById(query, id);
     }
@@ -53,6 +63,23 @@ public class TicketDaoImpl implements TicketDao {
                 Ticket ticket = new Ticket(rs.getInt("tid"),
                         rs.getInt("user_id"), rs.getInt("event_id"),
                         rs.getInt("row"), rs.getInt("seat"));
+
+                ticket.setUser(new User(rs.getInt("u.uid"),
+                        rs.getString("u.name"),
+                        rs.getString("u.email"),
+                        rs.getString("u.password"),
+                        User.Role.valueOf(rs.getString("u.role"))));
+
+                ticket.setEvent(new Event(rs.getInt("e.eid"),
+                        rs.getDate("e.date").toLocalDate(),
+                        new Seance(rs.getInt("s.sid"), rs.getTime("s.time").toLocalTime()),
+                        new Movie(rs.getInt("m.mid"),
+                                rs.getString("m.name"),
+                                rs.getString("m.genre"),
+                                rs.getInt("m.duration"),
+                                rs.getInt("m.year"),
+                                rs.getBoolean("active"))));
+
                 tickets.add(ticket);
                 logger.info("Ticket obtained: " + ticket.toString());
             }
@@ -60,7 +87,6 @@ public class TicketDaoImpl implements TicketDao {
         } catch (SQLException e) {
             logger.error(e);
         }
-
         return tickets;
     }
 
