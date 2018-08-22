@@ -1,9 +1,6 @@
 package com.elesson.pioneer.web.servlet;
 
-import com.elesson.pioneer.model.Event;
-import com.elesson.pioneer.model.Hall;
-import com.elesson.pioneer.model.Ticket;
-import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,8 +40,8 @@ public class EventServlet extends HttpServlet {
                 break;
             case "delete":
                 if(aUser.getRole()==User.Role.ADMIN) {
-                    Event e = service.delete(Integer.parseInt(eid));
-                    resp.sendRedirect("schedule?date=" + e.getDate().toString());
+                    service.delete(Integer.parseInt(eid));
+                    resp.sendRedirect("schedule" + getAdd(req));
                 }
                 break;
             case "view":
@@ -63,6 +60,11 @@ public class EventServlet extends HttpServlet {
         }
     }
 
+    private String getAdd(HttpServletRequest req) {
+        String referer = req.getHeader("referer");
+        return referer.lastIndexOf("?") != -1 ? referer.substring(referer.lastIndexOf("?")) : "";
+    }
+
     private void validatePreorders(HttpServletRequest req, HttpServletResponse resp) {
         List<Ticket> tickets = (List<Ticket>) req.getSession().getAttribute("tickets");
         if(tickets!=null && !tickets.isEmpty() && tickets.get(0).getEventId()!=Integer.parseInt(req.getParameter("eid"))) {
@@ -78,10 +80,10 @@ public class EventServlet extends HttpServlet {
         String sid = req.getParameter("sid");
         String date = req.getParameter("date");
 
-        Event event = new Event(LocalDate.parse(date));
+        Event event = new Event(null, LocalDate.parse(date), new Seance(Integer.parseInt(sid)), new Movie(Integer.parseInt(mid)));
 
         EventService service = EventServiceImpl.getEventService();
-        service.save(event, Integer.parseInt(mid), Integer.parseInt(sid));
+        service.save(event);
         resp.sendRedirect("schedule?date" + date);
     }
 }

@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+
+    private SimpleCrudDao simpleDao = new SimpleCrudDaoImpl();
 
     private static UserDao userDao = null;
 
@@ -33,27 +33,10 @@ public class UserDaoImpl implements UserDao {
         return userDao;
     }
 
-
     @Override
     public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM users");
-            while(rs.next()) {
-                User u = new User(rs.getInt("users.uid"),
-                        rs.getString("users.name"),
-                        rs.getString("users.email"),
-                        rs.getString("users.password"),
-                        User.Role.valueOf(rs.getString("users.role")));
-                users.add(u);
-                logger.info("User obtained: " + u.toString());
-            }
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return users;
+        String query = "SELECT * FROM users u";
+        return simpleDao.getAllById(User.class, query);
     }
 
     @Override
@@ -98,48 +81,23 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean delete(int id) {
-        int resultRows = 0;
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            String query = "DELETE FROM users WHERE uid=?;";
-            PreparedStatement pst = con.prepareStatement(query, id);
-            resultRows = pst.executeUpdate();
-            logger.info("Deleted record id={}", id);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-//            throw new DBException("Unable to delete record");
-        }
-        return resultRows == 1;
+        String query = "DELETE FROM users WHERE uid=?;";
+        return simpleDao.delete(query, id);
     }
 
     @Override
     public User getByEmail(String email) {
-        String query = "SELECT * FROM users WHERE email=?";
+        String query = "SELECT * FROM users u WHERE email=?";
         return getUser(query, email);
     }
 
     @Override
     public User getById(int id) {
-        String query = "SELECT * FROM users WHERE uid=?";
+        String query = "SELECT * FROM users u WHERE uid=?";
         return getUser(query, id);
     }
 
     private User getUser(String query, Object... values) {
-        User user = null;
-
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            PreparedStatement pst = con.prepareStatement(query, values);
-            ResultSet rs = pst.executeQuery();
-
-            if(rs.next()) {
-                user = new User(rs.getInt("uid"), rs.getString("name"),
-                        rs.getString("email"), rs.getString("password"),
-                        User.Role.valueOf(rs.getString("role")));
-            }
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-//            throw new DBException("Unable to obtain record");
-        }
-        return user;
+        return simpleDao.getById(User.class, query, values);
     }
 }

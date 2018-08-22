@@ -10,7 +10,7 @@ public interface EventService {
 
     Event getEvent(Integer id);
 
-    Event delete(int id);
+    boolean delete(int id);
 
-    Event save(Event event, Integer mid, Integer sid);
+    Event save(Event event);
 }

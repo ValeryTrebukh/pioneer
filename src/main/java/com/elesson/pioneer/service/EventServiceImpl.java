@@ -38,12 +38,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event delete(int id) {
+    public boolean delete(int id) {
         return eventDao.delete(id);
     }
 
     @Override
-    public Event save(Event event, Integer mid, Integer sid) {
-        return eventDao.save(event, mid, sid);
+    public Event save(Event event) {
+        return eventDao.save(event);
     }
 }

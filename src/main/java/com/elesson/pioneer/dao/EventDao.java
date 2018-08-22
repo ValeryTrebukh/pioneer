@@ -10,7 +10,7 @@ public interface EventDao {
 
     Event getEvent(Integer id);
 
-    Event save(Event event, Integer mid, Integer sid);
+    Event save(Event event);
 
-    Event delete(int id);
+    boolean delete(int id);
 }

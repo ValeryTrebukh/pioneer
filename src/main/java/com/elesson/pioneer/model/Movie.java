@@ -1,5 +1,8 @@
 package com.elesson.pioneer.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Movie extends Entity {
     private String name;
     private String genre;
@@ -8,6 +11,10 @@ public class Movie extends Entity {
     private Boolean active;
 
     public Movie() {
+    }
+
+    public Movie(Integer id) {
+        super(id);
     }
 
     public Movie(Integer id, String name, String genre, Integer duration, Integer year, Boolean active) {
@@ -21,6 +28,15 @@ public class Movie extends Entity {
 
     public Movie(String name, String genre, Integer duration, Integer year, Boolean active) {
         this(null, name, genre, duration, year, active);
+    }
+
+    public Movie(ResultSet rs) throws SQLException {
+        this(rs.getInt("m.mid"),
+                rs.getString("m.name"),
+                rs.getString("m.genre"),
+                rs.getInt("m.duration"),
+                rs.getInt("m.year"),
+                rs.getBoolean("active"));
     }
 
     public String getName() {

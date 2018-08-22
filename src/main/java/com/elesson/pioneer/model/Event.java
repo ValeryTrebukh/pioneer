@@ -1,5 +1,7 @@
 package com.elesson.pioneer.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Event extends Entity {
@@ -17,6 +19,11 @@ public class Event extends Entity {
         this.date = date;
         this.seance = seance;
         this.movie = movie;
+    }
+
+    public Event(ResultSet rs) throws SQLException {
+        this(rs.getInt("e.eid"), rs.getDate("e.date").toLocalDate(),
+                new Seance(rs), new Movie(rs));
     }
 
     public LocalDate getDate() {

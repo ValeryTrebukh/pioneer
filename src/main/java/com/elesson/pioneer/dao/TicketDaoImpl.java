@@ -9,12 +9,13 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDaoImpl implements TicketDao {
 
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
+
+    private SimpleCrudDao simpleDao = new SimpleCrudDaoImpl();
 
     private static TicketDao ticketDao = null;
 
@@ -55,39 +56,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     private List<Ticket> getAllById(String query, Integer id) {
-        List<Ticket> tickets = new ArrayList<>();
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            PreparedStatement pst = con.prepareStatement(query, id);
-            ResultSet rs = pst.executeQuery();
-            while(rs.next()) {
-                Ticket ticket = new Ticket(rs.getInt("tid"),
-                        rs.getInt("user_id"), rs.getInt("event_id"),
-                        rs.getInt("row"), rs.getInt("seat"));
-
-                ticket.setUser(new User(rs.getInt("u.uid"),
-                        rs.getString("u.name"),
-                        rs.getString("u.email"),
-                        rs.getString("u.password"),
-                        User.Role.valueOf(rs.getString("u.role"))));
-
-                ticket.setEvent(new Event(rs.getInt("e.eid"),
-                        rs.getDate("e.date").toLocalDate(),
-                        new Seance(rs.getInt("s.sid"), rs.getTime("s.time").toLocalTime()),
-                        new Movie(rs.getInt("m.mid"),
-                                rs.getString("m.name"),
-                                rs.getString("m.genre"),
-                                rs.getInt("m.duration"),
-                                rs.getInt("m.year"),
-                                rs.getBoolean("active"))));
-
-                tickets.add(ticket);
-                logger.info("Ticket obtained: " + ticket.toString());
-            }
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return tickets;
+        return simpleDao.getAllById(Ticket.class, query, id);
     }
 
     @Override

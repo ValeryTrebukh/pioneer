@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDaoImpl implements MovieDao {
 
     private static final Logger logger = LogManager.getLogger(MovieDaoImpl.class);
+
+    private SimpleCrudDao simpleDao = new SimpleCrudDaoImpl();
 
     private static MovieDao movieDao = null;
 
@@ -35,34 +35,16 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public List<Movie> getAllMovies() {
-        return getMovies("SELECT * FROM movies");
+        return getMovies("SELECT * FROM movies m");
     }
 
     @Override
     public List<Movie> getActiveMovies() {
-        return getMovies("SELECT * FROM movies WHERE active=true");
+        return getMovies("SELECT * FROM movies m WHERE active=true");
     }
 
     private List<Movie> getMovies(String query) {
-        List<Movie> movies = new ArrayList<>();
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            while(rs.next()) {
-                Movie movie = new Movie(rs.getInt("movies.mid"),
-                        rs.getString("movies.name"),
-                        rs.getString("movies.genre"),
-                        rs.getInt("movies.duration"),
-                        rs.getInt("movies.year"),
-                        rs.getBoolean("active"));
-                movies.add(movie);
-                logger.info("Movie obtained: " + movie.toString());
-            }
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return movies;
+        return simpleDao.getAllById(Movie.class, query);
     }
 
     @Override
@@ -102,38 +84,13 @@ public class MovieDaoImpl implements MovieDao {
 
     @Override
     public boolean delete(int id) {
-        int resultRows = 0;
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            String query = "DELETE FROM movies WHERE mid=?;";
-            PreparedStatement pst = con.prepareStatement(query, id);
-            resultRows = pst.executeUpdate();
-            logger.info("Deleted record id={}", id);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-//            throw new DBException("Unable to delete record");
-        }
-        return resultRows == 1;
+        String query = "DELETE FROM movies WHERE mid=?;";
+        return simpleDao.delete(query, id);
     }
 
     @Override
     public Movie getById(int id) {
-        String query = "SELECT * FROM movies WHERE mid=?";
-        Movie movie = null;
-
-        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
-            PreparedStatement pst = con.prepareStatement(query, id);
-            ResultSet rs = pst.executeQuery();
-
-            if(rs.next()) {
-                movie = new Movie(rs.getInt("mid"), rs.getString("name"),
-                        rs.getString("genre"), rs.getInt("duration"),
-                        rs.getInt("year"), rs.getBoolean("active"));
-            }
-            rs.close();
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-//            throw new DBException("Unable to obtain record");
-        }
-        return movie;
+        String query = "SELECT * FROM movies m WHERE mid=?";
+        return simpleDao.getById(Movie.class, query, id);
     }
 }

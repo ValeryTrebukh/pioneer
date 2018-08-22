@@ -1,5 +1,8 @@
 package com.elesson.pioneer.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class User extends Entity {
     private String name;
     private String email;
@@ -7,6 +10,14 @@ public class User extends Entity {
     private Role role;
 
     public User() {
+    }
+
+    public User(ResultSet rs) throws SQLException {
+        this(rs.getInt("u.uid"),
+                rs.getString("u.name"),
+                rs.getString("u.email"),
+                rs.getString("u.password"),
+                User.Role.valueOf(rs.getString("u.role")));
     }
 
     public User(Integer id, String name, String email, String password, Role role) {
