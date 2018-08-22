@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TicketDao {
 
-    List<Ticket> getAllTicketsByEventId(Integer id);
+    List<Ticket> getAllByEventId(Integer id);
 
-    List<Ticket> getAllTicketsByUserId(Integer id);
+    List<Ticket> getAllByUserId(Integer id);
 
-    int save(List<Ticket> tickets);
+    int saveAll(List<Ticket> tickets);
 }

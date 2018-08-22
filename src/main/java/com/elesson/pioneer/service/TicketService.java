@@ -10,5 +10,5 @@ public interface TicketService {
 
     List<Ticket> getAllTicketsByUserId(Integer id);
 
-    int save(List<Ticket> tickets);
+    int saveAll(List<Ticket> tickets);
 }

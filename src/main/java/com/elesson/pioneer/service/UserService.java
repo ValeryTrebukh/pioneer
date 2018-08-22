@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getUsers();
-
-    User create(User user);
+    boolean create(User user);
 
     void delete(int id);
 
@@ -17,7 +15,7 @@ public interface UserService {
 
     User getByEmail(String email);
 
-    void update(User user);
+    boolean update(User user);
 
     List<User> getAll();
 }

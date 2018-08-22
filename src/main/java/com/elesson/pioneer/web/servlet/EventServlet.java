@@ -47,7 +47,10 @@ public class EventServlet extends HttpServlet {
             case "view":
                 int eventId = Integer.parseInt(eid);
                 req.setAttribute("event", service.getEvent(eventId));
-                Hall hall = new Hall(5, 8);
+
+                int rows = Integer.parseInt(req.getServletContext().getInitParameter("hallRows"));
+                int seats = Integer.parseInt(req.getServletContext().getInitParameter("hallSeats"));
+                Hall hall = new Hall(rows, seats);
                 hall.place(tService.getAllTicketsByEventId(eventId));
                 validatePreorders(req, resp);
                 hall.place((List<Ticket>) req.getSession().getAttribute("tickets"));
@@ -84,6 +87,6 @@ public class EventServlet extends HttpServlet {
 
         EventService service = EventServiceImpl.getEventService();
         service.save(event);
-        resp.sendRedirect("schedule?date" + date);
+        resp.sendRedirect("schedule?date=" + date);
     }
 }

@@ -33,7 +33,7 @@ public class TicketDaoImpl implements TicketDao {
         return ticketDao;
     }
     @Override
-    public List<Ticket> getAllTicketsByEventId(Integer id) {
+    public List<Ticket> getAllByEventId(Integer id) {
         String query = "SELECT * FROM tickets t " +
                 "INNER JOIN events e ON t.event_id = e.eid " +
                 "INNER JOIN users u ON t.user_id = u.uid " +
@@ -44,7 +44,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public List<Ticket> getAllTicketsByUserId(Integer id) {
+    public List<Ticket> getAllByUserId(Integer id) {
         String query = "SELECT * FROM tickets t " +
                 "INNER JOIN events e ON t.event_id = e.eid " +
                 "INNER JOIN users u ON t.user_id = u.uid " +
@@ -60,7 +60,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public int save(List<Ticket> tickets) {
+    public int saveAll(List<Ticket> tickets) {
         int count = 0;
         DBConnection con = ConnectionPool.getPool().getConnection();
         try {

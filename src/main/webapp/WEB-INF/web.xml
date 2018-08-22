@@ -117,4 +117,13 @@
         <url-pattern>/jsp/*</url-pattern>
     </filter-mapping>
 
+    <context-param>
+        <param-name>hallRows</param-name>
+        <param-value>5</param-value>
+    </context-param>
+    <context-param>
+        <param-name>hallSeats</param-name>
+        <param-value>8</param-value>
+    </context-param>
+
 </web-app>

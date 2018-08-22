@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface MovieService {
 
-    Movie create(Movie movie);
+    boolean create(Movie movie);
 
-    void delete(int id);
+    boolean delete(int id);
 
     Movie get(int id);
 

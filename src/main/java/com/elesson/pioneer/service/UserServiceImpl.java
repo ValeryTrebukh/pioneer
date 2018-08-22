@@ -1,19 +1,21 @@
 package com.elesson.pioneer.service;
 
 
-import com.elesson.pioneer.dao.UserDao;
-import com.elesson.pioneer.dao.UserDaoImpl;
+import com.elesson.pioneer.dao.BaseDao;
+import com.elesson.pioneer.dao.DaoFactory;
 import com.elesson.pioneer.model.User;
 
 import java.util.List;
 
+import static com.elesson.pioneer.service.util.Security.encrypt;
+
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
+    private BaseDao userDao;
     private static UserService service = null;
 
     private UserServiceImpl() {
-        userDao = UserDaoImpl.getUserDao();
+        userDao = DaoFactory.getDao(DaoFactory.DaoType.USER);
     }
 
     public static UserService getUserService() {
@@ -28,12 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
-        return userDao.getUsers();
-    }
-
-    @Override
-    public User create(User user) {
+    public boolean create(User user) {
+        user.setPassword(encrypt(user.getPassword()));
         return userDao.save(user);
     }
 
@@ -53,13 +51,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-        userDao.save(user);
+    public boolean update(User user) {
+        if(!user.getPassword().isEmpty()) {
+            user.setPassword(encrypt(user.getPassword()));
+        }
+        return userDao.save(user);
     }
 
     @Override
     public List<User> getAll() {
-        return userDao.getUsers();
+        return userDao.getAll();
     }
 
 }

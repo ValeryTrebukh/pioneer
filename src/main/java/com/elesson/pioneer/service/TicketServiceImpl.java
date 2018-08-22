@@ -28,16 +28,16 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getAllTicketsByEventId(Integer id) {
-        return ticketDao.getAllTicketsByEventId(id);
+        return ticketDao.getAllByEventId(id);
     }
 
     @Override
     public List<Ticket> getAllTicketsByUserId(Integer id) {
-        return ticketDao.getAllTicketsByUserId(id);
+        return ticketDao.getAllByUserId(id);
     }
 
     @Override
-    public int save(List<Ticket> tickets) {
-        return ticketDao.save(tickets);
+    public int saveAll(List<Ticket> tickets) {
+        return ticketDao.saveAll(tickets);
     }
 }

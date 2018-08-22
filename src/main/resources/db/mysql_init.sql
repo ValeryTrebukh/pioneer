@@ -37,8 +37,8 @@ CREATE TABLE events
   date        DATE,
   seance_id   INTEGER,
   CONSTRAINT  seance_unique UNIQUE (seance_id, date),
-  FOREIGN KEY (movie_id)    REFERENCES movies(mid),
-  FOREIGN KEY (seance_id)   REFERENCES seances(sid)
+  FOREIGN KEY (movie_id)    REFERENCES movies(mid) ON DELETE CASCADE,
+  FOREIGN KEY (seance_id)   REFERENCES seances(sid) ON DELETE CASCADE
 );
 
 CREATE TABLE tickets
@@ -49,8 +49,8 @@ CREATE TABLE tickets
   row         INTEGER,
   seat        INTEGER,
   CONSTRAINT  seat_unique UNIQUE (event_id, row, seat),
-  FOREIGN KEY (event_id)  REFERENCES events(eid),
-  FOREIGN KEY (user_id)   REFERENCES users(uid)
+  FOREIGN KEY (event_id)  REFERENCES events(eid) ON DELETE CASCADE,
+  FOREIGN KEY (user_id)   REFERENCES users(uid) ON DELETE CASCADE
 );
 
 INSERT INTO users (name, email, password, role) VALUES

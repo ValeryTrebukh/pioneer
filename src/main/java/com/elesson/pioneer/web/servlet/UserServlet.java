@@ -36,7 +36,7 @@ public class UserServlet extends HttpServlet {
                 resp.sendRedirect("users");
                 break;
             case "all":
-                List<User> users = service.getUsers();
+                List<User> users = service.getAll();
 
                 req.setAttribute("users", users);
                 req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);

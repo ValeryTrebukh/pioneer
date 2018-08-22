@@ -12,5 +12,5 @@ public interface EventService {
 
     boolean delete(int id);
 
-    Event save(Event event);
+    boolean save(Event event);
 }

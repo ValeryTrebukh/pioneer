@@ -1,18 +1,18 @@
 package com.elesson.pioneer.service;
 
-import com.elesson.pioneer.dao.MovieDao;
-import com.elesson.pioneer.dao.MovieDaoImpl;
+import com.elesson.pioneer.dao.BaseDao;
+import com.elesson.pioneer.dao.DaoFactory;
 import com.elesson.pioneer.model.Movie;
 
 import java.util.List;
 
 public class MovieServiceImpl implements MovieService {
 
-    private MovieDao movieDao;
+    private BaseDao movieDao;
     private static MovieService service = null;
 
     private MovieServiceImpl() {
-        movieDao = MovieDaoImpl.getMovieDao();
+        movieDao = DaoFactory.getDao(DaoFactory.DaoType.MOVIE);
     }
 
     public static MovieService getMovieService() {
@@ -27,13 +27,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie create(Movie movie) {
+    public boolean create(Movie movie) {
         return movieDao.save(movie);
     }
 
     @Override
-    public void delete(int id) {
-        movieDao.delete(id);
+    public boolean delete(int id) {
+        return movieDao.delete(id);
     }
 
     @Override
@@ -48,11 +48,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> getAllMovies() {
-        return movieDao.getAllMovies();
+        return movieDao.getAll();
     }
 
     @Override
     public List<Movie> getActiveMovies() {
-        return movieDao.getActiveMovies();
+        return movieDao.getActive();
     }
 }

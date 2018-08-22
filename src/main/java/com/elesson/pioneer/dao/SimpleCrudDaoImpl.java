@@ -18,11 +18,6 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
     private static final Logger logger = LogManager.getLogger(SimpleCrudDaoImpl.class);
 
     @Override
-    public <T extends Entity> T save(String query, T entity) {
-        return null;
-    }
-
-    @Override
     public boolean delete(String query, int id) {
         int resultRows = 0;
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
@@ -81,7 +76,45 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
     }
 
     @Override
-    public <T extends Entity> T save(T entity) {
-        return null;
+    public <T extends Entity> boolean save(T entity, String query, Object... values) {
+        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
+            PreparedStatement pst = con.prepareInsertStatement(query, values);
+            if(pst.executeUpdate()==1) {
+                ResultSet rs = pst.getGeneratedKeys();
+                rs.next();
+                logger.info("New entity created with id={}", rs.getInt(1));
+                rs.close();
+                return true;
+            }
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate")) {
+                logger.error(e);
+//                throw new DuplicateEntityException();
+            }
+            logger.error(e);
+//            throw new DBException("Unable to saveAll new record");
+        }
+        return false;
+    }
+
+    @Override
+    public <T extends Entity> boolean update(T entity, String query, Object... values) {
+        try(DBConnection con = ConnectionPool.getPool().getConnection()) {
+            PreparedStatement pst = con.prepareStatement(query, values);
+            if(pst.executeUpdate()!=1) {
+                logger.error("Entity was not not updated");
+                // TODO: throw new exception
+                return false;
+            }
+            logger.info("User data successfully updated for id=" + entity.getId());
+        } catch (SQLException e) {
+            if(e.getMessage().contains("Duplicate")) {
+                logger.error(e);
+//                throw new DuplicateEntityException();
+            }
+            logger.error(e);
+//            throw new DBException("Unable to saveAll new record");
+        }
+        return true;
     }
 }

@@ -70,7 +70,8 @@ public class TicketServlet extends HttpServlet {
         List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
         if(preOrdered!=null && !preOrdered.isEmpty()) {
             TicketService service = TicketServiceImpl.getTicketService();
-            service.save(preOrdered);
+            service.saveAll(preOrdered);
+            session.removeAttribute("tickets");
         }
         int eid = Integer.parseInt(req.getParameter("eid"));
         resp.sendRedirect("event?action=view&eid=" + eid);
