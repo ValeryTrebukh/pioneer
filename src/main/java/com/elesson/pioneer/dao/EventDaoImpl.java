@@ -71,7 +71,7 @@ public class EventDaoImpl implements BaseDao {
     }
 
     @Override
-    public Event getByEmail(String email) {
+    public Event getByValue(String email) {
         return null;
     }
 }

@@ -75,7 +75,7 @@ public class MovieDaoImpl implements BaseDao {
     }
 
     @Override
-    public Movie getByEmail(String email) {
+    public Movie getByValue(String email) {
         return null;
     }
 }

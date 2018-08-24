@@ -1,4 +1,4 @@
-package com.elesson.pioneer.web;
+package com.elesson.pioneer.web.filter;
 
 import com.elesson.pioneer.dao.util.DBHelper;
 

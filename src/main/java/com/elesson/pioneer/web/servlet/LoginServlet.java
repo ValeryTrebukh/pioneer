@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
 //        try{
             UserService userService = UserServiceImpl.getUserService();
             User aUser = userService.getByEmail(authEmail);
-            if(aUser.getPassword().equals(encrypt(req.getParameter("authUserPass")))) {
+            if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter("authUserPass")))) {
                 HttpSession session = req.getSession();
                 session.invalidate();
                 session = req.getSession();
@@ -37,6 +37,7 @@ public class LoginServlet extends HttpServlet {
                 logger.info("{} logged in", aUser.getName());
                 resp.sendRedirect("schedule");
             } else {
+//                resp.setStatus(404);
 //                throw new NotFoundEntityException("Wrong password");
             }
 //        } catch (NotFoundEntityException e) {
@@ -50,15 +51,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        HttpSession session = req.getSession();
-//        UserService userService = UserServiceImpl.getUserService();
-//        try {
-//            session.setAttribute("masters", userService.getAllMasters());
-//        } catch (DBException e) {
-//            req.setAttribute("message", "db");
-//            req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
-//        }
-//        resp.sendRedirect("jsp/login.jsp");
         req.getRequestDispatcher("jsp/login.jsp").forward(req, resp);
     }
 }

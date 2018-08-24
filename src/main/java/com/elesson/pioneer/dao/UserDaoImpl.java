@@ -60,7 +60,7 @@ public class UserDaoImpl implements BaseDao {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public User getByValue(String email) {
         String query = "SELECT * FROM users u WHERE email=?";
         return getUser(query, email);
     }

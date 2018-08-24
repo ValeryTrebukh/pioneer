@@ -1,7 +1,17 @@
 package com.elesson.pioneer.dao;
 
+
+/**
+ * The type Dao factory.
+ */
 public class DaoFactory {
 
+    /**
+     * Gets dao.
+     *
+     * @param type the type
+     * @return the dao
+     */
     public static BaseDao getDao(DaoType type) {
         switch (type) {
             case USER:

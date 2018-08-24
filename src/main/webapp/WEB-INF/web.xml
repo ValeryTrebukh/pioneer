@@ -56,6 +56,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>registration</servlet-name>
+        <servlet-class>com.elesson.pioneer.web.servlet.RegistrationServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>registration</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>schedule</servlet-name>
         <servlet-class>com.elesson.pioneer.web.servlet.ScheduleServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
@@ -91,7 +101,7 @@
 
     <filter>
         <filter-name>CharacterSetFilter</filter-name>
-        <filter-class>com.elesson.pioneer.web.CharacterSetFilter</filter-class>
+        <filter-class>com.elesson.pioneer.web.filter.CharacterSetFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CharacterSetFilter</filter-name>
@@ -100,7 +110,7 @@
 
     <filter>
         <filter-name>accessFilter</filter-name>
-        <filter-class>com.elesson.pioneer.web.AccessFilter</filter-class>
+        <filter-class>com.elesson.pioneer.web.filter.AccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>accessFilter</filter-name>
@@ -110,7 +120,7 @@
 
     <filter>
         <filter-name>jspFilter</filter-name>
-        <filter-class>com.elesson.pioneer.web.JspFilter</filter-class>
+        <filter-class>com.elesson.pioneer.web.filter.JspFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>jspFilter</filter-name>
