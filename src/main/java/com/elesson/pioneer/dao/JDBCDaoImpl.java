@@ -1,5 +1,7 @@
 package com.elesson.pioneer.dao;
 
+import com.elesson.pioneer.dao.exception.DBException;
+import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.dao.util.ConnectionPool;
 import com.elesson.pioneer.dao.util.DBConnection;
 import com.elesson.pioneer.model.Entity;
@@ -13,10 +15,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleCrudDaoImpl implements SimpleCrudDao {
+/**
+ * This class provides implementation of all {@code JDBCDao} interface methods.
+ */
+public class JDBCDaoImpl implements JDBCDao {
 
-    private static final Logger logger = LogManager.getLogger(SimpleCrudDaoImpl.class);
+    private static final Logger logger = LogManager.getLogger(JDBCDaoImpl.class);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(String query, int id) {
         int resultRows = 0;
@@ -26,11 +34,14 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
             logger.info("Deleted entity id={}", id);
         } catch (SQLException e) {
             logger.error(e.getMessage());
-//            throw new DBException("Unable to delete record");
+            throw new DBException("Unable to delete record");
         }
         return resultRows == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Entity> T getById(Class cl, String query, Object... values) {
         T entity = null;
@@ -45,13 +56,16 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
             rs.close();
         } catch (SQLException e) {
             logger.error(e);
-//            throw new DBException("Unable to obtain record");
+            throw new DBException("Unable to obtain record");
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             logger.error(e);
         }
         return entity;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Entity> List<T> getAllById(Class cl, String query, Object... values) {
         List<T> list = new ArrayList<>();
@@ -68,13 +82,16 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
             rs.close();
         } catch (SQLException e) {
             logger.error(e);
-//            throw new DBException("Unable to obtain record");
+            throw new DBException("Unable to obtain record");
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             logger.error(e);
         }
         return list;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Entity> boolean save(T entity, String query, Object... values) {
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
@@ -89,31 +106,33 @@ public class SimpleCrudDaoImpl implements SimpleCrudDao {
         } catch (SQLException e) {
             if(e.getMessage().contains("Duplicate")) {
                 logger.error(e);
-//                throw new DuplicateEntityException();
+                throw new DuplicateEntityException();
             }
             logger.error(e);
-//            throw new DBException("Unable to saveAll new record");
+            throw new DBException("Unable to saveAll new record");
         }
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Entity> boolean update(T entity, String query, Object... values) {
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             PreparedStatement pst = con.prepareStatement(query, values);
             if(pst.executeUpdate()!=1) {
                 logger.error("Entity was not not updated");
-                // TODO: throw new exception
-                return false;
+                throw new DBException("Unable to update record");
             }
             logger.info("User data successfully updated for id=" + entity.getId());
         } catch (SQLException e) {
             if(e.getMessage().contains("Duplicate")) {
                 logger.error(e);
-//                throw new DuplicateEntityException();
+                throw new DuplicateEntityException();
             }
             logger.error(e);
-//            throw new DBException("Unable to saveAll new record");
+            throw new DBException("Unable to saveAll new record");
         }
         return true;
     }

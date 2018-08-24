@@ -3,10 +3,19 @@ package com.elesson.pioneer.model;
 
 import java.util.List;
 
+/**
+ * Represents a cinema hall
+ */
 public class Hall {
 
     private Row[] rows;
 
+    /**
+     * Instantiates a new Hall.
+     *
+     * @param maxRows  the max rows
+     * @param maxSeats the max seats
+     */
     public Hall(int maxRows, int maxSeats) {
         this.rows = new Row[maxRows];
         for(int i = 0; i < maxRows; i++) {
@@ -14,10 +23,20 @@ public class Hall {
         }
     }
 
+    /**
+     * Get rows row [ ].
+     *
+     * @return the row [ ]
+     */
     public Row[] getRows() {
         return rows;
     }
 
+    /**
+     * Place.
+     *
+     * @param tickets the tickets
+     */
     public void place(List<Ticket> tickets) {
         if(tickets==null) return;
         for (Ticket t : tickets) {
@@ -25,9 +44,18 @@ public class Hall {
         }
     }
 
+    /**
+     * Represents a row of seats in the cinema hall.
+     */
     public class Row {
         private Ticket[] seats;
 
+        /**
+         * Instantiates a new Row.
+         *
+         * @param rowNumber the row number
+         * @param maxSeats  the max seats
+         */
         Row(int rowNumber, int maxSeats) {
             this.seats = new Ticket[maxSeats];
 
@@ -36,6 +64,11 @@ public class Hall {
             }
         }
 
+        /**
+         * Get seats ticket [ ].
+         *
+         * @return the ticket [ ]
+         */
         public Ticket[] getSeats() {
             return seats;
         }

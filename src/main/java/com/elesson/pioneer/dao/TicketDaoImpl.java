@@ -1,5 +1,7 @@
 package com.elesson.pioneer.dao;
 
+import com.elesson.pioneer.dao.exception.DBException;
+import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.dao.util.ConnectionPool;
 import com.elesson.pioneer.dao.util.DBConnection;
 import com.elesson.pioneer.model.*;
@@ -15,7 +17,7 @@ public class TicketDaoImpl implements TicketDao {
 
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
 
-    private SimpleCrudDao simpleDao = new SimpleCrudDaoImpl();
+    private JDBCDao simpleDao = new JDBCDaoImpl();
 
     private static TicketDao ticketDao = null;
 
@@ -32,6 +34,10 @@ public class TicketDaoImpl implements TicketDao {
         if(logger.isDebugEnabled()) logger.debug("TicketDao received");
         return ticketDao;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Ticket> getAllByEventId(Integer id) {
         String query = "SELECT * FROM tickets t " +
@@ -43,6 +49,9 @@ public class TicketDaoImpl implements TicketDao {
         return getAllById(query, id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Ticket> getAllByUserId(Integer id) {
         String query = "SELECT * FROM tickets t " +
@@ -51,7 +60,7 @@ public class TicketDaoImpl implements TicketDao {
                 "INNER JOIN movies m on e.movie_id = m.mid " +
                 "INNER JOIN seances s on e.seance_id = s.sid " +
                 "WHERE user_id=?";
-        //TODO date after today
+
         return getAllById(query, id);
     }
 
@@ -59,6 +68,9 @@ public class TicketDaoImpl implements TicketDao {
         return simpleDao.getAllById(Ticket.class, query, id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int saveAll(List<Ticket> tickets) {
         int count = 0;
@@ -82,7 +94,7 @@ public class TicketDaoImpl implements TicketDao {
         } catch (SQLException e) {
             if(e.getMessage().contains("Duplicate")) {
                 logger.error(e);
-//                throw new DuplicateEntityException();
+                throw new DuplicateEntityException();
             }
             logger.error(e);
             try {
@@ -90,7 +102,7 @@ public class TicketDaoImpl implements TicketDao {
             } catch (SQLException e1) {
                 logger.error(e1);
             }
-//            throw new DBException("Unable to save new records");
+            throw new DBException("Unable to save new records");
         }
         finally {
             try {

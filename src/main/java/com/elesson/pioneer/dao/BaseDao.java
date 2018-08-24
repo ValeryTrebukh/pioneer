@@ -64,11 +64,12 @@ public interface BaseDao {
     <T extends Entity> T getByValue(String value) throws DBException;
 
     /**
-     * Gets all by date.
+     * Retrieves the database for single object of {@code Entity} class.
+     * Suppress all SQL exceptions and throws own general one.
      *
-     * @param <T>  the type parameter
-     * @param date the date
-     * @return the all by date
+     * @param date the identifier
+     * @return the instance of {@code Entity} class
+     * @throws DBException the general exception to cover all SQL exceptions
      */
     <T extends Entity> List<T> getAllByDate(LocalDate date) throws DBException;
 

@@ -33,6 +33,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getAllTicketsByUserId(Integer id) {
+        //TODO date after today
         return ticketDao.getAllByUserId(id);
     }
 
