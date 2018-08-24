@@ -46,7 +46,7 @@ public class UserDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public boolean save(Entity entity) {
+    public User save(Entity entity) {
         User user = (User)entity;
         if (user.isNew()) {
             String query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";

@@ -7,6 +7,9 @@ import com.elesson.pioneer.model.Event;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWithId;
+
 public class EventServiceImpl implements EventService {
 
     private BaseDao eventDao;
@@ -27,23 +30,36 @@ public class EventServiceImpl implements EventService {
         return service;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> getEvents(LocalDate date) {
         return eventDao.getAllByDate(date);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Event getEvent(Integer id) {
-        return eventDao.getById(id);
+        return checkNotFoundWithId(eventDao.getById(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean delete(int id) {
-        return eventDao.delete(id);
+    public void delete(int id) {
+        checkNotFoundWithId(eventDao.delete(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean save(Event event) {
-        return eventDao.save(event);
+    public void save(Event event) {
+        checkNotFound(event, "event must not be null");
+        checkNotFound(eventDao.save(event), "user must not be null");
     }
 }

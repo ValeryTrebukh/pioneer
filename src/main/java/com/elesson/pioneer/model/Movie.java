@@ -15,6 +15,21 @@ public class Movie extends Entity {
     private Boolean active;
 
     /**
+     * The default constructor.
+     */
+    public Movie() {
+    }
+
+    /**
+     * Instantiates a new Movie.
+     *
+     * @param id       the id
+     */
+    public Movie(Integer id) {
+        super(id);
+    }
+
+    /**
      * Instantiates a new Movie.
      *
      * @param id       the id

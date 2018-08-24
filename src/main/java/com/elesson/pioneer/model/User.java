@@ -14,6 +14,12 @@ public class User extends Entity {
     private Role role;
 
     /**
+     * The default constructor.
+     */
+    public User() {
+    }
+
+    /**
      * Instantiates a new User.
      *
      * @param rs the ResultSet object

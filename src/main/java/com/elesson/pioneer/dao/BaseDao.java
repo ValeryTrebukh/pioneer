@@ -41,7 +41,7 @@ public interface BaseDao {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException              in all other cases.
      */
-    boolean save(Entity entity) throws DuplicateEntityException, DBException;
+    <T extends Entity> T save(Entity entity) throws DuplicateEntityException, DBException;
 
     /**
      * Deletes single record from database.

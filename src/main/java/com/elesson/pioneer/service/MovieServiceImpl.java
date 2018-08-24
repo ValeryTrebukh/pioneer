@@ -6,6 +6,12 @@ import com.elesson.pioneer.model.Movie;
 
 import java.util.List;
 
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWithId;
+
+/**
+ * Provides implementation of all {@code MovieService} interface methods.
+ */
 public class MovieServiceImpl implements MovieService {
 
     private BaseDao movieDao;
@@ -26,31 +32,51 @@ public class MovieServiceImpl implements MovieService {
         return service;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean create(Movie movie) {
-        return movieDao.save(movie);
+    public void create(Movie movie) {
+        checkNotFound(movie, "movie must not be null");
+        checkNotFound(movieDao.save(movie), "movie must not be null");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean delete(int id) {
-        return movieDao.delete(id);
+    public void delete(int id) {
+        checkNotFoundWithId(movieDao.delete(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Movie get(int id) {
-        return movieDao.getById(id);
+        return checkNotFoundWithId(movieDao.getById(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Movie movie) {
-        movieDao.save(movie);
+        checkNotFound(movie, "movie must not be null");
+        checkNotFoundWithId(movieDao.save(movie), movie.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Movie> getAllMovies() {
         return movieDao.getAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Movie> getActiveMovies() {
         return movieDao.getActive();

@@ -8,7 +8,12 @@ import com.elesson.pioneer.model.User;
 import java.util.List;
 
 import static com.elesson.pioneer.service.util.Security.encrypt;
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWithId;
 
+/**
+ * Provides implementation of all {@code UserService} interface methods.
+ */
 public class UserServiceImpl implements UserService {
 
     private BaseDao userDao;
@@ -29,38 +34,58 @@ public class UserServiceImpl implements UserService {
         return service;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean create(User user) {
+    public void create(User user) {
+        checkNotFound(user, "user must not be null");
         user.setPassword(encrypt(user.getPassword()));
-        return userDao.save(user);
+        checkNotFound(userDao.save(user), "user must not be null");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(int id) {
-        userDao.delete(id);
+        checkNotFoundWithId(userDao.delete(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User get(int id) {
-        return userDao.getById(id);
+        return checkNotFoundWithId(userDao.getById(id), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getByEmail(String email) {
-        return userDao.getByValue(email);
+        checkNotFound(email, "email must not be null");
+        return checkNotFound(userDao.getByValue(email), "email=" + email);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean update(User user) {
+    public void update(User user) {
+        checkNotFound(user, "user must not be null");
         if(!user.getPassword().isEmpty()) {
             user.setPassword(encrypt(user.getPassword()));
         }
-        return userDao.save(user);
+        checkNotFoundWithId(userDao.save(user), user.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() {
         return userDao.getAll();
     }
-
 }

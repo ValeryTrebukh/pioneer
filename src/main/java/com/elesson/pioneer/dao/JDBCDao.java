@@ -59,7 +59,7 @@ public interface JDBCDao {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException              in all other cases.
      */
-    <T extends Entity> boolean save(T entity, String query, Object... values) throws DBException, DuplicateEntityException;
+    <T extends Entity> T save(T entity, String query, Object... values) throws DBException, DuplicateEntityException;
 
     /**
      * Updates a record in database.
@@ -72,5 +72,5 @@ public interface JDBCDao {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException              in all other cases.
      */
-    <T extends Entity> boolean update(T entity, String query, Object... values) throws DBException;
+    <T extends Entity> T update(T entity, String query, Object... values) throws DBException;
 }

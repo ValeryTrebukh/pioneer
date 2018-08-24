@@ -93,15 +93,15 @@ public class JDBCDaoImpl implements JDBCDao {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Entity> boolean save(T entity, String query, Object... values) {
+    public <T extends Entity> T save(T entity, String query, Object... values) {
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             PreparedStatement pst = con.prepareInsertStatement(query, values);
             if(pst.executeUpdate()==1) {
                 ResultSet rs = pst.getGeneratedKeys();
                 rs.next();
-                logger.info("New entity created with id={}", rs.getInt(1));
+                entity.setId(rs.getInt(1));
+                logger.info("New entity created with id={}", entity.getId());
                 rs.close();
-                return true;
             }
         } catch (SQLException e) {
             if(e.getMessage().contains("Duplicate")) {
@@ -111,14 +111,14 @@ public class JDBCDaoImpl implements JDBCDao {
             logger.error(e);
             throw new DBException("Unable to saveAll new record");
         }
-        return false;
+        return entity;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <T extends Entity> boolean update(T entity, String query, Object... values) {
+    public <T extends Entity> T update(T entity, String query, Object... values) {
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             PreparedStatement pst = con.prepareStatement(query, values);
             if(pst.executeUpdate()!=1) {
@@ -134,6 +134,6 @@ public class JDBCDaoImpl implements JDBCDao {
             logger.error(e);
             throw new DBException("Unable to saveAll new record");
         }
-        return true;
+        return entity;
     }
 }

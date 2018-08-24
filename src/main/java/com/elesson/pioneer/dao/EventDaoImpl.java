@@ -58,7 +58,7 @@ public class EventDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public boolean save(Entity entity) {
+    public Event save(Entity entity) {
         Event event = (Event)entity;
         String query = "INSERT INTO events (movie_id, date, seance_id) VALUES (?, ?, ?)";
         return simpleDao.save(event, query, event.getMovie().getId(), Date.valueOf(event.getDate()), event.getSeance().getId());

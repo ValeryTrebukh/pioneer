@@ -16,6 +16,14 @@ public class Seance extends Entity {
      * Instantiates a new Seance.
      *
      * @param id    the id
+     */
+    public Seance(Integer id) {
+    }
+
+    /**
+     * Instantiates a new Seance.
+     *
+     * @param id    the id
      * @param start the start
      */
     public Seance(Integer id, LocalTime start) {

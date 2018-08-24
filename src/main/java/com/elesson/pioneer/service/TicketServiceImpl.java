@@ -6,6 +6,11 @@ import com.elesson.pioneer.model.Ticket;
 
 import java.util.List;
 
+import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
+
+/**
+ * Provides implementation of all {@code TicketService} interface methods.
+ */
 public class TicketServiceImpl implements TicketService {
 
     private TicketDao ticketDao;
@@ -26,19 +31,29 @@ public class TicketServiceImpl implements TicketService {
         return service;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Ticket> getAllTicketsByEventId(Integer id) {
         return ticketDao.getAllByEventId(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Ticket> getAllTicketsByUserId(Integer id) {
         //TODO date after today
         return ticketDao.getAllByUserId(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int saveAll(List<Ticket> tickets) {
-        return ticketDao.saveAll(tickets);
+    public void saveAll(List<Ticket> tickets) {
+        checkNotFound(tickets, "tickets must not be null");
+        ticketDao.saveAll(tickets);
     }
 }

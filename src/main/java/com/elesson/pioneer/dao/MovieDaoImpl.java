@@ -57,7 +57,7 @@ public class MovieDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public boolean save(Entity entity) {
+    public Movie save(Entity entity) {
         Movie movie = (Movie)entity;
         if(movie.isNew()) {
             String query = "INSERT INTO movies (name, genre, duration, year, active) VALUES (?, ?, ?, ?, ?)";
