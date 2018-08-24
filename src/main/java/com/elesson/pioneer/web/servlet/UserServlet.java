@@ -3,6 +3,7 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.UserServiceImpl;
+import com.elesson.pioneer.service.util.Paginator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,9 +37,14 @@ public class UserServlet extends HttpServlet {
                 resp.sendRedirect("users");
                 break;
             case "all":
+                Paginator<User> paginator = new Paginator<>();
                 List<User> users = service.getAll();
-
-                req.setAttribute("users", users);
+                int page = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
+                int pagesCount = paginator.getPageCount(users);
+                page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
+                req.setAttribute("users", paginator.getPage(users, page));
+                req.setAttribute("page", page);
+                req.setAttribute("pagesCount", paginator.getPageCount(users));
                 req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
                 break;
             default:

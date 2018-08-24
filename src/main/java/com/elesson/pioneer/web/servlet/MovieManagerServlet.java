@@ -3,6 +3,7 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.MovieService;
 import com.elesson.pioneer.service.MovieServiceImpl;
+import com.elesson.pioneer.service.util.Paginator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,9 +38,14 @@ public class MovieManagerServlet extends HttpServlet {
                 resp.sendRedirect("movies");
                 break;
             case "all":
+                Paginator<Movie> paginator = new Paginator<>();
                 List<Movie> movies = service.getAllMovies();
-
-                req.setAttribute("movies", movies);
+                int page = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
+                int pagesCount = paginator.getPageCount(movies);
+                page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
+                req.setAttribute("movies", paginator.getPage(movies, page));
+                req.setAttribute("page", page);
+                req.setAttribute("pagesCount", paginator.getPageCount(movies));
                 req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
                 break;
             default:
