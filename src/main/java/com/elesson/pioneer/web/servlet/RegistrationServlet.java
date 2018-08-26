@@ -1,5 +1,7 @@
 package com.elesson.pioneer.web.servlet;
 
+import com.elesson.pioneer.dao.exception.DBException;
+import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.UserServiceImpl;
@@ -33,7 +35,7 @@ public class RegistrationServlet extends HttpServlet {
         if(UserDataValidation.hasError(req, regName, regEmail, regPassword, confPassword)) {
             req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);
         } else {
-//            try {
+            try {
                 UserService userService = UserServiceImpl.getUserService();
                 User user = new User(regName, regEmail, regPassword, User.Role.CLIENT);
                 userService.create(user);
@@ -43,13 +45,12 @@ public class RegistrationServlet extends HttpServlet {
                 session.setAttribute("authUser", userService.getByEmail(regEmail));
                 logger.info("{} logged in", user.getName());
                 resp.sendRedirect("schedule");
-//            } catch (DuplicateEntityException de) {
-//                req.setAttribute("duplicate", true);
-//                req.getRequestDispatcher("registration.jsp").forward(req, resp);
-//            } catch (DBException e) {
-//                req.setAttribute("message", "db");
-//                req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
-//            }
+            } catch (DuplicateEntityException de) {
+                req.setAttribute("duplicate", true);
+                req.getRequestDispatcher("registration.jsp").forward(req, resp);
+            } catch (DBException e) {
+                resp.setStatus(500);
+            }
         }
     }
 }

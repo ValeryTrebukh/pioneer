@@ -15,7 +15,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 public class MovieServiceImpl implements MovieService {
 
     private BaseDao movieDao;
-    private static MovieService service = null;
+    private static volatile MovieService service;
 
     private MovieServiceImpl() {
         movieDao = DaoFactory.getDao(DaoFactory.DaoType.MOVIE);

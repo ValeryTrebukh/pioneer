@@ -26,11 +26,18 @@
             </div>
         </div>
         <div id="authorized">
+            <div>
+                <c:if test="${sessionScope.authUser != null}">
+                    <span><fmt:message key="app.logged"/><br><b>${sessionScope.authUser.name}</b></span>
+                </c:if>
+                <c:if test="${sessionScope.authUser == null}">
+                    <span ><fmt:message key="app.notlogged"/></span>
+                </c:if>
+            </div>
             <c:if test="${sessionScope.authUser != null}">
-                <span class="fourteen"><fmt:message key="app.logged"/></span><br>${sessionScope.authUser.name}
-            </c:if>
-            <c:if test="${sessionScope.authUser == null}">
-            <span class="fourteen"><fmt:message key="app.notlogged"/></span>
+                <div id="logout">
+                    <a href="logout"><fmt:message key="app.logout"/></a>
+                </div>
             </c:if>
         </div>
     </div>

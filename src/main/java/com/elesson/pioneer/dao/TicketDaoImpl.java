@@ -19,7 +19,7 @@ public class TicketDaoImpl implements TicketDao {
 
     private JDBCDao simpleDao = new JDBCDaoImpl();
 
-    private static TicketDao ticketDao = null;
+    private static volatile TicketDao ticketDao;
 
     private TicketDaoImpl() {}
 

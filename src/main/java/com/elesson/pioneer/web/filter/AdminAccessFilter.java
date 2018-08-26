@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class AccessFilter implements Filter {
+public class AdminAccessFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,8 +25,7 @@ public class AccessFilter implements Filter {
         if(authUser!=null && authUser.getRole()==User.Role.ADMIN) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            req.setAttribute("message", "access");
-            req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
+            resp.setStatus(403);
         }
     }
 

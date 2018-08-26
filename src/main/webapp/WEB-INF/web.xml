@@ -56,6 +56,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>com.elesson.pioneer.web.servlet.LogoutServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>registration</servlet-name>
         <servlet-class>com.elesson.pioneer.web.servlet.RegistrationServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
@@ -110,7 +120,7 @@
 
     <filter>
         <filter-name>accessFilter</filter-name>
-        <filter-class>com.elesson.pioneer.web.filter.AccessFilter</filter-class>
+        <filter-class>com.elesson.pioneer.web.filter.AdminAccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>accessFilter</filter-name>
@@ -120,7 +130,7 @@
 
     <filter>
         <filter-name>jspFilter</filter-name>
-        <filter-class>com.elesson.pioneer.web.filter.JspFilter</filter-class>
+        <filter-class>com.elesson.pioneer.web.filter.JspAccessFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>jspFilter</filter-name>

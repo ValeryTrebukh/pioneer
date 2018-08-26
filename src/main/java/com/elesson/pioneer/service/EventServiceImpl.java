@@ -13,7 +13,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 public class EventServiceImpl implements EventService {
 
     private BaseDao eventDao;
-    private static EventService service = null;
+    private static volatile EventService service;
 
     private EventServiceImpl() {
         eventDao = DaoFactory.getDao(DaoFactory.DaoType.EVENT);

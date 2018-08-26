@@ -17,7 +17,7 @@ public class MovieDaoImpl implements BaseDao {
 
     private JDBCDao simpleDao = new JDBCDaoImpl();
 
-    private static MovieDaoImpl movieDao = null;
+    private static volatile MovieDaoImpl movieDao;
 
     private MovieDaoImpl() {}
 

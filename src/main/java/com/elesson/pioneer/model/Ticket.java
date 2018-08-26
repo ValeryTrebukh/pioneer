@@ -1,5 +1,8 @@
 package com.elesson.pioneer.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Represents a row in the &quot;tickets&quot; database table,
  * with each column mapped to a property of this class.
@@ -61,6 +64,20 @@ public class Ticket extends Entity {
      */
     public Ticket(Integer row, Integer seat) {
         this(null, row, seat);
+    }
+
+    /**
+     * Instantiates a new Ticket.
+     *
+     * @param rs the ResultSet object
+     * @throws SQLException the sql exception
+     */
+    public Ticket(ResultSet rs) throws SQLException {
+        this(rs.getInt("tid"),
+                rs.getInt("user_id"), rs.getInt("event_id"),
+                rs.getInt("row"), rs.getInt("seat"));
+        this.user = new User(rs);
+        this.event = new Event(rs);
     }
 
     /**

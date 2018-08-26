@@ -21,7 +21,7 @@ public class DaoFactory {
             case EVENT:
                 return EventDaoImpl.getEventDao();
             default:
-                return null;
+                throw new EnumConstantNotPresentException(DaoType.class, type.name());
         }
     }
 

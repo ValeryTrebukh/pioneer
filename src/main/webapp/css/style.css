@@ -58,6 +58,10 @@ h3, h4 {
     width: 100%;
 }
 
+.week {
+    background-color: #a9e6d0;
+}
+
 .navbar div, .week div {
     margin: 0;
 }
@@ -86,8 +90,14 @@ h3, h4 {
 }
 
 div#authorized {
-    width: 150px;
+    width: 200px;
     float: right;
+}
+
+div#logout {
+    width: 60px;
+    float: right;
+    font-size: 18px;
 }
 
 div span {

@@ -11,6 +11,11 @@
 <jsp:useBean id="event" type="com.elesson.pioneer.model.Event" scope="request"/>
 <div id="eventForm">
     <form method="post" action="event">
+
+        <c:if test="${duplicate}">
+            DUPLICATE
+            </br>
+        </c:if>
         <input type="hidden" name="eid" value="${event.id}">
 
         <div><input type="hidden" name="date" value="${event.date}"></div> <br>

@@ -1,5 +1,7 @@
 package com.elesson.pioneer.web.servlet;
 
+import com.elesson.pioneer.dao.exception.DBException;
+import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class EventServlet extends HttpServlet {
@@ -27,6 +30,7 @@ public class EventServlet extends HttpServlet {
         String action = req.getParameter("action");
         String eid = req.getParameter("eid");
         String date = req.getParameter("date");
+
         User aUser = (User)req.getSession().getAttribute("authUser");
 
         switch (action == null ? "view" : action) {
@@ -83,10 +87,28 @@ public class EventServlet extends HttpServlet {
         String sid = req.getParameter("sid");
         String date = req.getParameter("date");
 
-        Event event = new Event(null, LocalDate.parse(date), new Seance(Integer.parseInt(sid)), new Movie(Integer.parseInt(mid)));
-
         EventService service = EventServiceImpl.getEventService();
-        service.save(event);
-        resp.sendRedirect("schedule?date=" + date);
+        Event event = null;
+        try{
+            event = new Event(null, LocalDate.parse(date),
+                    new Seance(Integer.parseInt(sid)), new Movie(Integer.parseInt(mid)));
+        }  catch (DateTimeParseException e) {
+            logger.warn("Incorrect date input");
+            resp.setStatus(404);
+        }
+
+        try{
+            service.save(event);
+            resp.sendRedirect("schedule?date=" + date);
+        } catch (DuplicateEntityException de) {
+            logger.warn(de);
+            req.setAttribute("duplicate", true);
+            req.setAttribute("movies", MovieServiceImpl.getMovieService().getActiveMovies());
+            req.setAttribute("event", event);
+            req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+        } catch (DBException e) {
+            logger.warn(e);
+            resp.setStatus(500);
+        }
     }
 }

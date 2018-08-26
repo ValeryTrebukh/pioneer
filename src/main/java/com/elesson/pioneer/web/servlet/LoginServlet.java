@@ -1,7 +1,9 @@
 package com.elesson.pioneer.web.servlet;
 
+import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.*;
+import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +28,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String authEmail = req.getParameter("authUserEmail");
 
-//        try{
+        try{
             UserService userService = UserServiceImpl.getUserService();
             User aUser = userService.getByEmail(authEmail);
             if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter("authUserPass")))) {
@@ -37,16 +39,15 @@ public class LoginServlet extends HttpServlet {
                 logger.info("{} logged in", aUser.getName());
                 resp.sendRedirect("schedule");
             } else {
-//                resp.setStatus(404);
-//                throw new NotFoundEntityException("Wrong password");
+                throw new NotFoundEntityException("Wrong password");
             }
-//        } catch (NotFoundEntityException e) {
-//            req.setAttribute("error", "password");
-//            req.getRequestDispatcher("login.jsp").forward(req, resp);
-//        } catch (DBException e) {
-//            req.setAttribute("message", "db");
-//            req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
-//        }
+        } catch (NotFoundEntityException e) {
+            req.setAttribute("error", "password");
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+        } catch (DBException e) {
+            req.setAttribute("message", "db");
+            req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
+        }
     }
 
     @Override

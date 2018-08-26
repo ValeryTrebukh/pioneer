@@ -18,6 +18,7 @@ public class Seance extends Entity {
      * @param id    the id
      */
     public Seance(Integer id) {
+        super(id);
     }
 
     /**

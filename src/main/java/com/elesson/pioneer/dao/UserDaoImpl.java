@@ -17,7 +17,7 @@ public class UserDaoImpl implements BaseDao {
 
     private JDBCDao simpleDao = new JDBCDaoImpl();
 
-    private static UserDaoImpl userDao = null;
+    private static volatile UserDaoImpl userDao;
 
     private UserDaoImpl() {}
 
@@ -29,7 +29,7 @@ public class UserDaoImpl implements BaseDao {
                 }
             }
         }
-        if(logger.isDebugEnabled()) logger.debug("Admin userDao received");
+        if(logger.isDebugEnabled()) logger.debug("UserDao received");
         return userDao;
     }
 

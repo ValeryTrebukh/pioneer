@@ -18,7 +18,7 @@ public class EventDaoImpl implements BaseDao {
 
     private JDBCDao simpleDao = new JDBCDaoImpl();
 
-    private static EventDaoImpl eventDao = null;
+    private static volatile EventDaoImpl eventDao;
 
     private EventDaoImpl() {}
 

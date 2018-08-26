@@ -1,7 +1,6 @@
 package com.elesson.pioneer.web.servlet;
 
 
-import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.EventService;
 import com.elesson.pioneer.service.EventServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -11,9 +10,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +38,14 @@ public class ScheduleServlet extends HttpServlet {
         EventService service = EventServiceImpl.getEventService();
 
         String date = req.getParameter("date");
-        LocalDate localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
-        localDate = localDate.isBefore(LocalDate.now()) ? LocalDate.now() : localDate;
-
-        HttpSession session = req.getSession();
-        User authUser = (User)session.getAttribute("authUser");
+        LocalDate localDate = null;
+        try {
+            localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
+            localDate = localDate.isBefore(LocalDate.now()) ? LocalDate.now() : localDate;
+        } catch (DateTimeParseException e) {
+            logger.warn("Incorrect date input");
+            resp.setStatus(404);
+        }
 
         req.setAttribute("events", service.getEvents(localDate));
         req.setAttribute("nextWeek", getNextWeek());

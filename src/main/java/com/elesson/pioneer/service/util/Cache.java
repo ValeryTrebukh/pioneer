@@ -6,6 +6,7 @@ import com.elesson.pioneer.model.User;
 import java.util.List;
 
 public class Cache {
+    //TODO
 
     private List<Movie> movies;
     private List<User> users;

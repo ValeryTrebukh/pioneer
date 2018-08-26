@@ -14,7 +14,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
 public class TicketServiceImpl implements TicketService {
 
     private TicketDao ticketDao;
-    private static TicketService service = null;
+    private static volatile TicketService service;
 
     private TicketServiceImpl() {
         ticketDao = TicketDaoImpl.getTicketDao();

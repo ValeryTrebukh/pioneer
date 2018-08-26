@@ -18,13 +18,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private ResourceBundle appRB, dbRB;
-    private static ConnectionPool pool;
+    private static volatile ConnectionPool pool;
     private Queue<DBConnection> available, active;
     private int initialPoolSize, maxPoolSize;
 
     /**
      * Method is responsible for obtaining connection pool.
-     * Implements Singleton pattern.
      *
      * @return the connectionPool
      * @throws DBException the general exception to cover all SQL exceptions

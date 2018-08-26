@@ -17,7 +17,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 public class UserServiceImpl implements UserService {
 
     private BaseDao userDao;
-    private static UserService service = null;
+    private static volatile UserService service;
 
     private UserServiceImpl() {
         userDao = DaoFactory.getDao(DaoFactory.DaoType.USER);
