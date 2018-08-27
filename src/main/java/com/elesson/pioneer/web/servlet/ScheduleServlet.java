@@ -18,11 +18,10 @@ import java.util.List;
 
 
 /**
- * The {@code ScheduleServlet} class purpose is to form a list of {@code Appointment} class objects.
- * Resulting collection depends on attributes provided in URL.
+ * The {@code ScheduleServlet} class purpose is to form a list of {@code Event} class objects
+ * representing a daily schedule of planned Movies to be shown in the cinema.
  * Possible URL attributes:
- *      action=my - records for authorized user will be returned
- *      action=date&date=somedate - somedate will be parsed to LocalDate and the records for specified
+ *      date=somedate - somedate will be parsed to LocalDate and the records for specified
  *          data will be returned.
  * Redirects to error page if some exception comes from DAO layer.
  */

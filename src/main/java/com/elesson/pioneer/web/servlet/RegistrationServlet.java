@@ -16,6 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * The {@code RegistrationServlet} class purpose is to allow user to register a new account.
+ * This class perform validation of entered data before storing to database.
+ * Invalidates the session and creates new one. After that stores user data into session.
+ * Redirects to error page if some exception comes from DAO layer.
+ */
 public class RegistrationServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(RegistrationServlet.class);

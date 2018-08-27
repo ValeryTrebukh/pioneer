@@ -17,6 +17,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Handles requests on event entity.
+ * Behavior depends on request attribute 'action'.
+ * Possible values:
+ *      view - redirects to page describing event details and shows a map of cinema hall,
+ *      where user can acquire a seat.
+ *      create or delete - available only for admins.
+ *  Performs some validation of request attributes and redirects to error page in case of
+ *  some exception came from service/dao layer.
+ */
 public class EventServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(EventServlet.class);
 

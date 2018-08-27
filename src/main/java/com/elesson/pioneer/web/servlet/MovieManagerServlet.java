@@ -14,9 +14,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * The {@code MovieManagerServlet} class provides one of main functional for the Admins (CRUD).
+ *      - View the list of movies.
+ *      - Create new movie.
+ *      - Edit created movie data.
+ *      - Delete the movies from database.
+ * Redirects to error page if some exception comes from DAO or service layer.
+ */
 public class MovieManagerServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(MovieManagerServlet.class);
 

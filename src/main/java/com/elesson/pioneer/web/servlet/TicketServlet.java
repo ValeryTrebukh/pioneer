@@ -5,7 +5,6 @@ import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.TicketService;
 import com.elesson.pioneer.service.TicketServiceImpl;
-import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles operations on tickets for some event in the cinema.
+ * Perform some validation of data from request params.
+ * A User may pre-order the ticket (it will be saved into session) but it does not
+ * prevent the fact that ticket will be acquired by another User.
+ */
 public class TicketServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(TicketServlet.class);
@@ -57,10 +61,6 @@ public class TicketServlet extends HttpServlet {
             logger.error(e);
             resp.setStatus(500);
         }
-
-
-
-
     }
 
     private void addOrRemoveTicket(List<Ticket> tickets, Ticket ticket) {

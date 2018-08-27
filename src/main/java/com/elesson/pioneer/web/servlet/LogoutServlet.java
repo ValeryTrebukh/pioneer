@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Deletes all user's credentials by invalidating the session.
+ */
 public class LogoutServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(LoginServlet.class);
 

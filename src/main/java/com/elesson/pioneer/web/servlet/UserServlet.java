@@ -15,9 +15,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * The {@code UserServlet} class provides one of main functional for the Admins (CRUD).
+ *      - View the list of users.
+ *      - Create new user.
+ *      - Edit created user data.
+ *      - Delete the users from database.
+ * Redirects to error page if some exception comes from DAO or service layer.
+ */
 public class UserServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(UserServlet.class);
 

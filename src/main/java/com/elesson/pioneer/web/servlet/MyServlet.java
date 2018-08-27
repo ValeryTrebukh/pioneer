@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+
+/**
+ * Shows list of Tickets owned by specific User.
+ * Available only for authorized Users.
+ */
 public class MyServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(MyServlet.class);
 
