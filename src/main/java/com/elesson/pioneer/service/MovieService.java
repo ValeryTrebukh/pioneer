@@ -19,7 +19,7 @@ public interface MovieService {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException in all other cases.
      */
-    void create(Movie movie) throws DuplicateEntityException, DBException;
+    void create(Movie movie) throws DBException;
 
     /**
      * Method process request to DAO layer and confirms the operation success.
@@ -47,7 +47,7 @@ public interface MovieService {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException in all other cases.
      */
-    void update(Movie movie) throws DuplicateEntityException, DBException;
+    void update(Movie movie) throws DBException;
 
     /**
      * Returns a list of movies.

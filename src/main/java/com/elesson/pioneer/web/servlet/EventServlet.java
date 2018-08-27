@@ -4,6 +4,7 @@ import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
+import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,37 +34,45 @@ public class EventServlet extends HttpServlet {
 
         User aUser = (User)req.getSession().getAttribute("authUser");
 
-        switch (action == null ? "view" : action) {
-            case "create":
-                if(aUser.getRole()==User.Role.ADMIN) {
-                    req.setAttribute("event", new Event(LocalDate.parse(date)));
-                    req.setAttribute("action", action);
-                    req.setAttribute("movies", mService.getActiveMovies());
-                    req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
-                }
-                break;
-            case "delete":
-                if(aUser.getRole()==User.Role.ADMIN) {
-                    service.delete(Integer.parseInt(eid));
-                    resp.sendRedirect("schedule" + getAdd(req));
-                }
-                break;
-            case "view":
-                int eventId = Integer.parseInt(eid);
-                req.setAttribute("event", service.getEvent(eventId));
+        try {
+            switch (action == null ? "view" : action) {
+                case "create":
+                    if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
+                        req.setAttribute("event", new Event(LocalDate.parse(date)));
+                        req.setAttribute("action", action);
+                        req.setAttribute("movies", mService.getActiveMovies());
+                        req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+                    }
+                    break;
+                case "delete":
+                    if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
+                        service.delete(Integer.parseInt(eid));
+                        resp.sendRedirect("schedule" + getAdd(req));
+                    }
+                    break;
+                case "view":
+                    int eventId = Integer.parseInt(eid);
+                    req.setAttribute("event", service.getEvent(eventId));
 
-                int rows = Integer.parseInt(req.getServletContext().getInitParameter("hallRows"));
-                int seats = Integer.parseInt(req.getServletContext().getInitParameter("hallSeats"));
-                Hall hall = new Hall(rows, seats);
-                hall.place(tService.getAllTicketsByEventId(eventId));
-                validatePreorders(req, resp);
-                hall.place((List<Ticket>) req.getSession().getAttribute("tickets"));
-                req.setAttribute("hall", hall);
-                req.getRequestDispatcher("jsp/eventView.jsp").forward(req, resp);
-                break;
-            default:
-                resp.sendRedirect("schedule");
-                break;
+                    int rows = Integer.parseInt(req.getServletContext().getInitParameter("hallRows"));
+                    int seats = Integer.parseInt(req.getServletContext().getInitParameter("hallSeats"));
+                    Hall hall = new Hall(rows, seats);
+                    hall.place(tService.getAllTicketsByEventId(eventId));
+                    validatePreorders(req, resp);
+                    hall.place((List<Ticket>) req.getSession().getAttribute("tickets"));
+                    req.setAttribute("hall", hall);
+                    req.getRequestDispatcher("jsp/eventView.jsp").forward(req, resp);
+                    break;
+                default:
+                    resp.sendRedirect("schedule");
+                    break;
+            }
+        } catch (DateTimeParseException | NumberFormatException | NotFoundEntityException e) {
+            logger.warn(e.getMessage());
+            resp.setStatus(404);
+        } catch (DBException e) {
+            logger.error(e);
+            resp.setStatus(500);
         }
     }
 
@@ -92,14 +101,11 @@ public class EventServlet extends HttpServlet {
         try{
             event = new Event(null, LocalDate.parse(date),
                     new Seance(Integer.parseInt(sid)), new Movie(Integer.parseInt(mid)));
-        }  catch (DateTimeParseException e) {
-            logger.warn("Incorrect date input");
-            resp.setStatus(404);
-        }
-
-        try{
             service.save(event);
             resp.sendRedirect("schedule?date=" + date);
+        } catch (DateTimeParseException | NumberFormatException e) {
+            logger.warn("Parsing error", e.getMessage());
+            resp.setStatus(404);
         } catch (DuplicateEntityException de) {
             logger.warn(de);
             req.setAttribute("duplicate", true);
@@ -107,7 +113,7 @@ public class EventServlet extends HttpServlet {
             req.setAttribute("event", event);
             req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
         } catch (DBException e) {
-            logger.warn(e);
+            logger.error(e);
             resp.setStatus(500);
         }
     }

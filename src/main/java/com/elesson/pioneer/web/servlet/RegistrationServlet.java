@@ -46,8 +46,9 @@ public class RegistrationServlet extends HttpServlet {
                 logger.info("{} logged in", user.getName());
                 resp.sendRedirect("schedule");
             } catch (DuplicateEntityException de) {
+                logger.warn(de.getMessage());
                 req.setAttribute("duplicate", true);
-                req.getRequestDispatcher("registration.jsp").forward(req, resp);
+                req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);
             } catch (DBException e) {
                 resp.setStatus(500);
             }

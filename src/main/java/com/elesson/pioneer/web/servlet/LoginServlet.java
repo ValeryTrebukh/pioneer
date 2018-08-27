@@ -42,11 +42,12 @@ public class LoginServlet extends HttpServlet {
                 throw new NotFoundEntityException("Wrong password");
             }
         } catch (NotFoundEntityException e) {
+            logger.warn(e.getMessage());
             req.setAttribute("error", "password");
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            req.getRequestDispatcher("jsp/login.jsp").forward(req, resp);
         } catch (DBException e) {
-            req.setAttribute("message", "db");
-            req.getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
+            logger.error(e);
+            resp.setStatus(500);
         }
     }
 

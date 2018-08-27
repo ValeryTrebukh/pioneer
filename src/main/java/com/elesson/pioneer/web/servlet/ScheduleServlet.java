@@ -23,8 +23,7 @@ import java.util.List;
  * Possible URL attributes:
  *      action=my - records for authorized user will be returned
  *      action=date&date=somedate - somedate will be parsed to LocalDate and the records for specified
- *          data will be returned. It is also required that masterId to be stored in session.
- *          If masterId is null you will be redirected to the page with list of masters.
+ *          data will be returned.
  * Redirects to error page if some exception comes from DAO layer.
  */
 public class ScheduleServlet extends HttpServlet {
@@ -61,5 +60,4 @@ public class ScheduleServlet extends HttpServlet {
         }
         return nextWeek;
     }
-
 }

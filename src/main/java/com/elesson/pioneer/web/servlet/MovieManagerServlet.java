@@ -1,8 +1,10 @@
 package com.elesson.pioneer.web.servlet;
 
+import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.MovieService;
 import com.elesson.pioneer.service.MovieServiceImpl;
+import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.Paginator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class MovieManagerServlet extends HttpServlet {
@@ -24,33 +27,45 @@ public class MovieManagerServlet extends HttpServlet {
         MovieService service = MovieServiceImpl.getMovieService();
 
         String action = req.getParameter("action");
-        switch (action == null ? "all" : action) {
-            case "edit":
-            case "create":
-                final Movie movie = "create".equals(action) ?
-                        new Movie() : service.get(Integer.parseInt(req.getParameter("mid")));
-                logger.debug("movie received");
-                req.setAttribute("movie", movie);
-                req.getRequestDispatcher("jsp/movieForm.jsp").forward(req, resp);
-                break;
-            case "delete":
-                service.delete(Integer.parseInt(req.getParameter("mid")));
-                resp.sendRedirect("movies");
-                break;
-            case "all":
-                Paginator<Movie> paginator = new Paginator<>();
-                List<Movie> movies = service.getAllMovies();
-                int page = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
-                int pagesCount = paginator.getPageCount(movies);
-                page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
-                req.setAttribute("movies", paginator.getPage(movies, page));
-                req.setAttribute("page", page);
-                req.setAttribute("pagesCount", paginator.getPageCount(movies));
-                req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
-                break;
-            default:
-                req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
-                break;
+        String mid = req.getParameter("mid");
+
+        try {
+            switch (action == null ? "all" : action) {
+                case "edit":
+                case "create":
+                    final Movie movie = "create".equals(action) ?
+                            new Movie() : service.get(Integer.parseInt(mid));
+                    logger.debug("Movie obtained");
+                    req.setAttribute("movie", movie);
+                    req.getRequestDispatcher("jsp/movieForm.jsp").forward(req, resp);
+                    break;
+                case "delete":
+                    service.delete(Integer.parseInt(mid));
+                    logger.info("Movie deleted: ", mid);
+                    resp.sendRedirect("movies");
+                    break;
+                case "all":
+                    Paginator<Movie> paginator = new Paginator<>();
+                    List<Movie> movies = service.getAllMovies();
+                    String sPage = req.getParameter("page");
+                    int page = sPage !=null ? Integer.parseInt(sPage) : 1;
+                    int pagesCount = paginator.getPageCount(movies);
+                    page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
+                    req.setAttribute("movies", paginator.getPage(movies, page));
+                    req.setAttribute("page", page);
+                    req.setAttribute("pagesCount", paginator.getPageCount(movies));
+                    req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
+                    break;
+                default:
+                    req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
+                    break;
+            }
+        } catch (NumberFormatException | NotFoundEntityException e) {
+            logger.warn(e.getMessage());
+            resp.setStatus(404);
+        } catch (DBException e) {
+            logger.error(e);
+            resp.setStatus(500);
         }
     }
 
@@ -63,16 +78,22 @@ public class MovieManagerServlet extends HttpServlet {
         String year = req.getParameter("year");
         String active = req.getParameter("status");
 
-        Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year), Boolean.valueOf(active));
-
         MovieService service = MovieServiceImpl.getMovieService();
-        if (req.getParameter("mid").isEmpty()) {
-            service.create(movie);
+
+        try {
+            Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year), Boolean.valueOf(active));
+
+            if (req.getParameter("mid").isEmpty()) {
+                service.create(movie);
+            }
+            else {
+                movie.setId(Integer.parseInt(req.getParameter("mid")));
+                service.update(movie);
+            }
+            resp.sendRedirect("movies");
+        } catch (DBException e) {
+            logger.error(e);
+            resp.setStatus(500);
         }
-        else {
-            movie.setId(Integer.parseInt(req.getParameter("mid")));
-            service.update(movie);
-        }
-        resp.sendRedirect("movies");
     }
 }

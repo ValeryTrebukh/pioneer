@@ -1,9 +1,11 @@
 package com.elesson.pioneer.web.servlet;
 
+import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.TicketService;
 import com.elesson.pioneer.service.TicketServiceImpl;
+import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +28,39 @@ public class TicketServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         String tid = req.getParameter("tid");
-        int row = Integer.parseInt(tid.split("-")[0]);
-        int seat = Integer.parseInt(tid.split("-")[1]);
-        int eid = Integer.parseInt(req.getParameter("eid"));
 
-        if(isValid(new Ticket(eid, row, seat))) {
-            HttpSession session = req.getSession();
-            List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
-            if(preOrdered == null) {
-                preOrdered = new ArrayList<>();
+        try {
+            int row = Integer.parseInt(tid.split("-")[0]);
+            int seat = Integer.parseInt(tid.split("-")[1]);
+            int eid = Integer.parseInt(req.getParameter("eid"));
+            if(isValid(new Ticket(eid, row, seat))) {
+                HttpSession session = req.getSession();
+                List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
+                if(preOrdered == null) {
+                    preOrdered = new ArrayList<>();
+                }
+                User aUser = (User)session.getAttribute("authUser");
+                if(aUser == null) {
+                    resp.setStatus(403);
+                } else {
+                    int uid = aUser.getId();
+                    addOrRemoveTicket(preOrdered, new Ticket(uid, eid, row, seat));
+                    session.setAttribute("tickets", preOrdered);
+                    logger.debug(tid + " added to list");
+                    resp.sendRedirect("event?action=view&eid=" + eid);
+                }
             }
-            int uid = ((User)session.getAttribute("authUser")).getId();
-            addOrRemoveTicket(preOrdered, new Ticket(uid, eid, row, seat));
-            session.setAttribute("tickets", preOrdered);
-            logger.debug(tid + " added to list");
+        } catch (NumberFormatException e) {
+            logger.warn(e.getMessage());
+            resp.setStatus(404);
+        } catch (DBException e) {
+            logger.error(e);
+            resp.setStatus(500);
         }
-        resp.sendRedirect("event?action=view&eid=" + eid);
+
+
+
+
     }
 
     private void addOrRemoveTicket(List<Ticket> tickets, Ticket ticket) {

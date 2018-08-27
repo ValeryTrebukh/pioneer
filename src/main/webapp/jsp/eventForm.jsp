@@ -13,7 +13,7 @@
     <form method="post" action="event">
 
         <c:if test="${duplicate}">
-            DUPLICATE
+            <fmt:message key="errmsg.duplicate"/>
             </br>
         </c:if>
         <input type="hidden" name="eid" value="${event.id}">
