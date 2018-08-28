@@ -73,12 +73,4 @@ public interface BaseDao {
      */
     <T extends Entity> List<T> getAllByDate(LocalDate date) throws DBException;
 
-    /**
-     * Retrieves the database for a list of {@code Entity} class objects.
-     * Suppress all SQL exceptions and throws own general one.
-     *
-     * @return the list of {@code Entity} class objects
-     * @throws DBException the general exception to cover all SQL exceptions
-     */
-    <T extends Entity> List<T> getActive() throws DBException;
 }

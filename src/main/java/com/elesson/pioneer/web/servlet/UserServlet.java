@@ -7,6 +7,7 @@ import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.UserServiceImpl;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.Paginator;
+import com.elesson.pioneer.service.util.UserCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +51,7 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "all":
                     Paginator<User> paginator = new Paginator<>();
-                    List<User> users = service.getAll();
+                    List<User> users = UserCache.getUsers();
                     int page = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
                     int pagesCount = paginator.getPageCount(users);
                     page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;

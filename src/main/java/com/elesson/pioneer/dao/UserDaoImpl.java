@@ -111,12 +111,4 @@ public class UserDaoImpl implements BaseDao {
         return null;
     }
 
-    //not implemented
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T extends Entity> List<T> getActive() {
-        return null;
-    }
 }

@@ -5,6 +5,7 @@ import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
+import com.elesson.pioneer.service.util.MovieCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +36,6 @@ public class EventServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         EventService service = EventServiceImpl.getEventService();
-        MovieService mService = MovieServiceImpl.getMovieService();
         TicketService tService = TicketServiceImpl.getTicketService();
 
         String action = req.getParameter("action");
@@ -50,7 +50,7 @@ public class EventServlet extends HttpServlet {
                     if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
                         req.setAttribute("event", new Event(LocalDate.parse(date)));
                         req.setAttribute("action", action);
-                        req.setAttribute("movies", mService.getActiveMovies());
+                        req.setAttribute("movies", MovieCache.getActiveMovies());
                         req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
                     }
                     break;
@@ -119,7 +119,7 @@ public class EventServlet extends HttpServlet {
         } catch (DuplicateEntityException de) {
             logger.warn(de);
             req.setAttribute("duplicate", true);
-            req.setAttribute("movies", MovieServiceImpl.getMovieService().getActiveMovies());
+            req.setAttribute("movies", MovieCache.getActiveMovies());
             req.setAttribute("event", event);
             req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
         } catch (DBException e) {

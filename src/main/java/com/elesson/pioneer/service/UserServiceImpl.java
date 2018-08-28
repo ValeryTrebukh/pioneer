@@ -4,6 +4,7 @@ package com.elesson.pioneer.service;
 import com.elesson.pioneer.dao.BaseDao;
 import com.elesson.pioneer.dao.DaoFactory;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.util.UserCache;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 
 /**
  * Provides implementation of all {@code UserService} interface methods.
+ * All modification operations invalidate cached collection of users.
  */
 public class UserServiceImpl implements UserService {
 
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
         checkNotFound(user, "user must not be null");
         user.setPassword(encrypt(user.getPassword()));
         checkNotFound(userDao.save(user), "user must not be null");
+        UserCache.invalidate();
     }
 
     /**
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(int id) {
         checkNotFoundWithId(userDao.delete(id), id);
+        UserCache.invalidate();
     }
 
     /**
@@ -79,6 +83,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(encrypt(user.getPassword()));
         }
         checkNotFoundWithId(userDao.save(user), user.getId());
+        UserCache.invalidate();
     }
 
     /**

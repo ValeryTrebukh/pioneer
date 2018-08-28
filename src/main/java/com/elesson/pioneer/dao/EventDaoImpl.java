@@ -87,15 +87,6 @@ public class EventDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Event> getActive() {
-        return null;
-    }
-
-    //not implemented
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Event getByValue(String value) {
         return null;
     }

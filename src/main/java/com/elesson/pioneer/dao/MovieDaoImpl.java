@@ -38,18 +38,7 @@ public class MovieDaoImpl implements BaseDao {
      */
     @Override
     public List<Movie> getAll() {
-        return getMovies("SELECT * FROM movies m");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Movie> getActive() {
-        return getMovies("SELECT * FROM movies m WHERE active=true");
-    }
-
-    private List<Movie> getMovies(String query) {
+        String query = "SELECT * FROM movies m";
         return simpleDao.getAllById(Movie.class, query);
     }
 

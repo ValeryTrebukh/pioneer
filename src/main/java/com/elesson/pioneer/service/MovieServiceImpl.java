@@ -3,6 +3,7 @@ package com.elesson.pioneer.service;
 import com.elesson.pioneer.dao.BaseDao;
 import com.elesson.pioneer.dao.DaoFactory;
 import com.elesson.pioneer.model.Movie;
+import com.elesson.pioneer.service.util.MovieCache;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 
 /**
  * Provides implementation of all {@code MovieService} interface methods.
+ * All modification operations invalidate cached collection of movies.
  */
 public class MovieServiceImpl implements MovieService {
 
@@ -39,6 +41,7 @@ public class MovieServiceImpl implements MovieService {
     public void create(Movie movie) {
         checkNotFound(movie, "movie must not be null");
         checkNotFound(movieDao.save(movie), "movie must not be null");
+        MovieCache.invalidate();
     }
 
     /**
@@ -47,6 +50,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void delete(int id) {
         checkNotFoundWithId(movieDao.delete(id), id);
+        MovieCache.invalidate();
     }
 
     /**
@@ -64,6 +68,7 @@ public class MovieServiceImpl implements MovieService {
     public void update(Movie movie) {
         checkNotFound(movie, "movie must not be null");
         checkNotFoundWithId(movieDao.save(movie), movie.getId());
+        MovieCache.invalidate();
     }
 
     /**
@@ -74,11 +79,4 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.getAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Movie> getActiveMovies() {
-        return movieDao.getActive();
-    }
 }
