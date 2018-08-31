@@ -41,7 +41,7 @@ public class EventDaoImpl implements BaseDao {
     public Event getById(int id) {
         String query = "SELECT e.*, s.*, m.* FROM events e INNER JOIN seances s on e.seance_id = s.sid " +
                 "INNER JOIN movies m on e.movie_id = m.mid WHERE e.eid=?";
-        return simpleDao.getById(Event.class, query, id);
+        return simpleDao.get(Event.class, query, id);
     }
 
     /**
@@ -51,7 +51,7 @@ public class EventDaoImpl implements BaseDao {
     public List<Event> getAllByDate(LocalDate date) {
         String query = "SELECT e.*, s.*, m.* FROM events e RIGHT JOIN seances s on e.seance_id = s.sid " +
                 "INNER JOIN movies m on e.movie_id = m.mid WHERE e.date=? ORDER BY s.sid";
-        return simpleDao.getAllById(Event.class, query, Date.valueOf(date));
+        return simpleDao.getAll(Event.class, query, Date.valueOf(date));
     }
 
     /**

@@ -34,7 +34,7 @@ public interface JDBCDao {
      * @return the instance of {@code Entity} class
      * @throws DBException the general exception to cover all SQL exceptions
      */
-    <T extends Entity> T getById(Class cl, String query, Object... values) throws DBException;
+    <T extends Entity> T get(Class cl, String query, Object... values) throws DBException;
 
     /**
      * Retrieves the database for the list of objects.
@@ -46,7 +46,7 @@ public interface JDBCDao {
      * @return the instance of {@code Entity} class
      * @throws DBException the general exception to cover all SQL exceptions
      */
-    <T extends Entity> List<T> getAllById(Class cl, String query, Object... values) throws DBException;
+    <T extends Entity> List<T> getAll(Class cl, String query, Object... values) throws DBException;
 
     /**
      * Inserts new record to database.

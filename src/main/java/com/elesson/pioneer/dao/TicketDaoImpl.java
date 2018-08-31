@@ -65,7 +65,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     private List<Ticket> getAllById(String query, Integer id) {
-        return simpleDao.getAllById(Ticket.class, query, id);
+        return simpleDao.getAll(Ticket.class, query, id);
     }
 
     /**

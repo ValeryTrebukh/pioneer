@@ -39,7 +39,7 @@ public class MovieDaoImpl implements BaseDao {
     @Override
     public List<Movie> getAll() {
         String query = "SELECT * FROM movies m";
-        return simpleDao.getAllById(Movie.class, query);
+        return simpleDao.getAll(Movie.class, query);
     }
 
     /**
@@ -72,7 +72,7 @@ public class MovieDaoImpl implements BaseDao {
     @Override
     public Movie getById(int id) {
         String query = "SELECT * FROM movies m WHERE mid=?";
-        return simpleDao.getById(Movie.class, query, id);
+        return simpleDao.get(Movie.class, query, id);
     }
 
     //not implemented

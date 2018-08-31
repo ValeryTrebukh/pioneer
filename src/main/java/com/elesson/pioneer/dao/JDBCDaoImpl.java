@@ -43,7 +43,7 @@ public class JDBCDaoImpl implements JDBCDao {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Entity> T getById(Class cl, String query, Object... values) {
+    public <T extends Entity> T get(Class cl, String query, Object... values) {
         T entity = null;
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {
             PreparedStatement pst = con.prepareStatement(query, values);
@@ -67,7 +67,7 @@ public class JDBCDaoImpl implements JDBCDao {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Entity> List<T> getAllById(Class cl, String query, Object... values) {
+    public <T extends Entity> List<T> getAll(Class cl, String query, Object... values) {
         List<T> list = new ArrayList<>();
         T entity = null;
         try(DBConnection con = ConnectionPool.getPool().getConnection()) {

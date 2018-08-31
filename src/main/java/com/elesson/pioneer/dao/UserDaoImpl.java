@@ -39,7 +39,7 @@ public class UserDaoImpl implements BaseDao {
     @Override
     public List<User> getAll() {
         String query = "SELECT * FROM users u";
-        return simpleDao.getAllById(User.class, query);
+        return simpleDao.getAll(User.class, query);
     }
 
     /**
@@ -98,7 +98,7 @@ public class UserDaoImpl implements BaseDao {
      * @return the instance of {@code User} class
      */
     private User getUser(String query, Object... values) {
-        return simpleDao.getById(User.class, query, values);
+        return simpleDao.get(User.class, query, values);
     }
 
 
