@@ -87,7 +87,7 @@ public class EventDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public Event getByValue(String value) {
+    public Event getByEmail(String value) {
         return null;
     }
 }

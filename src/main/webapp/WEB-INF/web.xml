@@ -106,7 +106,7 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>login</welcome-file>
+        <welcome-file>schedule</welcome-file>
     </welcome-file-list>
 
     <filter>
@@ -144,6 +144,10 @@
     <context-param>
         <param-name>hallSeats</param-name>
         <param-value>8</param-value>
+    </context-param>
+    <context-param>
+        <param-name>pageSize</param-name>
+        <param-value>3</param-value>
     </context-param>
 
 </web-app>

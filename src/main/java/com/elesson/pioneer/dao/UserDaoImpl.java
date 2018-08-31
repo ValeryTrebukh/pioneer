@@ -75,7 +75,7 @@ public class UserDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public User getByValue(String email) {
+    public User getByEmail(String email) {
         String query = "SELECT * FROM users u WHERE email=?";
         return getUser(query, email);
     }

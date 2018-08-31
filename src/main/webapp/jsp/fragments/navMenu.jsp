@@ -6,11 +6,12 @@
 
 <header>
     <div class="navbar">
-        <div><a href="login"><fmt:message key="app.login"/></a></div>
-        <div><a href="registration"><fmt:message key="app.register"/></a></div>
-        <div class="dropdown">
-            <div><a href="schedule"><fmt:message key="app.schedule"/></a></div>
-        </div>
+        <c:if test="${sessionScope.authUser == null}">
+            <div><a href="login"><fmt:message key="app.login"/></a></div>
+            <div><a href="registration"><fmt:message key="app.register"/></a></div>
+        </c:if>
+
+        <div><a href="schedule"><fmt:message key="app.schedule"/></a></div>
         <c:if test="${sessionScope.authUser != null}">
             <div><a href="my"><fmt:message key="app.my"/></a></div>
             <c:if test="${sessionScope.authUser.role == 'ADMIN'}">

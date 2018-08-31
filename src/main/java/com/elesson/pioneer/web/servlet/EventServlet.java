@@ -18,6 +18,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Helper.getBackReference;
+
 /**
  * Handles requests on event entity.
  * Behavior depends on request attribute 'action'.
@@ -57,7 +59,7 @@ public class EventServlet extends HttpServlet {
                 case "delete":
                     if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
                         service.delete(Integer.parseInt(eid));
-                        resp.sendRedirect("schedule" + getAdd(req));
+                        resp.sendRedirect("schedule" + getBackReference(req));
                     }
                     break;
                 case "view":
@@ -84,11 +86,6 @@ public class EventServlet extends HttpServlet {
             logger.error(e);
             resp.setStatus(500);
         }
-    }
-
-    private String getAdd(HttpServletRequest req) {
-        String referer = req.getHeader("referer");
-        return referer.lastIndexOf("?") != -1 ? referer.substring(referer.lastIndexOf("?")) : "";
     }
 
     private void validatePreorders(HttpServletRequest req, HttpServletResponse resp) {

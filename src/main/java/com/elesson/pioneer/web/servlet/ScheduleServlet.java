@@ -1,6 +1,7 @@
 package com.elesson.pioneer.web.servlet;
 
 
+import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.service.EventService;
 import com.elesson.pioneer.service.EventServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -36,20 +37,22 @@ public class ScheduleServlet extends HttpServlet {
         EventService service = EventServiceImpl.getEventService();
 
         String date = req.getParameter("date");
-        LocalDate localDate = null;
         try {
-            localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
+            LocalDate localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
             localDate = localDate.isBefore(LocalDate.now()) ? LocalDate.now() : localDate;
+
+            req.setAttribute("events", service.getEvents(localDate));
+            req.setAttribute("nextWeek", getNextWeek());
+            req.setAttribute("date", localDate);
+
+            req.getRequestDispatcher("jsp/schedule.jsp").forward(req, resp);
         } catch (DateTimeParseException e) {
             logger.warn("Incorrect date input");
             resp.setStatus(404);
+        }  catch (DBException e) {
+            logger.error(e);
+            resp.setStatus(500);
         }
-
-        req.setAttribute("events", service.getEvents(localDate));
-        req.setAttribute("nextWeek", getNextWeek());
-        req.setAttribute("date", localDate);
-
-        req.getRequestDispatcher("jsp/schedule.jsp").forward(req, resp);
     }
 
     private List<LocalDate> getNextWeek() {

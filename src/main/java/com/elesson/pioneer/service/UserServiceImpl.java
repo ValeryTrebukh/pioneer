@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         checkNotFound(email, "email must not be null");
-        return checkNotFound(userDao.getByValue(email), "email=" + email);
+        return checkNotFound(userDao.getByEmail(email), "email=" + email);
     }
 
     /**

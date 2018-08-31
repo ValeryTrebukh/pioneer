@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Helper.getBackReference;
+
 /**
  * The {@code MovieManagerServlet} class provides one of main functional for the Admins (CRUD).
  *      - View the list of movies.
@@ -38,7 +40,7 @@ public class MovieManagerServlet extends HttpServlet {
         String mid = req.getParameter("mid");
 
         try {
-            switch (action == null ? "all" : action) {
+            switch (action) {
                 case "edit":
                 case "create":
                     final Movie movie = "create".equals(action) ?
@@ -50,21 +52,10 @@ public class MovieManagerServlet extends HttpServlet {
                 case "delete":
                     service.delete(Integer.parseInt(mid));
                     logger.info("Movie deleted: ", mid);
-                    resp.sendRedirect("movies");
-                    break;
-                case "all":
-                    Paginator<Movie> paginator = new Paginator<>();
-                    List<Movie> movies = MovieCache.getMovies();
-                    String sPage = req.getParameter("page");
-                    int page = sPage !=null ? Integer.parseInt(sPage) : 1;
-                    int pagesCount = paginator.getPageCount(movies);
-                    page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
-                    req.setAttribute("movies", paginator.getPage(movies, page));
-                    req.setAttribute("page", page);
-                    req.setAttribute("pagesCount", paginator.getPageCount(movies));
-                    req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
+                    resp.sendRedirect("movies"+ getBackReference(req));
                     break;
                 default:
+                    setPageDataToRequest(req);
                     req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
                     break;
             }
@@ -75,6 +66,19 @@ public class MovieManagerServlet extends HttpServlet {
             logger.error(e);
             resp.setStatus(500);
         }
+    }
+
+    private void setPageDataToRequest(HttpServletRequest req) {
+        int pageSize = Integer.parseInt(req.getServletContext().getInitParameter("pageSize"));
+        Paginator<Movie> paginator = new Paginator<>(pageSize);
+        List<Movie> movies = MovieCache.getMovies();
+        String sPage = req.getParameter("page");
+        int page = sPage !=null ? Integer.parseInt(sPage) : 1;
+        int pagesCount = paginator.getPageCount(movies);
+        page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
+        req.setAttribute("movies", paginator.getPage(movies, page));
+        req.setAttribute("page", page);
+        req.setAttribute("pagesCount", paginator.getPageCount(movies));
     }
 
     @Override

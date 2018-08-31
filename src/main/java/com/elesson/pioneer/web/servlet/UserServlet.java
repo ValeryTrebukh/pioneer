@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Helper.getBackReference;
+
 /**
  * The {@code UserServlet} class provides one of main functional for the Admins (CRUD).
  *      - View the list of users.
@@ -37,7 +39,7 @@ public class UserServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         try {
-            switch (action == null ? "all" : action) {
+            switch (action) {
                 case "edit":
                 case "create":
                     final User user = "create".equals(action) ?
@@ -47,20 +49,10 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "delete":
                     service.delete(Integer.parseInt(req.getParameter("userid")));
-                    resp.sendRedirect("users" + getAdd(req));
-                    break;
-                case "all":
-                    Paginator<User> paginator = new Paginator<>();
-                    List<User> users = UserCache.getUsers();
-                    int page = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
-                    int pagesCount = paginator.getPageCount(users);
-                    page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
-                    req.setAttribute("users", paginator.getPage(users, page));
-                    req.setAttribute("page", page);
-                    req.setAttribute("pagesCount", paginator.getPageCount(users));
-                    req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
+                    resp.sendRedirect("users" + getBackReference(req));
                     break;
                 default:
+                    setPageDataToRequest(req);
                     req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
                     break;
             }
@@ -73,10 +65,18 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    private String getAdd(HttpServletRequest req) {
-        String referer = req.getHeader("referer");
-        return referer.lastIndexOf("?") != -1 ? referer.substring(referer.lastIndexOf("?")) : "";
+    private void setPageDataToRequest(HttpServletRequest req) {
+        int pageSize = Integer.parseInt(req.getServletContext().getInitParameter("pageSize"));
+        Paginator<User> paginator = new Paginator<>(pageSize);
+        List<User> users = UserCache.getUsers();
+        int currentPage = req.getParameter("page")!=null ? Integer.parseInt(req.getParameter("page")) : 1;
+        int pagesCount = paginator.getPageCount(users);
+        currentPage = currentPage > pagesCount ? pagesCount : currentPage < 1 ? 1 : currentPage;
+        req.setAttribute("users", paginator.getPage(users, currentPage));
+        req.setAttribute("page", currentPage);
+        req.setAttribute("pagesCount", paginator.getPageCount(users));
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

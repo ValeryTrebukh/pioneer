@@ -61,7 +61,7 @@ public interface BaseDao {
      * @return the instance of {@code Entity} class
      * @throws DBException the general exception to cover all SQL exceptions
      */
-    <T extends Entity> T getByValue(String value) throws DBException;
+    <T extends Entity> T getByEmail(String value) throws DBException;
 
     /**
      * Retrieves the database for single object of {@code Entity} class.

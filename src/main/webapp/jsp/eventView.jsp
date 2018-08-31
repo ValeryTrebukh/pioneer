@@ -52,17 +52,18 @@ select sits
     </c:forEach>
 </table>
 
-<form method="post" action="ticket">
-    <input type="hidden" name="eid" value="${event.id}">
+<c:if test="${sessionScope.tickets!=null}">
+    <form method="post" action="ticket">
+        <input type="hidden" name="eid" value="${event.id}">
 
-    <c:forEach items="${sessionScope.tickets}" var="ticket">
-        <jsp:useBean id="ticket" type="com.elesson.pioneer.model.Ticket"/>
-        <c:out value="eid:${ticket.eventId}, row:${ticket.row}, seat:${ticket.seat}"/> <br>
-    </c:forEach>
+        <c:forEach items="${sessionScope.tickets}" var="ticket">
+            <jsp:useBean id="ticket" type="com.elesson.pioneer.model.Ticket"/>
+            <c:out value="eid:${ticket.eventId}, row:${ticket.row}, seat:${ticket.seat}"/> <br>
+        </c:forEach>
 
-    <button type="submit"><fmt:message key="ticket.buy"/></button>
-</form>
-
+        <button type="submit"><fmt:message key="ticket.buy"/></button>
+    </form>
+</c:if>
 
 
 </body>

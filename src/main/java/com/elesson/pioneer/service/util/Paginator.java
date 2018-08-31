@@ -11,7 +11,11 @@ import java.util.List;
  */
 public class Paginator<T>  {
 
-    private static final int PAGE_SIZE = 3;
+    private final int PAGE_SIZE;
+
+    public Paginator(int pageSize) {
+        PAGE_SIZE = pageSize;
+    }
 
     /**
      * Returns the chunk of data related to requested page

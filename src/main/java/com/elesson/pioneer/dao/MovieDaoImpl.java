@@ -83,7 +83,7 @@ public class MovieDaoImpl implements BaseDao {
 
     //not implemented
     @Override
-    public Movie getByValue(String value) {
+    public Movie getByEmail(String value) {
         return null;
     }
 }
