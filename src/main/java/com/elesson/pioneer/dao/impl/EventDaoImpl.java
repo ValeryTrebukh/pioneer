@@ -20,20 +20,20 @@ public class EventDaoImpl implements EventDao {
     private static final Logger logger = LogManager.getLogger(EventDaoImpl.class);
     private Dao simpleDao = getStrategy(Strategy.JDBC);
 
-    private static volatile EventDaoImpl eventDao;
+    private static volatile EventDao dao;
 
     private EventDaoImpl() {}
 
-    public static EventDaoImpl getEventDao() {
-        if(eventDao ==null) {
+    public static EventDao getDao() {
+        if(dao ==null) {
             synchronized (EventDaoImpl.class) {
-                if(eventDao ==null) {
-                    eventDao = new EventDaoImpl();
+                if(dao ==null) {
+                    dao = new EventDaoImpl();
                 }
             }
         }
         if(logger.isDebugEnabled()) logger.debug("EventDaoImpl received");
-        return eventDao;
+        return dao;
     }
 
     /**

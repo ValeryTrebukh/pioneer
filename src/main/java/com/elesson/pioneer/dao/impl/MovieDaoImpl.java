@@ -19,20 +19,20 @@ public class MovieDaoImpl implements MovieDao {
     private static final Logger logger = LogManager.getLogger(MovieDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
-    private static volatile MovieDaoImpl movieDao;
+    private static volatile MovieDao dao;
 
     private MovieDaoImpl() {}
 
-    public static MovieDaoImpl getMovieDao() {
-        if(movieDao ==null) {
+    public static MovieDao getDao() {
+        if(dao ==null) {
             synchronized (MovieDaoImpl.class) {
-                if(movieDao ==null) {
-                    movieDao = new MovieDaoImpl();
+                if(dao ==null) {
+                    dao = new MovieDaoImpl();
                 }
             }
         }
         if(logger.isDebugEnabled()) logger.debug("MovieDaoImpl received");
-        return movieDao;
+        return dao;
     }
 
     /**

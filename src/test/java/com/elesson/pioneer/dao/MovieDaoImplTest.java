@@ -1,6 +1,5 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.dao.impl.MovieDaoImpl;
 import com.elesson.pioneer.dao.util.DBHelper;
 import com.elesson.pioneer.model.Movie;
 import org.junit.Before;
@@ -12,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class MovieDaoImplTest {
 
-    private MovieDao movieDao = MovieDaoImpl.getMovieDao();
+    private MovieDao movieDao = DaoEntityFactory.getMovieDao();
 
     @Before
     public void setUp() throws Exception {

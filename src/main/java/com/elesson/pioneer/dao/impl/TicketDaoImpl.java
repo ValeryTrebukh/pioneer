@@ -19,20 +19,20 @@ public class TicketDaoImpl implements TicketDao {
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
-    private static volatile TicketDao ticketDao;
+    private static volatile TicketDao dao;
 
     private TicketDaoImpl() {}
 
-    public static TicketDao getTicketDao() {
-        if(ticketDao ==null) {
+    public static TicketDao getDao() {
+        if(dao ==null) {
             synchronized (TicketDaoImpl.class) {
-                if(ticketDao ==null) {
-                    ticketDao = new TicketDaoImpl();
+                if(dao ==null) {
+                    dao = new TicketDaoImpl();
                 }
             }
         }
         if(logger.isDebugEnabled()) logger.debug("TicketDao received");
-        return ticketDao;
+        return dao;
     }
 
     /**

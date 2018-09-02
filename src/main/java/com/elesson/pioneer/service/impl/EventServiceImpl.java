@@ -1,7 +1,7 @@
 package com.elesson.pioneer.service.impl;
 
+import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.dao.EventDao;
-import com.elesson.pioneer.dao.impl.EventDaoImpl;
 import com.elesson.pioneer.model.Event;
 import com.elesson.pioneer.service.EventService;
 
@@ -17,7 +17,7 @@ public class EventServiceImpl implements EventService {
     private static volatile EventService service;
 
     private EventServiceImpl() {
-        eventDao = EventDaoImpl.getEventDao();
+        eventDao = DaoEntityFactory.getEventDao();
     }
 
     public static EventService getEventService() {

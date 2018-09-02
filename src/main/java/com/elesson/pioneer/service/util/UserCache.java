@@ -1,6 +1,6 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.impl.UserDaoImpl;
+import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.model.User;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class UserCache {
         if(users.isEmpty()) {
             synchronized (UserCache.class) {
                 if(users.isEmpty()) {
-                    users = UserDaoImpl.getUserDao().getAll();
+                    users = DaoEntityFactory.getUserDao().getAll();
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.dao.impl.EventDaoImpl;
 import com.elesson.pioneer.dao.util.DBHelper;
 import com.elesson.pioneer.model.Event;
 import org.junit.Before;
@@ -14,7 +13,7 @@ import static org.junit.Assert.*;
 public class EventDaoImplTest {
 
 
-    private EventDao eventDao = EventDaoImpl.getEventDao();
+    private EventDao eventDao = DaoEntityFactory.getEventDao();
 
     @Before
     public void setUp() throws Exception {

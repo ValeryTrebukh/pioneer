@@ -19,20 +19,20 @@ public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
-    private static volatile UserDaoImpl userDao;
+    private static volatile UserDao dao;
 
     private UserDaoImpl() {}
 
-    public static UserDaoImpl getUserDao() {
-        if(userDao==null) {
+    public static UserDao getDao() {
+        if(dao==null) {
             synchronized (UserDaoImpl.class) {
-                if(userDao==null) {
-                    userDao = new UserDaoImpl();
+                if(dao==null) {
+                    dao = new UserDaoImpl();
                 }
             }
         }
         if(logger.isDebugEnabled()) logger.debug("UserDao received");
-        return userDao;
+        return dao;
     }
 
     /**

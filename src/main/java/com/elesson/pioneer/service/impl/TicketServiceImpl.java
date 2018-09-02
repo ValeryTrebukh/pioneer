@@ -1,7 +1,7 @@
 package com.elesson.pioneer.service.impl;
 
+import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.dao.TicketDao;
-import com.elesson.pioneer.dao.impl.TicketDaoImpl;
 import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.service.TicketService;
 
@@ -18,7 +18,7 @@ public class TicketServiceImpl implements TicketService {
     private static volatile TicketService service;
 
     private TicketServiceImpl() {
-        ticketDao = TicketDaoImpl.getTicketDao();
+        ticketDao = DaoEntityFactory.getTicketDao();
     }
 
     public static TicketService getTicketService() {

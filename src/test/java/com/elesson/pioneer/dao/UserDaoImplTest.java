@@ -1,6 +1,5 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.dao.impl.UserDaoImpl;
 import com.elesson.pioneer.dao.util.DBHelper;
 import com.elesson.pioneer.model.User;
 import org.junit.Before;
@@ -13,8 +12,7 @@ public class UserDaoImplTest {
 
 
 
-//    private BaseDao userDao = getDao(DaoType.USER);
-    private UserDaoImpl userDao = UserDaoImpl.getUserDao();
+    private UserDao userDao = DaoEntityFactory.getUserDao();
 
     @Before
     public void setUp() throws Exception {

@@ -1,6 +1,5 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.dao.impl.TicketDaoImpl;
 import com.elesson.pioneer.dao.util.DBHelper;
 import com.elesson.pioneer.model.Ticket;
 import org.junit.Before;
@@ -15,7 +14,7 @@ import static org.junit.Assert.*;
 public class TicketDaoImplTest {
 
 
-    private TicketDao ticketDao = TicketDaoImpl.getTicketDao();
+    private TicketDao ticketDao = DaoEntityFactory.getTicketDao();
 
     @Before
     public void setUp() throws Exception {

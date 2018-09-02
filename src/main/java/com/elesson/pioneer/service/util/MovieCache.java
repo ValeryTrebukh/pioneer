@@ -1,5 +1,6 @@
 package com.elesson.pioneer.service.util;
 
+import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.dao.impl.MovieDaoImpl;
 import com.elesson.pioneer.model.Movie;
 
@@ -20,7 +21,7 @@ public class MovieCache {
         if(movies.isEmpty()) {
             synchronized (UserCache.class) {
                 if(movies.isEmpty()) {
-                    movies = MovieDaoImpl.getMovieDao().getAll();
+                    movies = DaoEntityFactory.getMovieDao().getAll();
                 }
             }
         }

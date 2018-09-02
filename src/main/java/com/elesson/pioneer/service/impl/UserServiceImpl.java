@@ -1,8 +1,8 @@
 package com.elesson.pioneer.service.impl;
 
 
+import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.dao.UserDao;
-import com.elesson.pioneer.dao.impl.UserDaoImpl;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.util.UserCache;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private static volatile UserService service;
 
     private UserServiceImpl() {
-        userDao = UserDaoImpl.getUserDao();
+        userDao = DaoEntityFactory.getUserDao();
     }
 
     public static UserService getUserService() {
