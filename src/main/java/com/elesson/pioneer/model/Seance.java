@@ -39,7 +39,7 @@ public class Seance extends Entity {
      * @throws SQLException the sql exception
      */
     public Seance(ResultSet rs) throws SQLException {
-        this(rs.getInt("s.sid"), rs.getTime("s.time").toLocalTime());
+        this(rs.getInt("seances.sid"), rs.getTime("seances.time").toLocalTime());
     }
 
     /**

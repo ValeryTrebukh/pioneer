@@ -16,7 +16,7 @@ public class EventDaoImpl implements BaseDao {
 
     private static final Logger logger = LogManager.getLogger(EventDaoImpl.class);
 
-    private JDBCDao simpleDao = new JDBCDaoImpl();
+    private Dao simpleDao = new JDBCDao();
 
     private static volatile EventDaoImpl eventDao;
 
@@ -39,8 +39,8 @@ public class EventDaoImpl implements BaseDao {
      */
     @Override
     public Event getById(int id) {
-        String query = "SELECT e.*, s.*, m.* FROM events e INNER JOIN seances s on e.seance_id = s.sid " +
-                "INNER JOIN movies m on e.movie_id = m.mid WHERE e.eid=?";
+        String query = "SELECT * FROM events INNER JOIN seances on events.seance_id = seances.sid " +
+                "INNER JOIN movies on events.movie_id = movies.mid WHERE events.eid=?";
         return simpleDao.get(Event.class, query, id);
     }
 
@@ -49,8 +49,8 @@ public class EventDaoImpl implements BaseDao {
      */
     @Override
     public List<Event> getAllByDate(LocalDate date) {
-        String query = "SELECT e.*, s.*, m.* FROM events e RIGHT JOIN seances s on e.seance_id = s.sid " +
-                "INNER JOIN movies m on e.movie_id = m.mid WHERE e.date=? ORDER BY s.sid";
+        String query = "SELECT * FROM events RIGHT JOIN seances on events.seance_id = seances.sid " +
+                "INNER JOIN movies on events.movie_id = movies.mid WHERE events.date=? ORDER BY seances.sid";
         return simpleDao.getAll(Event.class, query, Date.valueOf(date));
     }
 

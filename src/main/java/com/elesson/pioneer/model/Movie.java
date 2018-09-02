@@ -68,11 +68,11 @@ public class Movie extends Entity {
      * @throws SQLException the sql exception
      */
     public Movie(ResultSet rs) throws SQLException {
-        this(rs.getInt("m.mid"),
-                rs.getString("m.name"),
-                rs.getString("m.genre"),
-                rs.getInt("m.duration"),
-                rs.getInt("m.year"),
+        this(rs.getInt("movies.mid"),
+                rs.getString("movies.name"),
+                rs.getString("movies.genre"),
+                rs.getInt("movies.duration"),
+                rs.getInt("movies.year"),
                 rs.getBoolean("active"));
     }
 

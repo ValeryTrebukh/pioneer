@@ -46,7 +46,7 @@ public class Event extends Entity {
      * @throws SQLException the sql exception
      */
     public Event(ResultSet rs) throws SQLException {
-        this(rs.getInt("e.eid"), rs.getDate("e.date").toLocalDate(),
+        this(rs.getInt("events.eid"), rs.getDate("events.date").toLocalDate(),
                 new Seance(rs), new Movie(rs));
     }
 

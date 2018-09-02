@@ -15,7 +15,7 @@ public class MovieDaoImpl implements BaseDao {
 
     private static final Logger logger = LogManager.getLogger(MovieDaoImpl.class);
 
-    private JDBCDao simpleDao = new JDBCDaoImpl();
+    private Dao simpleDao = new JDBCDao();
 
     private static volatile MovieDaoImpl movieDao;
 
@@ -38,7 +38,7 @@ public class MovieDaoImpl implements BaseDao {
      */
     @Override
     public List<Movie> getAll() {
-        String query = "SELECT * FROM movies m";
+        String query = "SELECT * FROM movies";
         return simpleDao.getAll(Movie.class, query);
     }
 
@@ -62,7 +62,7 @@ public class MovieDaoImpl implements BaseDao {
      */
     @Override
     public boolean delete(int id) {
-        String query = "DELETE FROM movies WHERE mid=?;";
+        String query = "DELETE FROM movies WHERE mid=?";
         return simpleDao.delete(query, id);
     }
 
@@ -71,7 +71,7 @@ public class MovieDaoImpl implements BaseDao {
      */
     @Override
     public Movie getById(int id) {
-        String query = "SELECT * FROM movies m WHERE mid=?";
+        String query = "SELECT * FROM movies WHERE mid=?";
         return simpleDao.get(Movie.class, query, id);
     }
 

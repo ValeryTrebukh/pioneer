@@ -15,7 +15,7 @@ public class UserDaoImpl implements BaseDao {
 
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
-    private JDBCDao simpleDao = new JDBCDaoImpl();
+    private Dao simpleDao = new JDBCDao();
 
     private static volatile UserDaoImpl userDao;
 
@@ -38,7 +38,7 @@ public class UserDaoImpl implements BaseDao {
      */
     @Override
     public List<User> getAll() {
-        String query = "SELECT * FROM users u";
+        String query = "SELECT * FROM users";
         return simpleDao.getAll(User.class, query);
     }
 
@@ -76,7 +76,7 @@ public class UserDaoImpl implements BaseDao {
      */
     @Override
     public User getByEmail(String email) {
-        String query = "SELECT * FROM users u WHERE email=?";
+        String query = "SELECT * FROM users WHERE email=?";
         return getUser(query, email);
     }
 
@@ -85,7 +85,7 @@ public class UserDaoImpl implements BaseDao {
      */
     @Override
     public User getById(int id) {
-        String query = "SELECT * FROM users u WHERE uid=?";
+        String query = "SELECT * FROM users WHERE uid=?";
         return getUser(query, id);
     }
 

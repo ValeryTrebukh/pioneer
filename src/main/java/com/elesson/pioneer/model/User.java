@@ -2,6 +2,7 @@ package com.elesson.pioneer.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Represents a row in the &quot;users&quot; database table,
@@ -26,11 +27,11 @@ public class User extends Entity {
      * @throws SQLException the sql exception
      */
     public User(ResultSet rs) throws SQLException {
-        this(rs.getInt("u.uid"),
-                rs.getString("u.name"),
-                rs.getString("u.email"),
-                rs.getString("u.password"),
-                User.Role.valueOf(rs.getString("u.role")));
+        this(rs.getInt("users.uid"),
+                rs.getString("users.name"),
+                rs.getString("users.email"),
+                rs.getString("users.password"),
+                User.Role.valueOf(rs.getString("users.role")));
     }
 
     /**
@@ -123,6 +124,23 @@ public class User extends Entity {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) &&
+                Objects.equals(email, user.email) &&
+                role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), name, email, password, role);
     }
 
     /**

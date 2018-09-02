@@ -39,7 +39,7 @@ public class UserServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         try {
-            switch (action) {
+            switch (action==null?"default":action) {
                 case "edit":
                 case "create":
                     final User user = "create".equals(action) ?

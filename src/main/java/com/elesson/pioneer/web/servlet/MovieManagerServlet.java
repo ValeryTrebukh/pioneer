@@ -40,7 +40,7 @@ public class MovieManagerServlet extends HttpServlet {
         String mid = req.getParameter("mid");
 
         try {
-            switch (action) {
+            switch (action==null?"default":action) {
                 case "edit":
                 case "create":
                     final Movie movie = "create".equals(action) ?
