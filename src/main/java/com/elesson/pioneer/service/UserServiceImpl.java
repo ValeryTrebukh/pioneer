@@ -1,8 +1,8 @@
 package com.elesson.pioneer.service;
 
 
-import com.elesson.pioneer.dao.BaseDao;
-import com.elesson.pioneer.dao.DaoFactory;
+import com.elesson.pioneer.dao.UserDao;
+import com.elesson.pioneer.dao.UserDaoImpl;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.util.UserCache;
 
@@ -18,11 +18,11 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
  */
 public class UserServiceImpl implements UserService {
 
-    private BaseDao userDao;
+    private UserDao userDao;
     private static volatile UserService service;
 
     private UserServiceImpl() {
-        userDao = DaoFactory.getDao(DaoFactory.DaoType.USER);
+        userDao = UserDaoImpl.getUserDao();
     }
 
     public static UserService getUserService() {

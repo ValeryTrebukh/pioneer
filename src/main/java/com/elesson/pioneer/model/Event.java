@@ -41,17 +41,6 @@ public class Event extends Entity {
     }
 
     /**
-     * Instantiates a new Event.
-     *
-     * @param rs the ResultSet object
-     * @throws SQLException the sql exception
-     */
-    public Event(ResultSet rs) throws SQLException {
-        this(rs.getInt("events.eid"), rs.getDate("events.date").toLocalDate(),
-                new Seance(rs), new Movie(rs));
-    }
-
-    /**
      * Gets date.
      *
      * @return the date

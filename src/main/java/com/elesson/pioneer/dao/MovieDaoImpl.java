@@ -1,21 +1,20 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.model.Entity;
 import com.elesson.pioneer.model.Movie;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
+
 /**
- * This class provides implementation of all {@code UserDao} interface methods.
+ * This class provides implementation of all {@code MovieDao} interface methods.
  */
-public class MovieDaoImpl implements BaseDao {
+public class MovieDaoImpl implements MovieDao {
 
     private static final Logger logger = LogManager.getLogger(MovieDaoImpl.class);
-
-    private Dao simpleDao = new JDBCDao();
+    private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
     private static volatile MovieDaoImpl movieDao;
 
@@ -46,8 +45,7 @@ public class MovieDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public Movie save(Entity entity) {
-        Movie movie = (Movie)entity;
+    public Movie save(Movie movie) {
         if(movie.isNew()) {
             String query = "INSERT INTO movies (name, genre, duration, year, active) VALUES (?, ?, ?, ?, ?)";
             return simpleDao.save(movie, query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive());
@@ -73,17 +71,5 @@ public class MovieDaoImpl implements BaseDao {
     public Movie getById(int id) {
         String query = "SELECT * FROM movies WHERE mid=?";
         return simpleDao.get(Movie.class, query, id);
-    }
-
-    //not implemented
-    @Override
-    public List<Movie> getAllByDate(LocalDate date) {
-        return null;
-    }
-
-    //not implemented
-    @Override
-    public Movie getByEmail(String value) {
-        return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.DaoFactory;
+import com.elesson.pioneer.dao.MovieDaoImpl;
 import com.elesson.pioneer.model.Movie;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class MovieCache {
         if(movies.isEmpty()) {
             synchronized (UserCache.class) {
                 if(movies.isEmpty()) {
-                    movies = DaoFactory.getDao(DaoFactory.DaoType.MOVIE).getAll();
+                    movies = MovieDaoImpl.getMovieDao().getAll();
                 }
             }
         }

@@ -1,11 +1,11 @@
-package com.elesson.pioneer.dao;
+package com.elesson.pioneer.dao.jdbc;
 
+import com.elesson.pioneer.dao.Dao;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.dao.util.ConnectionPool;
 import com.elesson.pioneer.dao.util.DBConnection;
 import com.elesson.pioneer.model.Entity;
-import com.elesson.pioneer.model.EntityFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * This class provides implementation of all {@code JDBCDao} interface methods.
+ * Implementation based on JDBC tools.
  */
 public class JDBCDao implements Dao {
 
@@ -51,16 +52,13 @@ public class JDBCDao implements Dao {
             ResultSet rs = pst.executeQuery();
 
             if(rs.next()) {
-                entity = (T)cl.getConstructor(ResultSet.class).newInstance(rs);
+                entity = (T)JDBCEntityFactory.create(cl, rs);
                 logger.info("Entity obtained: " + entity.toString());
             }
             rs.close();
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e.getMessage());
-        }
-        catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            logger.error(e);
         }
         return entity;
     }
@@ -77,7 +75,7 @@ public class JDBCDao implements Dao {
             ResultSet rs = pst.executeQuery();
 
             while(rs.next()) {
-                entity = (T)cl.getConstructor(ResultSet.class).newInstance(rs);
+                entity = (T)JDBCEntityFactory.create(cl, rs);
                 list.add(entity);
                 logger.info("Entity obtained: " + entity.toString());
             }
@@ -85,8 +83,6 @@ public class JDBCDao implements Dao {
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException("Unable to obtain record");
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            logger.error(e);
         }
         return list;
     }

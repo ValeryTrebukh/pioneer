@@ -1,7 +1,7 @@
 package com.elesson.pioneer.service;
 
-import com.elesson.pioneer.dao.BaseDao;
-import com.elesson.pioneer.dao.DaoFactory;
+import com.elesson.pioneer.dao.MovieDao;
+import com.elesson.pioneer.dao.MovieDaoImpl;
 import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.util.MovieCache;
 
@@ -16,11 +16,11 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
  */
 public class MovieServiceImpl implements MovieService {
 
-    private BaseDao movieDao;
+    private MovieDao movieDao;
     private static volatile MovieService service;
 
     private MovieServiceImpl() {
-        movieDao = DaoFactory.getDao(DaoFactory.DaoType.MOVIE);
+        movieDao = MovieDaoImpl.getMovieDao();
     }
 
     public static MovieService getMovieService() {

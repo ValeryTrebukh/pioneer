@@ -1,7 +1,7 @@
 package com.elesson.pioneer.service;
 
-import com.elesson.pioneer.dao.BaseDao;
-import com.elesson.pioneer.dao.DaoFactory;
+import com.elesson.pioneer.dao.EventDao;
+import com.elesson.pioneer.dao.EventDaoImpl;
 import com.elesson.pioneer.model.Event;
 
 import java.time.LocalDate;
@@ -12,11 +12,11 @@ import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWi
 
 public class EventServiceImpl implements EventService {
 
-    private BaseDao eventDao;
+    private EventDao eventDao;
     private static volatile EventService service;
 
     private EventServiceImpl() {
-        eventDao = DaoFactory.getDao(DaoFactory.DaoType.EVENT);
+        eventDao = EventDaoImpl.getEventDao();
     }
 
     public static EventService getEventService() {
@@ -35,7 +35,7 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public List<Event> getEvents(LocalDate date) {
-        return eventDao.getAllByDate(date);
+        return eventDao.getByDate(date);
     }
 
     /**

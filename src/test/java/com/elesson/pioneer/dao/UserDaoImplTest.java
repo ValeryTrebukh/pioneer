@@ -5,7 +5,6 @@ import com.elesson.pioneer.model.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.elesson.pioneer.dao.DaoFactory.*;
 import static com.elesson.pioneer.dao.TestData.*;
 import static org.junit.Assert.*;
 
@@ -14,7 +13,7 @@ public class UserDaoImplTest {
 
 
 //    private BaseDao userDao = getDao(DaoType.USER);
-    private UserDaoImpl userDao = (UserDaoImpl)getDao(DaoType.USER);
+    private UserDaoImpl userDao = UserDaoImpl.getUserDao();
 
     @Before
     public void setUp() throws Exception {

@@ -6,11 +6,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
+
+/**
+ * This class provides implementation of all {@code TicketDao} interface methods.
+ */
 public class TicketDaoImpl implements TicketDao {
 
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
-
-    private Dao simpleDao = new JDBCDao();
+    private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
     private static volatile TicketDao ticketDao;
 

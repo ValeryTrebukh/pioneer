@@ -23,20 +23,6 @@ public class User extends Entity {
     /**
      * Instantiates a new User.
      *
-     * @param rs the ResultSet object
-     * @throws SQLException the sql exception
-     */
-    public User(ResultSet rs) throws SQLException {
-        this(rs.getInt("users.uid"),
-                rs.getString("users.name"),
-                rs.getString("users.email"),
-                rs.getString("users.password"),
-                User.Role.valueOf(rs.getString("users.role")));
-    }
-
-    /**
-     * Instantiates a new User.
-     *
      * @param id       the id
      * @param name     the name
      * @param email    the email

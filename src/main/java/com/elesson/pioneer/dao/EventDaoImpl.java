@@ -1,6 +1,5 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.model.Entity;
 import com.elesson.pioneer.model.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,14 +8,15 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.elesson.pioneer.dao.DaoStrategyFactory.*;
+
 /**
- * This class provides implementation of all {@code BaseDao} interface methods.
+ * This class provides implementation of all {@code EventDao} interface methods.
  */
-public class EventDaoImpl implements BaseDao {
+public class EventDaoImpl implements EventDao {
 
     private static final Logger logger = LogManager.getLogger(EventDaoImpl.class);
-
-    private Dao simpleDao = new JDBCDao();
+    private Dao simpleDao = getStrategy(Strategy.JDBC);
 
     private static volatile EventDaoImpl eventDao;
 
@@ -48,7 +48,7 @@ public class EventDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Event> getAllByDate(LocalDate date) {
+    public List<Event> getByDate(LocalDate date) {
         String query = "SELECT * FROM events RIGHT JOIN seances on events.seance_id = seances.sid " +
                 "INNER JOIN movies on events.movie_id = movies.mid WHERE events.date=? ORDER BY seances.sid";
         return simpleDao.getAll(Event.class, query, Date.valueOf(date));
@@ -58,8 +58,7 @@ public class EventDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public Event save(Entity entity) {
-        Event event = (Event)entity;
+    public Event save(Event event) {
         String query = "INSERT INTO events (movie_id, date, seance_id) VALUES (?, ?, ?)";
         return simpleDao.save(event, query, event.getMovie().getId(), Date.valueOf(event.getDate()), event.getSeance().getId());
     }
@@ -71,23 +70,5 @@ public class EventDaoImpl implements BaseDao {
     public boolean delete(int id) {
         String query = "DELETE FROM events WHERE eid=?";
         return simpleDao.delete(query, id);
-    }
-
-    //not implemented
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Event> getAll() {
-        return null;
-    }
-
-    //not implemented
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Event getByEmail(String value) {
-        return null;
     }
 }

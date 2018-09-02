@@ -63,21 +63,6 @@ public class Movie extends Entity {
     }
 
     /**
-     * Instantiates a new Movie.
-     *
-     * @param rs the ResultSet object
-     * @throws SQLException the sql exception
-     */
-    public Movie(ResultSet rs) throws SQLException {
-        this(rs.getInt("movies.mid"),
-                rs.getString("movies.name"),
-                rs.getString("movies.genre"),
-                rs.getInt("movies.duration"),
-                rs.getInt("movies.year"),
-                rs.getBoolean("active"));
-    }
-
-    /**
      * Gets name.
      *
      * @return the name

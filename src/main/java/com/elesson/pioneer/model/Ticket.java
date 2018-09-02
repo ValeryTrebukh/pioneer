@@ -68,20 +68,6 @@ public class Ticket extends Entity {
     }
 
     /**
-     * Instantiates a new Ticket.
-     *
-     * @param rs the ResultSet object
-     * @throws SQLException the sql exception
-     */
-    public Ticket(ResultSet rs) throws SQLException {
-        this(rs.getInt("tickets.tid"),
-                rs.getInt("tickets.user_id"), rs.getInt("tickets.event_id"),
-                rs.getInt("tickets.row"), rs.getInt("tickets.seat"));
-        this.user = new User(rs);
-        this.event = new Event(rs);
-    }
-
-    /**
      * Gets user id.
      *
      * @return the user id

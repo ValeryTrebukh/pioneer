@@ -33,16 +33,6 @@ public class Seance extends Entity {
     }
 
     /**
-     * Instantiates a new Seance.
-     *
-     * @param rs the ResultSet object
-     * @throws SQLException the sql exception
-     */
-    public Seance(ResultSet rs) throws SQLException {
-        this(rs.getInt("seances.sid"), rs.getTime("seances.time").toLocalTime());
-    }
-
-    /**
      * Gets start.
      *
      * @return the start

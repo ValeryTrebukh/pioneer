@@ -1,21 +1,20 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.model.Entity;
 import com.elesson.pioneer.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
+
 /**
- * This class provides implementation of all {@code BaseDao} interface methods.
+ * This class provides implementation of all {@code UserDao} interface methods.
  */
-public class UserDaoImpl implements BaseDao {
+public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-
-    private Dao simpleDao = new JDBCDao();
+    private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
     private static volatile UserDaoImpl userDao;
 
@@ -46,8 +45,7 @@ public class UserDaoImpl implements BaseDao {
      * {@inheritDoc}
      */
     @Override
-    public User save(Entity entity) {
-        User user = (User)entity;
+    public User save(User user) {
         if (user.isNew()) {
             String query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
             return simpleDao.save(user, query, user.getName(), user.getEmail(), user.getPassword(), User.Role.CLIENT.toString());
@@ -99,16 +97,6 @@ public class UserDaoImpl implements BaseDao {
      */
     private User getUser(String query, Object... values) {
         return simpleDao.get(User.class, query, values);
-    }
-
-
-    //not implemented
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T extends Entity> List<T> getAllByDate(LocalDate date) {
-        return null;
     }
 
 }

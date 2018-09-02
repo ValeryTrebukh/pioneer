@@ -5,14 +5,13 @@ import com.elesson.pioneer.model.Movie;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.elesson.pioneer.dao.DaoFactory.getDao;
 import static com.elesson.pioneer.dao.TestData.*;
 import static org.junit.Assert.*;
 
 
 public class MovieDaoImplTest {
 
-    private BaseDao movieDao = getDao(DaoFactory.DaoType.MOVIE);
+    private MovieDao movieDao = MovieDaoImpl.getMovieDao();
 
     @Before
     public void setUp() throws Exception {
