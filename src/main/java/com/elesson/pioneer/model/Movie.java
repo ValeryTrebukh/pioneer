@@ -2,6 +2,7 @@ package com.elesson.pioneer.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Represents a row in the &quot;movies&quot; database table,
@@ -130,4 +131,22 @@ public class Movie extends Entity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(name, movie.name) &&
+                Objects.equals(genre, movie.genre) &&
+                Objects.equals(duration, movie.duration) &&
+                Objects.equals(year, movie.year) &&
+                Objects.equals(active, movie.active);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), name, genre, duration, year, active);
+    }
 }

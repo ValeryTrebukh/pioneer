@@ -3,6 +3,7 @@ package com.elesson.pioneer.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * The {@code Event} class represents an entity of cinema event.
@@ -102,5 +103,22 @@ public class Event extends Entity {
                 ", date=" + date +
                 ", seance=" + seance +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Event event = (Event) o;
+        return Objects.equals(date, event.date) &&
+                Objects.equals(seance, event.seance) &&
+                Objects.equals(movie, event.movie);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), date, seance, movie);
     }
 }

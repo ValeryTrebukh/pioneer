@@ -2,6 +2,7 @@ package com.elesson.pioneer.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Represents a row in the &quot;tickets&quot; database table,
@@ -160,5 +161,23 @@ public class Ticket extends Entity {
                 ", row=" + row +
                 ", seat=" + seat +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Ticket ticket = (Ticket) o;
+        return Objects.equals(userId, ticket.userId) &&
+                Objects.equals(eventId, ticket.eventId) &&
+                Objects.equals(row, ticket.row) &&
+                Objects.equals(seat, ticket.seat);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), userId, eventId, row, seat);
     }
 }

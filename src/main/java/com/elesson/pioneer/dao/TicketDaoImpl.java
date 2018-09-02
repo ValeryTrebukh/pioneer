@@ -47,7 +47,7 @@ public class TicketDaoImpl implements TicketDao {
      */
     @Override
     public List<Ticket> getAllByUserId(Integer id) {
-        String query = "SELECT * FROM tickets t " +
+        String query = "SELECT * FROM tickets " +
                 "INNER JOIN events ON tickets.event_id = events.eid " +
                 "INNER JOIN users ON tickets.user_id = users.uid " +
                 "INNER JOIN movies on events.movie_id = movies.mid " +
