@@ -7,8 +7,7 @@ import com.elesson.pioneer.model.Entity;
 import java.util.List;
 
 /**
- * The {@code JDBCDao} interface provides methods to perform CRUD operations with database
- * using jdbc driver.
+ * The {@code JDBCDao} interface provides methods to perform CRUD operations with database.
  *
  */
 public interface Dao {

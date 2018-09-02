@@ -5,6 +5,8 @@ import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
+import com.elesson.pioneer.service.impl.EventServiceImpl;
+import com.elesson.pioneer.service.impl.TicketServiceImpl;
 import com.elesson.pioneer.service.util.MovieCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

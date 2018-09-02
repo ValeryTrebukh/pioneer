@@ -4,7 +4,7 @@ import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.TicketService;
-import com.elesson.pioneer.service.TicketServiceImpl;
+import com.elesson.pioneer.service.impl.TicketServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

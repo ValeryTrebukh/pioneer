@@ -1,6 +1,6 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.UserDaoImpl;
+import com.elesson.pioneer.dao.impl.UserDaoImpl;
 import com.elesson.pioneer.model.User;
 
 import java.util.ArrayList;

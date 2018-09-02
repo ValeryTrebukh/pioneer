@@ -3,7 +3,7 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.MovieService;
-import com.elesson.pioneer.service.MovieServiceImpl;
+import com.elesson.pioneer.service.impl.MovieServiceImpl;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.MovieCache;
 import com.elesson.pioneer.service.util.Paginator;

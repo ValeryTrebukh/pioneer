@@ -1,5 +1,8 @@
-package com.elesson.pioneer.dao;
+package com.elesson.pioneer.dao.impl;
 
+import com.elesson.pioneer.dao.Dao;
+import com.elesson.pioneer.dao.DaoStrategyFactory;
+import com.elesson.pioneer.dao.MovieDao;
 import com.elesson.pioneer.model.Movie;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

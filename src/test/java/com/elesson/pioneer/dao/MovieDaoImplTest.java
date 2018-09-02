@@ -1,5 +1,6 @@
 package com.elesson.pioneer.dao;
 
+import com.elesson.pioneer.dao.impl.MovieDaoImpl;
 import com.elesson.pioneer.dao.util.DBHelper;
 import com.elesson.pioneer.model.Movie;
 import org.junit.Before;

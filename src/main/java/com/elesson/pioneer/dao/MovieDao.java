@@ -6,6 +6,10 @@ import com.elesson.pioneer.model.Movie;
 
 import java.util.List;
 
+/**
+ * The {@code MovieDao} interface provides the methods for interaction with database.
+ *
+ */
 public interface MovieDao {
 
     /**

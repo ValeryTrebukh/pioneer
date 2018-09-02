@@ -1,8 +1,9 @@
-package com.elesson.pioneer.service;
+package com.elesson.pioneer.service.impl;
 
 import com.elesson.pioneer.dao.TicketDao;
-import com.elesson.pioneer.dao.TicketDaoImpl;
+import com.elesson.pioneer.dao.impl.TicketDaoImpl;
 import com.elesson.pioneer.model.Ticket;
+import com.elesson.pioneer.service.TicketService;
 
 import java.util.List;
 

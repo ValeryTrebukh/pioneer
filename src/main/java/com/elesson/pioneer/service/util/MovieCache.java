@@ -1,6 +1,6 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.MovieDaoImpl;
+import com.elesson.pioneer.dao.impl.MovieDaoImpl;
 import com.elesson.pioneer.model.Movie;
 
 import java.util.ArrayList;

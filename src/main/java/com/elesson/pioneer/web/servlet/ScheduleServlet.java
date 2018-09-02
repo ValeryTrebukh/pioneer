@@ -3,7 +3,7 @@ package com.elesson.pioneer.web.servlet;
 
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.service.EventService;
-import com.elesson.pioneer.service.EventServiceImpl;
+import com.elesson.pioneer.service.impl.EventServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

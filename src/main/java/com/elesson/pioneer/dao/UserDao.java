@@ -2,11 +2,14 @@ package com.elesson.pioneer.dao;
 
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
-import com.elesson.pioneer.model.Entity;
 import com.elesson.pioneer.model.User;
 
 import java.util.List;
 
+/**
+ * The {@code UserDao} interface provides the methods for interaction with database.
+ *
+ */
 public interface UserDao {
     /**
      * Retrieves the database for a list of {@code User} class objects.

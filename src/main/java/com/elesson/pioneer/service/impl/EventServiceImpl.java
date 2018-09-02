@@ -1,8 +1,9 @@
-package com.elesson.pioneer.service;
+package com.elesson.pioneer.service.impl;
 
 import com.elesson.pioneer.dao.EventDao;
-import com.elesson.pioneer.dao.EventDaoImpl;
+import com.elesson.pioneer.dao.impl.EventDaoImpl;
 import com.elesson.pioneer.model.Event;
+import com.elesson.pioneer.service.EventService;
 
 import java.time.LocalDate;
 import java.util.List;

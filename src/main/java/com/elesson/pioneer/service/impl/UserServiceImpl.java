@@ -1,9 +1,10 @@
-package com.elesson.pioneer.service;
+package com.elesson.pioneer.service.impl;
 
 
 import com.elesson.pioneer.dao.UserDao;
-import com.elesson.pioneer.dao.UserDaoImpl;
+import com.elesson.pioneer.dao.impl.UserDaoImpl;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.util.UserCache;
 
 import java.util.List;

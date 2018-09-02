@@ -4,6 +4,7 @@ import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
+import com.elesson.pioneer.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

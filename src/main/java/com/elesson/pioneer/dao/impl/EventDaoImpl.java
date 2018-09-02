@@ -1,5 +1,7 @@
-package com.elesson.pioneer.dao;
+package com.elesson.pioneer.dao.impl;
 
+import com.elesson.pioneer.dao.Dao;
+import com.elesson.pioneer.dao.EventDao;
 import com.elesson.pioneer.model.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

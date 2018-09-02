@@ -7,6 +7,11 @@ import com.elesson.pioneer.model.Event;
 import java.time.LocalDate;
 import java.util.List;
 
+
+/**
+ * The {@code EventDao} interface provides the methods for interaction with database.
+ *
+ */
 public interface EventDao {
 
     /**

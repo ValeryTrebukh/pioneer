@@ -4,7 +4,7 @@ import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.UserService;
-import com.elesson.pioneer.service.UserServiceImpl;
+import com.elesson.pioneer.service.impl.UserServiceImpl;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.Paginator;
 import com.elesson.pioneer.service.util.UserCache;
