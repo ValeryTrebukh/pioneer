@@ -41,5 +41,5 @@ public interface TicketDao {
      * @throws DuplicateEntityException in case of non-unique values (database restrictions).
      * @throws DBException              in all other cases.
      */
-    int saveAll(List<Ticket> tickets) throws DBException, DuplicateEntityException;
+    int save(List<Ticket> tickets) throws DBException, DuplicateEntityException;
 }

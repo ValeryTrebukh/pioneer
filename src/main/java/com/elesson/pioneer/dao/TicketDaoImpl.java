@@ -1,23 +1,16 @@
 package com.elesson.pioneer.dao;
 
-import com.elesson.pioneer.dao.exception.DBException;
-import com.elesson.pioneer.dao.exception.DuplicateEntityException;
-import com.elesson.pioneer.dao.util.ConnectionPool;
-import com.elesson.pioneer.dao.util.DBConnection;
 import com.elesson.pioneer.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class TicketDaoImpl implements TicketDao {
 
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
 
-    private JDBCDao simpleDao = new JDBCDaoImpl();
+    private Dao simpleDao = new JDBCDao();
 
     private static volatile TicketDao ticketDao;
 
@@ -40,13 +33,13 @@ public class TicketDaoImpl implements TicketDao {
      */
     @Override
     public List<Ticket> getAllByEventId(Integer id) {
-        String query = "SELECT * FROM tickets t " +
-                "INNER JOIN events e ON t.event_id = e.eid " +
-                "INNER JOIN users u ON t.user_id = u.uid " +
-                "INNER JOIN movies m on e.movie_id = m.mid " +
-                "INNER JOIN seances s on e.seance_id = s.sid " +
+        String query = "SELECT * FROM tickets " +
+                "INNER JOIN events ON tickets.event_id = events.eid " +
+                "INNER JOIN users ON tickets.user_id = users.uid " +
+                "INNER JOIN movies on events.movie_id = movies.mid " +
+                "INNER JOIN seances on events.seance_id = seances.sid " +
                 "WHERE event_id=?";
-        return getAllById(query, id);
+        return getAllByForeignId(query, id);
     }
 
     /**
@@ -55,16 +48,16 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public List<Ticket> getAllByUserId(Integer id) {
         String query = "SELECT * FROM tickets t " +
-                "INNER JOIN events e ON t.event_id = e.eid " +
-                "INNER JOIN users u ON t.user_id = u.uid " +
-                "INNER JOIN movies m on e.movie_id = m.mid " +
-                "INNER JOIN seances s on e.seance_id = s.sid " +
+                "INNER JOIN events ON tickets.event_id = events.eid " +
+                "INNER JOIN users ON tickets.user_id = users.uid " +
+                "INNER JOIN movies on events.movie_id = movies.mid " +
+                "INNER JOIN seances on events.seance_id = seances.sid " +
                 "WHERE user_id=?";
 
-        return getAllById(query, id);
+        return getAllByForeignId(query, id);
     }
 
-    private List<Ticket> getAllById(String query, Integer id) {
+    private List<Ticket> getAllByForeignId(String query, Integer id) {
         return simpleDao.getAll(Ticket.class, query, id);
     }
 
@@ -72,46 +65,20 @@ public class TicketDaoImpl implements TicketDao {
      * {@inheritDoc}
      */
     @Override
-    public int saveAll(List<Ticket> tickets) {
-        int count = 0;
-        DBConnection con = ConnectionPool.getPool().getConnection();
-        try {
-            PreparedStatement pst;
-            String query = "INSERT INTO tickets (event_id, user_id, row, seat) VALUES (?, ?, ?, ?)";
-            con.setAutoCommit(false);
-            for(Ticket t : tickets) {
-                pst = con.prepareInsertStatement(query, t.getEventId(), t.getUserId(), t.getRow(), t.getSeat());
-                if(pst.executeUpdate()==1) {
-                    ResultSet rs = pst.getGeneratedKeys();
-                    rs.next();
-                    t.setId(rs.getInt(1));
-                    rs.close();
-                }
-                logger.info("New ticket created with id={}", t.getId());
-                count++;
-            }
-            con.commit();
-        } catch (SQLException e) {
-            if(e.getMessage().contains("Duplicate")) {
-                logger.error(e);
-                throw new DuplicateEntityException();
-            }
-            logger.error(e);
-            try {
-                con.rollback();
-            } catch (SQLException e1) {
-                logger.error(e1);
-            }
-            throw new DBException("Unable to save new records");
+    public int save(List<Ticket> tickets) {
+        String query = "INSERT INTO tickets (event_id, user_id, row, seat) VALUES (?, ?, ?, ?)";
+        int paramsLen = 4;
+
+        int c = 0;
+        Object[][] params2 = new Integer[tickets.size()][paramsLen];
+        for(Ticket t : tickets) {
+            params2[c][0] = t.getEventId();
+            params2[c][1] = t.getUserId();
+            params2[c][2] = t.getRow();
+            params2[c][3] = t.getSeat();
+            c++;
         }
-        finally {
-            try {
-                con.setAutoCommit(true);
-                con.close();
-            } catch (SQLException e) {
-                logger.error(e);
-            }
-        }
-        return count;
+
+        return simpleDao.save(query, params2);
     }
 }

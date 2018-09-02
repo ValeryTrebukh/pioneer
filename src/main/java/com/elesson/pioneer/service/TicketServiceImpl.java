@@ -54,6 +54,6 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void saveAll(List<Ticket> tickets) {
         checkNotFound(tickets, "tickets must not be null");
-        ticketDao.saveAll(tickets);
+        ticketDao.save(tickets);
     }
 }
