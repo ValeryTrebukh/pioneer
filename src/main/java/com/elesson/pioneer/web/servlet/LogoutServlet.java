@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static com.elesson.pioneer.web.util.Constants.A_AUTH_USER;
+import static com.elesson.pioneer.web.util.Constants.LOGIN_JSP;
+
 /**
  * Deletes all user's credentials by invalidating the session.
  */
@@ -20,11 +23,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        User aUser = (User)session.getAttribute("authUser");
+        User aUser = (User)session.getAttribute(A_AUTH_USER);
         if(aUser!=null) {
-            logger.info("{} logget out", aUser.getName());
+            logger.info("{} logged out", aUser.getName());
         }
         session.invalidate();
-        req.getRequestDispatcher("jsp/login.jsp").forward(req, resp);
+        req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
     }
 }

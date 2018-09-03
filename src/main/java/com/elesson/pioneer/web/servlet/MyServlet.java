@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static com.elesson.pioneer.web.util.Constants.*;
+
 
 /**
  * Shows list of Tickets owned by specific User.
@@ -26,19 +28,19 @@ public class MyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
-        User aUser = (User)session.getAttribute("authUser");
+        User aUser = (User)session.getAttribute(A_AUTH_USER);
         TicketService service = TicketServiceImpl.getTicketService();
 
         if(aUser!=null) {
             try {
-                req.setAttribute("tickets", service.getAllTicketsByUserId(aUser.getId()));
+                req.setAttribute(A_TICKETS, service.getAllTicketsByUserId(aUser.getId()));
             } catch (DBException e) {
                 logger.error(e);
                 resp.setStatus(500);
             }
-            req.getRequestDispatcher("jsp/myTickets.jsp").forward(req, resp);
+            req.getRequestDispatcher(MY_TICKETS_JSP).forward(req, resp);
         } else {
-            resp.setStatus(403);
+            resp.setStatus(404);
         }
     }
 }

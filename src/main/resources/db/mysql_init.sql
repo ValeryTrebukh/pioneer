@@ -58,14 +58,20 @@ INSERT INTO users (name, email, password, role) VALUES
   ('Тищенко Екатерина', 'te@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
   ('Потапова Алеся', 'pa@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
   ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
-  ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9', 'CLIENT');
+  ('Резник Иван', 'ri@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Буланов Тимур', 'bt@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Кириченко Олег', 'ko@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Троицкий Никита', 'tn@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Сапожникова Татьяна', 'st@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT');
 
 INSERT INTO movies (name, genre, duration, year, active) VALUES
   ('Terminator', 'science-fiction action', 107, 1984, true),
   ('Titanic', 'epic romance', 195, 1997, true),
   ('Fifty Shades of Grey', 'erotic romantic drama', 125, 2015, true),
   ('Monsters, Inc.', 'computer-animated comedy', 92, 2001, true),
-  ('Левиафан', 'драма', 142, 2014, true);
+  ('Левиафан', 'драма', 142, 2014, true),
+  ('Eight Below', 'drama', 120, 2006, true),
+  ('Madagascar', 'computer-animated comedy', 86, 2005, true);
 
 INSERT INTO seances (time) VALUES
   ('9:00:00'),
@@ -79,7 +85,11 @@ INSERT INTO events (movie_id, date, seance_id) VALUES
   (1, '2018-09-14', 2),
   (3, '2018-09-14', 4),
   (2, '2018-09-15', 3),
-  (2, '2018-09-16', 3);
+  (2, '2018-09-16', 3),
+  (7, '2018-09-13', 1),
+  (7, '2018-09-14', 1),
+  (7, '2018-09-15', 1),
+  (4, '2018-09-16', 1);
 
 INSERT INTO tickets (event_id, user_id, row, seat) VALUES
   (2, 2, 4, 4),
@@ -88,6 +98,12 @@ INSERT INTO tickets (event_id, user_id, row, seat) VALUES
   (2, 3, 3, 4),
   (2, 3, 3, 5),
   (2, 3, 3, 6),
-  (1, 5, 4, 5),
-  (1, 5, 4, 6);
+  (7, 6, 3, 4),
+  (7, 6, 3, 5),
+  (7, 6, 3, 6),
+  (7, 3, 1, 2),
+  (7, 5, 1, 7),
+  (7, 4, 2, 3),
+  (7, 2, 5, 6),
+  (7, 7, 2, 5);
 

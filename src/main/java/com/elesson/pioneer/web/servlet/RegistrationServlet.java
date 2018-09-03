@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static com.elesson.pioneer.web.util.Constants.*;
+
 /**
  * The {@code RegistrationServlet} class purpose is to allow user to register a new account.
  * This class perform validation of entered data before storing to database.
@@ -28,18 +30,18 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);
+        req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String regName = req.getParameter("regName");
-        String regEmail = req.getParameter("regEmail");
-        String regPassword = req.getParameter("regPass");
-        String confPassword = req.getParameter("confPass");
+        String regName = req.getParameter(A_REG_NAME);
+        String regEmail = req.getParameter(A_REG_EMAIL);
+        String regPassword = req.getParameter(A_REG_PASS);
+        String confPassword = req.getParameter(A_REG_PASS2);
 
         if(UserDataValidation.hasError(req, regName, regEmail, regPassword, confPassword)) {
-            req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);
+            req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
         } else {
             try {
                 UserService userService = UserServiceImpl.getUserService();
@@ -48,13 +50,13 @@ public class RegistrationServlet extends HttpServlet {
                 HttpSession session = req.getSession();
                 session.invalidate();
                 session = req.getSession();
-                session.setAttribute("authUser", userService.getByEmail(regEmail));
+                session.setAttribute(A_AUTH_USER, user);
                 logger.info("{} logged in", user.getName());
-                resp.sendRedirect("schedule");
+                resp.sendRedirect(SCHEDULE);
             } catch (DuplicateEntityException de) {
                 logger.warn(de.getMessage());
-                req.setAttribute("duplicate", true);
-                req.getRequestDispatcher("jsp/registration.jsp").forward(req, resp);
+                req.setAttribute(A_DUPLICATE, true);
+                req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
             } catch (DBException e) {
                 resp.setStatus(500);
             }

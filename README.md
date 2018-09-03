@@ -24,7 +24,7 @@
     1. Создать базу и пользователя. [dbName: pioneer; user: user; password: password]. 
         *CREATE DATABASE pioneer CHARACTER SET utf8 COLLATE utf8_general_ci;*
     2. Предоставить пользователю необходимые права к базе. 
-        *GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,REFERENCES ON pioneer.* TO 'user'@'localhost';*
+        *GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,REFERENCES ON pioneer TO 'user'@'localhost';*
     3. При необходимости параметры можно изменить в файле *src/main/resources/db/mysql.properties*
     4. Инициализировать базу данных, выполнив содержимое файла *src/main/resources/db/init_mysql.sql*  
     5. Наполнить базу тестовыми данными, выполнив содержимое файла *src/main/resources/db/populate_mysql.sql*

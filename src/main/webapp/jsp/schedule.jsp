@@ -33,7 +33,9 @@
             <tr>
                 <td><a href="event?action=view&eid=${event.id}"><c:out value="${event.movie.name}"/></a></td>
                 <td>${event.seance.start}</td>
-                <td><a href="event?action=delete&eid=${event.id}"><fmt:message key="entity.delete"/></a></td>
+                <c:if test="${sessionScope.authUser.role == 'ADMIN'}">
+                    <td><a href="event?action=delete&eid=${event.id}"><fmt:message key="entity.delete"/></a></td>
+                </c:if>
             </tr>
         </c:forEach>
     </table>

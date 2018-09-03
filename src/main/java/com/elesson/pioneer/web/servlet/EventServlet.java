@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Constants.*;
 import static com.elesson.pioneer.web.util.Helper.getBackReference;
 
 /**
@@ -42,43 +43,43 @@ public class EventServlet extends HttpServlet {
         EventService service = EventServiceImpl.getEventService();
         TicketService tService = TicketServiceImpl.getTicketService();
 
-        String action = req.getParameter("action");
-        String eid = req.getParameter("eid");
-        String date = req.getParameter("date");
+        String action = req.getParameter(A_ACTION);
+        String eid = req.getParameter(A_EID);
+        String date = req.getParameter(A_DATE);
 
-        User aUser = (User)req.getSession().getAttribute("authUser");
+        User aUser = (User)req.getSession().getAttribute(A_AUTH_USER);
 
         try {
-            switch (action == null ? "view" : action) {
-                case "create":
+            switch (action == null ? VIEW : action) {
+                case CREATE:
                     if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
-                        req.setAttribute("event", new Event(LocalDate.parse(date)));
-                        req.setAttribute("action", action);
-                        req.setAttribute("movies", MovieCache.getActiveMovies());
-                        req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+                        req.setAttribute(A_EVENT, new Event(LocalDate.parse(date)));
+                        req.setAttribute(A_ACTION, action);
+                        req.setAttribute(A_MOVIES, MovieCache.getActiveMovies());
+                        req.getRequestDispatcher(EVENT_FORM_JSP).forward(req, resp);
                     }
                     break;
-                case "delete":
+                case DELETE:
                     if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
                         service.delete(Integer.parseInt(eid));
-                        resp.sendRedirect("schedule" + getBackReference(req));
+                        resp.sendRedirect(SCHEDULE + getBackReference(req));
                     }
                     break;
-                case "view":
+                case VIEW:
                     int eventId = Integer.parseInt(eid);
-                    req.setAttribute("event", service.getEvent(eventId));
+                    req.setAttribute(A_EVENT, service.getEvent(eventId));
 
-                    int rows = Integer.parseInt(req.getServletContext().getInitParameter("hallRows"));
-                    int seats = Integer.parseInt(req.getServletContext().getInitParameter("hallSeats"));
+                    int rows = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_ROWS));
+                    int seats = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_SEATS));
                     Hall hall = new Hall(rows, seats);
                     hall.place(tService.getAllTicketsByEventId(eventId));
-                    validatePreorders(req, resp);
-                    hall.place((List<Ticket>) req.getSession().getAttribute("tickets"));
-                    req.setAttribute("hall", hall);
-                    req.getRequestDispatcher("jsp/eventView.jsp").forward(req, resp);
+                    validatePreorders(req);
+                    hall.place((List<Ticket>) req.getSession().getAttribute(A_TICKETS));
+                    req.setAttribute(A_HALL, hall);
+                    req.getRequestDispatcher(EVENT_VIEW_JSP).forward(req, resp);
                     break;
                 default:
-                    resp.sendRedirect("schedule");
+                    resp.sendRedirect(SCHEDULE);
                     break;
             }
         } catch (DateTimeParseException | NumberFormatException | NotFoundEntityException e) {
@@ -90,9 +91,10 @@ public class EventServlet extends HttpServlet {
         }
     }
 
-    private void validatePreorders(HttpServletRequest req, HttpServletResponse resp) {
-        List<Ticket> tickets = (List<Ticket>) req.getSession().getAttribute("tickets");
-        if(tickets!=null && !tickets.isEmpty() && tickets.get(0).getEventId()!=Integer.parseInt(req.getParameter("eid"))) {
+    private void validatePreorders(HttpServletRequest req) {
+        List<Ticket> tickets = (List<Ticket>) req.getSession().getAttribute(A_TICKETS);
+        // if user comes to another event page all pre-ordered tickets should be removed from cache (session)
+        if(tickets!=null && !tickets.isEmpty() && tickets.get(0).getEventId()!=Integer.parseInt(req.getParameter(A_EID))) {
             logger.info("Invalidation pre-orders: {} removed", tickets.size());
             tickets.clear();
         }
@@ -101,9 +103,9 @@ public class EventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String mid = req.getParameter("mid");
-        String sid = req.getParameter("sid");
-        String date = req.getParameter("date");
+        String mid = req.getParameter(A_MID);
+        String sid = req.getParameter(A_SID);
+        String date = req.getParameter(A_DATE);
 
         EventService service = EventServiceImpl.getEventService();
         Event event = null;
@@ -111,16 +113,16 @@ public class EventServlet extends HttpServlet {
             event = new Event(null, LocalDate.parse(date),
                     new Seance(Integer.parseInt(sid)), new Movie(Integer.parseInt(mid)));
             service.save(event);
-            resp.sendRedirect("schedule?date=" + date);
+            resp.sendRedirect(SCHEDULE + getBackReference(req));
         } catch (DateTimeParseException | NumberFormatException e) {
             logger.warn("Parsing error", e.getMessage());
             resp.setStatus(404);
         } catch (DuplicateEntityException de) {
             logger.warn(de);
-            req.setAttribute("duplicate", true);
-            req.setAttribute("movies", MovieCache.getActiveMovies());
-            req.setAttribute("event", event);
-            req.getRequestDispatcher("jsp/eventForm.jsp").forward(req, resp);
+            req.setAttribute(A_DUPLICATE, true);
+            req.setAttribute(A_MOVIES, MovieCache.getActiveMovies());
+            req.setAttribute(A_EVENT, event);
+            req.getRequestDispatcher(EVENT_FORM_JSP).forward(req, resp);
         } catch (DBException e) {
             logger.error(e);
             resp.setStatus(500);

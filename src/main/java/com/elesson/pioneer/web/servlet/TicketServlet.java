@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Constants.*;
+import static com.elesson.pioneer.web.util.Helper.getBackReference;
+
 /**
  * Handles operations on tickets for some event in the cinema.
  * Perform some validation of data from request params.
@@ -31,27 +34,27 @@ public class TicketServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        String tid = req.getParameter("tid");
+        String tid = req.getParameter(A_TID);
 
         try {
             int row = Integer.parseInt(tid.split("-")[0]);
             int seat = Integer.parseInt(tid.split("-")[1]);
-            int eid = Integer.parseInt(req.getParameter("eid"));
+            int eid = Integer.parseInt(req.getParameter(A_EID));
             if(isValid(new Ticket(eid, row, seat))) {
                 HttpSession session = req.getSession();
-                List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
+                List<Ticket> preOrdered = (List<Ticket>) session.getAttribute(A_TICKETS);
                 if(preOrdered == null) {
                     preOrdered = new ArrayList<>();
                 }
-                User aUser = (User)session.getAttribute("authUser");
+                User aUser = (User)session.getAttribute(A_AUTH_USER);
                 if(aUser == null) {
                     resp.setStatus(403);
                 } else {
                     int uid = aUser.getId();
                     addOrRemoveTicket(preOrdered, new Ticket(uid, eid, row, seat));
-                    session.setAttribute("tickets", preOrdered);
+                    session.setAttribute(A_TICKETS, preOrdered);
                     logger.debug(tid + " added to list");
-                    resp.sendRedirect("event?action=view&eid=" + eid);
+                    resp.sendRedirect(EVENT + getBackReference(req));
                 }
             }
         } catch (NumberFormatException e) {
@@ -87,13 +90,12 @@ public class TicketServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        List<Ticket> preOrdered = (List<Ticket>) session.getAttribute("tickets");
+        List<Ticket> preOrdered = (List<Ticket>) session.getAttribute(A_TICKETS);
         if(preOrdered!=null && !preOrdered.isEmpty()) {
             TicketService service = TicketServiceImpl.getTicketService();
             service.saveAll(preOrdered);
-            session.removeAttribute("tickets");
+            session.removeAttribute(A_TICKETS);
         }
-        int eid = Integer.parseInt(req.getParameter("eid"));
-        resp.sendRedirect("event?action=view&eid=" + eid);
+        resp.sendRedirect(EVENT + getBackReference(req));
     }
 }

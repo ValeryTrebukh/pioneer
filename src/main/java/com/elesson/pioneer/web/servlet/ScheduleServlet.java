@@ -17,6 +17,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Constants.*;
+
 
 /**
  * The {@code ScheduleServlet} class purpose is to form a list of {@code Event} class objects
@@ -36,16 +38,16 @@ public class ScheduleServlet extends HttpServlet {
 
         EventService service = EventServiceImpl.getEventService();
 
-        String date = req.getParameter("date");
+        String date = req.getParameter(A_DATE);
         try {
             LocalDate localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
             localDate = localDate.isBefore(LocalDate.now()) ? LocalDate.now() : localDate;
 
-            req.setAttribute("events", service.getEvents(localDate));
-            req.setAttribute("nextWeek", getNextWeek());
-            req.setAttribute("date", localDate);
+            req.setAttribute(A_EVENTS, service.getEvents(localDate));
+            req.setAttribute(A_NEXT_WEEK, getNextWeek());
+            req.setAttribute(A_DATE, localDate);
 
-            req.getRequestDispatcher("jsp/schedule.jsp").forward(req, resp);
+            req.getRequestDispatcher(SCHEDULE_JSP).forward(req, resp);
         } catch (DateTimeParseException e) {
             logger.warn("Incorrect date input");
             resp.setStatus(404);

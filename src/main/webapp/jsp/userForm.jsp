@@ -19,13 +19,13 @@
             <input type="hidden" name="userid" value="${user.id}">
 
             <div><label><fmt:message key="entity.name"/></label></div>
-            <div><input type="text" value="${user.name}" name="name" required></div> <br>
+            <div><input type="text" value="${user.name}" name="regName" required></div> <br>
             <c:if test="${errName}">
                 <div class="error"><fmt:message key="err.name"/></div>
             </c:if>
 
             <div><label><fmt:message key="user.email"/></label></div>
-            <div><input type="text" value="${user.email}" name="email" required></div> <br>
+            <div><input type="text" value="${user.email}" name="regEmail" required></div> <br>
             <c:if test="${errEmail}">
                 <div class="error"><fmt:message key="err.email"/></div>
             </c:if>
@@ -34,7 +34,7 @@
             </c:if>
 
             <div><label><fmt:message key="user.password"/></label></div>
-            <div><input type="text" name="password" ${param.action == 'create' ? 'required' : ''}></div> <br>
+            <div><input type="text" name="regPass" ${param.action == 'create' ? 'required' : ''}></div> <br>
             <c:if test="${errPassLen}">
                 <div class="error"><fmt:message key="err.password"/></div>
             </c:if>

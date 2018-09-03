@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.elesson.pioneer.web.util.Constants.*;
 import static com.elesson.pioneer.web.util.Helper.getBackReference;
 
 /**
@@ -36,27 +37,27 @@ public class MovieManagerServlet extends HttpServlet {
 
         MovieService service = MovieServiceImpl.getMovieService();
 
-        String action = req.getParameter("action");
-        String mid = req.getParameter("mid");
+        String action = req.getParameter(A_ACTION);
+        String mid = req.getParameter(A_MID);
 
         try {
-            switch (action==null?"default":action) {
-                case "edit":
-                case "create":
-                    final Movie movie = "create".equals(action) ?
+            switch (action==null?"":action) {
+                case EDIT:
+                case CREATE:
+                    final Movie movie = CREATE.equals(action) ?
                             new Movie() : service.get(Integer.parseInt(mid));
                     logger.debug("Movie obtained");
-                    req.setAttribute("movie", movie);
-                    req.getRequestDispatcher("jsp/movieForm.jsp").forward(req, resp);
+                    req.setAttribute(A_MOVIE, movie);
+                    req.getRequestDispatcher(MOVIE_FORM_JSP).forward(req, resp);
                     break;
-                case "delete":
+                case DELETE:
                     service.delete(Integer.parseInt(mid));
                     logger.info("Movie deleted: ", mid);
-                    resp.sendRedirect("movies"+ getBackReference(req));
+                    resp.sendRedirect(MOVIES + getBackReference(req));
                     break;
                 default:
                     setPageDataToRequest(req);
-                    req.getRequestDispatcher("jsp/movies.jsp").forward(req, resp);
+                    req.getRequestDispatcher(MOVIES_JSP).forward(req, resp);
                     break;
             }
         } catch (NumberFormatException | NotFoundEntityException e) {
@@ -69,40 +70,39 @@ public class MovieManagerServlet extends HttpServlet {
     }
 
     private void setPageDataToRequest(HttpServletRequest req) {
-        int pageSize = Integer.parseInt(req.getServletContext().getInitParameter("pageSize"));
+        int pageSize = Integer.parseInt(req.getServletContext().getInitParameter(A_PAGE_SIZE));
         Paginator<Movie> paginator = new Paginator<>(pageSize);
         List<Movie> movies = MovieCache.getMovies();
-        String sPage = req.getParameter("page");
+        String sPage = req.getParameter(A_PAGE);
         int page = sPage !=null ? Integer.parseInt(sPage) : 1;
         int pagesCount = paginator.getPageCount(movies);
         page = page > pagesCount ? pagesCount : page < 1 ? 1 : page;
-        req.setAttribute("movies", paginator.getPage(movies, page));
-        req.setAttribute("page", page);
-        req.setAttribute("pagesCount", paginator.getPageCount(movies));
+        req.setAttribute(A_MOVIES, paginator.getPage(movies, page));
+        req.setAttribute(A_PAGE, page);
+        req.setAttribute(A_PAGES_COUNT, paginator.getPageCount(movies));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String name = req.getParameter("name");
-        String genre = req.getParameter("genre");
-        String duration = req.getParameter("duration");
-        String year = req.getParameter("year");
-        String active = req.getParameter("status");
+        String name = req.getParameter(A_NAME);
+        String genre = req.getParameter(A_GENRE);
+        String duration = req.getParameter(A_DURATION);
+        String year = req.getParameter(A_YEAR);
+        String active = req.getParameter(A_STATUS);
 
         MovieService service = MovieServiceImpl.getMovieService();
 
         try {
             Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year), Boolean.valueOf(active));
-
-            if (req.getParameter("mid").isEmpty()) {
+            if (req.getParameter(A_MID).isEmpty()) {
                 service.create(movie);
             }
             else {
-                movie.setId(Integer.parseInt(req.getParameter("mid")));
+                movie.setId(Integer.parseInt(req.getParameter(A_MID)));
                 service.update(movie);
             }
-            resp.sendRedirect("movies");
+            resp.sendRedirect(MOVIES);
         } catch (DBException e) {
             logger.error(e);
             resp.setStatus(500);

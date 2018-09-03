@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.elesson.pioneer.service.util.Security.encrypt;
+import static com.elesson.pioneer.web.util.Constants.*;
 
 /**
  * The {@code LoginServlet} class purpose is to validate user's credentials.
@@ -27,25 +28,25 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String authEmail = req.getParameter("authUserEmail");
+        String authEmail = req.getParameter(A_AUTH_USER_EMAIL);
 
         try{
             UserService userService = UserServiceImpl.getUserService();
             User aUser = userService.getByEmail(authEmail);
-            if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter("authUserPass")))) {
+            if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter(A_AUTH_USER_PASS)))) {
                 HttpSession session = req.getSession();
                 session.invalidate();
                 session = req.getSession();
-                session.setAttribute("authUser", aUser);
+                session.setAttribute(A_AUTH_USER, aUser);
                 logger.info("{} logged in", aUser.getName());
-                resp.sendRedirect("schedule");
+                resp.sendRedirect(SCHEDULE);
             } else {
                 throw new NotFoundEntityException("Wrong password");
             }
         } catch (NotFoundEntityException e) {
             logger.warn(e.getMessage());
-            req.setAttribute("error", "password");
-            req.getRequestDispatcher("jsp/login.jsp").forward(req, resp);
+            req.setAttribute(A_ERR, "password");
+            req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
         } catch (DBException e) {
             logger.error(e);
             resp.setStatus(500);
@@ -54,6 +55,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("jsp/login.jsp").forward(req, resp);
+        req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
     }
 }
