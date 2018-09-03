@@ -4,7 +4,6 @@ import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
-import com.elesson.pioneer.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +30,7 @@ public class LoginServlet extends HttpServlet {
         String authEmail = req.getParameter(A_AUTH_USER_EMAIL);
 
         try{
-            UserService userService = UserServiceImpl.getUserService();
+            UserService userService = ServiceFactory.getUserService();
             User aUser = userService.getByEmail(authEmail);
             if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter(A_AUTH_USER_PASS)))) {
                 HttpSession session = req.getSession();

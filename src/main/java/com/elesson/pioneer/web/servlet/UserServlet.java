@@ -3,8 +3,8 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.UserService;
-import com.elesson.pioneer.service.impl.UserServiceImpl;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.Paginator;
 import com.elesson.pioneer.service.util.UserCache;
@@ -34,9 +34,8 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
 
-        UserService service = UserServiceImpl.getUserService();
+        UserService service = ServiceFactory.getUserService();
         String action = req.getParameter(A_ACTION);
 
         try {
@@ -81,12 +80,11 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         String regName = req.getParameter(A_REG_NAME);
         String regEmail = req.getParameter(A_REG_EMAIL);
         String regPassword = req.getParameter(A_REG_PASS);
         String regRole = req.getParameter(A_ROLE)!=null ? req.getParameter(A_ROLE) : User.Role.CLIENT.toString();
-        UserService service = UserServiceImpl.getUserService();
+        UserService service = ServiceFactory.getUserService();
 
         try {
             User user = new User(regName, regEmail, regPassword, User.Role.valueOf(regRole));

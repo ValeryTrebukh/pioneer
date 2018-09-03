@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.elesson.pioneer.web.util.Constants.A_AUTH_USER;
-import static com.elesson.pioneer.web.util.Constants.LOGIN_JSP;
+import static com.elesson.pioneer.web.util.Constants.*;
 
 /**
  * Deletes all user's credentials by invalidating the session.

@@ -3,7 +3,7 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.MovieService;
-import com.elesson.pioneer.service.impl.MovieServiceImpl;
+import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
 import com.elesson.pioneer.service.util.MovieCache;
 import com.elesson.pioneer.service.util.Paginator;
@@ -33,9 +33,8 @@ public class MovieManagerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
 
-        MovieService service = MovieServiceImpl.getMovieService();
+        MovieService service = ServiceFactory.getMovieService();
 
         String action = req.getParameter(A_ACTION);
         String mid = req.getParameter(A_MID);
@@ -84,14 +83,14 @@ public class MovieManagerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
+
         String name = req.getParameter(A_NAME);
         String genre = req.getParameter(A_GENRE);
         String duration = req.getParameter(A_DURATION);
         String year = req.getParameter(A_YEAR);
         String active = req.getParameter(A_STATUS);
 
-        MovieService service = MovieServiceImpl.getMovieService();
+        MovieService service = ServiceFactory.getMovieService();
 
         try {
             Movie movie = new Movie(name, genre, Integer.parseInt(duration), Integer.parseInt(year), Boolean.valueOf(active));
@@ -103,7 +102,11 @@ public class MovieManagerServlet extends HttpServlet {
                 service.update(movie);
             }
             resp.sendRedirect(MOVIES);
-        } catch (DBException e) {
+        } catch (NumberFormatException e) {
+            logger.warn(e.getMessage());
+            resp.setStatus(400);
+        }
+        catch (DBException e) {
             logger.error(e);
             resp.setStatus(500);
         }

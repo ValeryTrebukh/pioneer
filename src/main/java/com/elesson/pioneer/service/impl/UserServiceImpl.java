@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         userDao = DaoEntityFactory.getUserDao();
     }
 
-    public static UserService getUserService() {
+    public static UserService getService() {
         if(service ==null) {
             synchronized (UserServiceImpl.class) {
                 if(service ==null) {

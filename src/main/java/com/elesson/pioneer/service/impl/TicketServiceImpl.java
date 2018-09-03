@@ -21,7 +21,7 @@ public class TicketServiceImpl implements TicketService {
         ticketDao = DaoEntityFactory.getTicketDao();
     }
 
-    public static TicketService getTicketService() {
+    public static TicketService getService() {
         if(service ==null) {
             synchronized (TicketServiceImpl.class) {
                 if(service ==null) {

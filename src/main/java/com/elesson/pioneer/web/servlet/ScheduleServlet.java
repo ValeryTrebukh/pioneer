@@ -3,7 +3,7 @@ package com.elesson.pioneer.web.servlet;
 
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.service.EventService;
-import com.elesson.pioneer.service.impl.EventServiceImpl;
+import com.elesson.pioneer.service.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,9 +34,8 @@ public class ScheduleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
 
-        EventService service = EventServiceImpl.getEventService();
+        EventService service = ServiceFactory.getEventService();
 
         String date = req.getParameter(A_DATE);
         try {

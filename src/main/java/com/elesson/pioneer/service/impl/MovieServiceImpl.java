@@ -24,7 +24,7 @@ public class MovieServiceImpl implements MovieService {
         movieDao = DaoEntityFactory.getMovieDao();
     }
 
-    public static MovieService getMovieService() {
+    public static MovieService getService() {
         if(service ==null) {
             synchronized (MovieServiceImpl.class) {
                 if(service ==null) {

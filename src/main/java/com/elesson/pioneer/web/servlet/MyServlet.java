@@ -2,8 +2,8 @@ package com.elesson.pioneer.web.servlet;
 
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.TicketService;
-import com.elesson.pioneer.service.impl.TicketServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,10 +26,9 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
         User aUser = (User)session.getAttribute(A_AUTH_USER);
-        TicketService service = TicketServiceImpl.getTicketService();
+        TicketService service = ServiceFactory.getTicketService();
 
         if(aUser!=null) {
             try {

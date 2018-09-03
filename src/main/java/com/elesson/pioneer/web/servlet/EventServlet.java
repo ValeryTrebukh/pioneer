@@ -5,8 +5,6 @@ import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.*;
 import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
-import com.elesson.pioneer.service.impl.EventServiceImpl;
-import com.elesson.pioneer.service.impl.TicketServiceImpl;
 import com.elesson.pioneer.service.util.MovieCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,10 +36,9 @@ public class EventServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
 
-        EventService service = EventServiceImpl.getEventService();
-        TicketService tService = TicketServiceImpl.getTicketService();
+        EventService service = ServiceFactory.getEventService();
+        TicketService tService = ServiceFactory.getTicketService();
 
         String action = req.getParameter(A_ACTION);
         String eid = req.getParameter(A_EID);
@@ -102,12 +99,11 @@ public class EventServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         String mid = req.getParameter(A_MID);
         String sid = req.getParameter(A_SID);
         String date = req.getParameter(A_DATE);
 
-        EventService service = EventServiceImpl.getEventService();
+        EventService service = ServiceFactory.getEventService();
         Event event = null;
         try{
             event = new Event(null, LocalDate.parse(date),

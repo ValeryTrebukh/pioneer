@@ -3,8 +3,8 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.TicketService;
-import com.elesson.pioneer.service.impl.TicketServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,6 @@ public class TicketServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
 
         String tid = req.getParameter(A_TID);
 
@@ -78,7 +77,7 @@ public class TicketServlet extends HttpServlet {
     }
 
     private boolean isValid(Ticket ticket) {
-        TicketService tService = TicketServiceImpl.getTicketService();
+        TicketService tService = ServiceFactory.getTicketService();
         for(Ticket t : tService.getAllTicketsByEventId(ticket.getEventId())) {
             if(t.getRow().equals(ticket.getRow()) && t.getSeat().equals(ticket.getSeat())) {
                 return false;
@@ -92,7 +91,7 @@ public class TicketServlet extends HttpServlet {
         HttpSession session = req.getSession();
         List<Ticket> preOrdered = (List<Ticket>) session.getAttribute(A_TICKETS);
         if(preOrdered!=null && !preOrdered.isEmpty()) {
-            TicketService service = TicketServiceImpl.getTicketService();
+            TicketService service = ServiceFactory.getTicketService();
             service.saveAll(preOrdered);
             session.removeAttribute(A_TICKETS);
         }

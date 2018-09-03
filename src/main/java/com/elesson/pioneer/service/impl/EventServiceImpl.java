@@ -20,7 +20,7 @@ public class EventServiceImpl implements EventService {
         eventDao = DaoEntityFactory.getEventDao();
     }
 
-    public static EventService getEventService() {
+    public static EventService getService() {
         if(service ==null) {
             synchronized (EventServiceImpl.class) {
                 if(service ==null) {

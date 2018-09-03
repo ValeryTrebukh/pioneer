@@ -3,8 +3,8 @@ package com.elesson.pioneer.web.servlet;
 import com.elesson.pioneer.dao.exception.DBException;
 import com.elesson.pioneer.dao.exception.DuplicateEntityException;
 import com.elesson.pioneer.model.User;
+import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.UserService;
-import com.elesson.pioneer.service.impl.UserServiceImpl;
 import com.elesson.pioneer.web.util.UserDataValidation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +44,7 @@ public class RegistrationServlet extends HttpServlet {
             req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
         } else {
             try {
-                UserService userService = UserServiceImpl.getUserService();
+                UserService userService = ServiceFactory.getUserService();
                 User user = new User(regName, regEmail, regPassword, User.Role.CLIENT);
                 userService.create(user);
                 HttpSession session = req.getSession();
