@@ -7,12 +7,13 @@ import java.time.LocalTime;
 
 public class TestData {
 
-    static final User USER_1 = new User(1, "Ромашова Ольга", "ro@gmail.com", null, User.Role.ADMIN);
-    static final User USER_2 = new User(2, "Тищенко Екатерина", "te@gmail.com", null, User.Role.CLIENT);
-    static final User USER_3 = new User(3, "Потапова Алеся", "pa@gmail.com", null, User.Role.CLIENT);
-    static final User USER_4 = new User(4, "Смирнова Ольга", "so@gmail.com", null, User.Role.CLIENT);
-    static final User USER_5 = new User(5, "Буланов Тимур", "bt@gmail.com", null, User.Role.CLIENT);
+    public static final User USER_1 = new User(1, "Ромашова Ольга", "ro@gmail.com", "1111", User.Role.ADMIN);
+    public static final User USER_2 = new User(2, "Тищенко Екатерина", "te@gmail.com", null, User.Role.CLIENT);
+    public static final User USER_3 = new User(3, "Потапова Алеся", "pa@gmail.com", null, User.Role.CLIENT);
+    public static final User USER_4 = new User(4, "Смирнова Ольга", "so@gmail.com", null, User.Role.CLIENT);
+    public static final User USER_5 = new User(5, "Буланов Тимур", "bt@gmail.com", null, User.Role.CLIENT);
     static final User USER_6 = new User("Ромашова Ирина", "ri@gmail.com", "test", User.Role.CLIENT);
+    static final User USER_6_2 = new User("Ромашова Ирина", "ri@gmail.com", "test", User.Role.CLIENT);
     static final User USER_7 = new User(2, "Смирнова Екатерина", "te@gmail.com", "test", User.Role.CLIENT);
 
     static final Movie MOVIE_1 = new Movie(1, "Terminator", "science-fiction action", 107, 1984, true);

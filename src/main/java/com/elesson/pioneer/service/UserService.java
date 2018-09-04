@@ -39,7 +39,7 @@ public interface UserService {
      * @throws DBException the general exception to cover all SQL exceptions
      * @throws NotFoundEntityException if no record found
      */
-    User get(int id) throws NotFoundEntityException, DBException;
+    User getById(int id) throws NotFoundEntityException, DBException;
 
     /**
      * Method process request to DAO layer and confirms the operation success.

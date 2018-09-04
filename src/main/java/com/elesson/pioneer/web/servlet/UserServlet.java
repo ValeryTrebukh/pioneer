@@ -43,7 +43,7 @@ public class UserServlet extends HttpServlet {
                 case EDIT:
                 case CREATE:
                     final User user = CREATE.equals(action) ?
-                            new User() : service.get(Integer.parseInt(req.getParameter(A_UID)));
+                            new User() : service.getById(Integer.parseInt(req.getParameter(A_UID)));
                     req.setAttribute(A_USER, user);
                     req.getRequestDispatcher(USER_FORM_JSP).forward(req, resp);
                     break;

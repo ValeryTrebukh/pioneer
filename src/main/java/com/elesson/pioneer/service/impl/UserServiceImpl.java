@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public User get(int id) {
+    public User getById(int id) {
         return checkNotFoundWithId(userDao.getById(id), id);
     }
 
