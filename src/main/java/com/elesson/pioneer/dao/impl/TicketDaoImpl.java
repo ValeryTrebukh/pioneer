@@ -16,6 +16,20 @@ import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
  */
 public class TicketDaoImpl implements TicketDao {
 
+    private static final String SELECT_TICKETS_BY_EVENT = "SELECT * FROM tickets " +
+            "INNER JOIN events ON tickets.event_id = events.eid " +
+            "INNER JOIN users ON tickets.user_id = users.uid " +
+            "INNER JOIN movies on events.movie_id = movies.mid " +
+            "INNER JOIN seances on events.seance_id = seances.sid " +
+            "WHERE event_id=?";
+    private static final String SELECT_TICKETS_BY_USER = "SELECT * FROM tickets " +
+            "INNER JOIN events ON tickets.event_id = events.eid " +
+            "INNER JOIN users ON tickets.user_id = users.uid " +
+            "INNER JOIN movies on events.movie_id = movies.mid " +
+            "INNER JOIN seances on events.seance_id = seances.sid " +
+            "WHERE user_id=?";
+    private static final String INSERT_TICKETS = "INSERT INTO tickets (event_id, user_id, row, seat) VALUES (?, ?, ?, ?)";
+
     private static final Logger logger = LogManager.getLogger(TicketDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
@@ -40,13 +54,7 @@ public class TicketDaoImpl implements TicketDao {
      */
     @Override
     public List<Ticket> getAllByEventId(Integer id) {
-        String query = "SELECT * FROM tickets " +
-                "INNER JOIN events ON tickets.event_id = events.eid " +
-                "INNER JOIN users ON tickets.user_id = users.uid " +
-                "INNER JOIN movies on events.movie_id = movies.mid " +
-                "INNER JOIN seances on events.seance_id = seances.sid " +
-                "WHERE event_id=?";
-        return getAllByForeignId(query, id);
+        return getAllByForeignId(SELECT_TICKETS_BY_EVENT, id);
     }
 
     /**
@@ -54,14 +62,7 @@ public class TicketDaoImpl implements TicketDao {
      */
     @Override
     public List<Ticket> getAllByUserId(Integer id) {
-        String query = "SELECT * FROM tickets " +
-                "INNER JOIN events ON tickets.event_id = events.eid " +
-                "INNER JOIN users ON tickets.user_id = users.uid " +
-                "INNER JOIN movies on events.movie_id = movies.mid " +
-                "INNER JOIN seances on events.seance_id = seances.sid " +
-                "WHERE user_id=?";
-
-        return getAllByForeignId(query, id);
+        return getAllByForeignId(SELECT_TICKETS_BY_USER, id);
     }
 
     private List<Ticket> getAllByForeignId(String query, Integer id) {
@@ -73,9 +74,7 @@ public class TicketDaoImpl implements TicketDao {
      */
     @Override
     public int save(List<Ticket> tickets) {
-        String query = "INSERT INTO tickets (event_id, user_id, row, seat) VALUES (?, ?, ?, ?)";
         int paramsLen = 4;
-
         int c = 0;
         Object[][] params2 = new Integer[tickets.size()][paramsLen];
         for(Ticket t : tickets) {
@@ -85,7 +84,6 @@ public class TicketDaoImpl implements TicketDao {
             params2[c][3] = t.getSeat();
             c++;
         }
-
-        return simpleDao.save(query, params2);
+        return simpleDao.save(INSERT_TICKETS, params2);
     }
 }

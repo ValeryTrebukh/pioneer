@@ -16,6 +16,14 @@ import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
  */
 public class UserDaoImpl implements UserDao {
 
+    private static final String INSERT_USER = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_USER_WITHOUT_PASSWORD = "UPDATE users SET name=?, email=?, role=? WHERE uid=?";
+    private static final String UPDATE_USER_WITH_PASSWORD = "UPDATE users SET name=?, email=?, password=?, role=? WHERE uid=?";
+    private static final String SELECT_USERS = "SELECT * FROM users";
+    private static final String DELETE_USER = "DELETE FROM users WHERE uid=?";
+    private static final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?";
+    private static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE uid=?";
+
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
@@ -40,8 +48,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public List<User> getAll() {
-        String query = "SELECT * FROM users";
-        return simpleDao.getAll(User.class, query);
+        return simpleDao.getAll(User.class, SELECT_USERS);
     }
 
     /**
@@ -50,15 +57,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User save(User user) {
         if (user.isNew()) {
-            String query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
-            return simpleDao.save(user, query, user.getName(), user.getEmail(), user.getPassword(), User.Role.CLIENT.toString());
+            return simpleDao.save(user, INSERT_USER, user.getName(), user.getEmail(), user.getPassword(), User.Role.CLIENT.toString());
         } else {
             if(user.getPassword().isEmpty()) {
-                String query = "UPDATE users SET name=?, email=?, role=? WHERE uid=?";
-                return simpleDao.update(user, query, user.getName(), user.getEmail(), user.getRole().toString(), user.getId());
+                return simpleDao.update(user, UPDATE_USER_WITHOUT_PASSWORD, user.getName(), user.getEmail(), user.getRole().toString(), user.getId());
             } else {
-                String query = "UPDATE users SET name=?, email=?, password=?, role=? WHERE uid=?";
-                return simpleDao.update(user, query, user.getName(), user.getEmail(), user.getPassword(), user.getRole().toString(), user.getId());
+                return simpleDao.update(user, UPDATE_USER_WITH_PASSWORD, user.getName(), user.getEmail(), user.getPassword(), user.getRole().toString(), user.getId());
             }
         }
     }
@@ -68,8 +72,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public boolean delete(int id) {
-        String query = "DELETE FROM users WHERE uid=?;";
-        return simpleDao.delete(query, id);
+        return simpleDao.delete(DELETE_USER, id);
     }
 
     /**
@@ -77,8 +80,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User getByEmail(String email) {
-        String query = "SELECT * FROM users WHERE email=?";
-        return getUser(query, email);
+        return getUser(SELECT_USER_BY_EMAIL, email);
     }
 
     /**
@@ -86,8 +88,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User getById(int id) {
-        String query = "SELECT * FROM users WHERE uid=?";
-        return getUser(query, id);
+        return getUser(SELECT_USER_BY_ID, id);
     }
 
     /**

@@ -16,6 +16,12 @@ import static com.elesson.pioneer.dao.DaoStrategyFactory.getStrategy;
  */
 public class MovieDaoImpl implements MovieDao {
 
+    private static final String SELECT_ALL_MOVIES = "SELECT * FROM movies";
+    private static final String INSERT_MOVIE = "INSERT INTO movies (name, genre, duration, year, active) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_MOVIE = "UPDATE movies SET name=?, genre=?, duration=?, year=?, active=? WHERE mid=?";
+    private static final String DELETE_MOVIE = "DELETE FROM movies WHERE mid=?";
+    private static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies WHERE mid=?";
+
     private static final Logger logger = LogManager.getLogger(MovieDaoImpl.class);
     private Dao simpleDao = getStrategy(DaoStrategyFactory.Strategy.JDBC);
 
@@ -40,8 +46,7 @@ public class MovieDaoImpl implements MovieDao {
      */
     @Override
     public List<Movie> getAll() {
-        String query = "SELECT * FROM movies";
-        return simpleDao.getAll(Movie.class, query);
+        return simpleDao.getAll(Movie.class, SELECT_ALL_MOVIES);
     }
 
     /**
@@ -50,11 +55,9 @@ public class MovieDaoImpl implements MovieDao {
     @Override
     public Movie save(Movie movie) {
         if(movie.isNew()) {
-            String query = "INSERT INTO movies (name, genre, duration, year, active) VALUES (?, ?, ?, ?, ?)";
-            return simpleDao.save(movie, query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive());
+            return simpleDao.save(movie, INSERT_MOVIE, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive());
         } else {
-            String query = "UPDATE movies SET name=?, genre=?, duration=?, year=?, active=? WHERE mid=?";
-            return simpleDao.update(movie, query, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive(), movie.getId());
+            return simpleDao.update(movie, UPDATE_MOVIE, movie.getName(), movie.getGenre(), movie.getDuration(), movie.getYear(), movie.isActive(), movie.getId());
         }
     }
 
@@ -63,8 +66,7 @@ public class MovieDaoImpl implements MovieDao {
      */
     @Override
     public boolean delete(int id) {
-        String query = "DELETE FROM movies WHERE mid=?";
-        return simpleDao.delete(query, id);
+        return simpleDao.delete(DELETE_MOVIE, id);
     }
 
     /**
@@ -72,7 +74,6 @@ public class MovieDaoImpl implements MovieDao {
      */
     @Override
     public Movie getById(int id) {
-        String query = "SELECT * FROM movies WHERE mid=?";
-        return simpleDao.get(Movie.class, query, id);
+        return simpleDao.get(Movie.class, SELECT_MOVIE_BY_ID, id);
     }
 }

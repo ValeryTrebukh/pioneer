@@ -17,6 +17,13 @@ import static com.elesson.pioneer.dao.DaoStrategyFactory.*;
  */
 public class EventDaoImpl implements EventDao {
 
+    private static final String GET_EVENT_BY_ID = "SELECT * FROM events INNER JOIN seances on events.seance_id = seances.sid " +
+            "INNER JOIN movies on events.movie_id = movies.mid WHERE events.eid=?";
+    private static final String GET_EVENT_BY_DATE = "SELECT * FROM events RIGHT JOIN seances on events.seance_id = seances.sid " +
+            "INNER JOIN movies on events.movie_id = movies.mid WHERE events.date=? ORDER BY seances.sid";
+    private static final String INSERT_EVENT = "INSERT INTO events (movie_id, date, seance_id) VALUES (?, ?, ?)";
+    private static final String DELETE_EVENT = "DELETE FROM events WHERE eid=?";
+
     private static final Logger logger = LogManager.getLogger(EventDaoImpl.class);
     private Dao simpleDao = getStrategy(Strategy.JDBC);
 
@@ -41,9 +48,7 @@ public class EventDaoImpl implements EventDao {
      */
     @Override
     public Event getById(int id) {
-        String query = "SELECT * FROM events INNER JOIN seances on events.seance_id = seances.sid " +
-                "INNER JOIN movies on events.movie_id = movies.mid WHERE events.eid=?";
-        return simpleDao.get(Event.class, query, id);
+        return simpleDao.get(Event.class, GET_EVENT_BY_ID, id);
     }
 
     /**
@@ -51,9 +56,7 @@ public class EventDaoImpl implements EventDao {
      */
     @Override
     public List<Event> getByDate(LocalDate date) {
-        String query = "SELECT * FROM events RIGHT JOIN seances on events.seance_id = seances.sid " +
-                "INNER JOIN movies on events.movie_id = movies.mid WHERE events.date=? ORDER BY seances.sid";
-        return simpleDao.getAll(Event.class, query, Date.valueOf(date));
+        return simpleDao.getAll(Event.class, GET_EVENT_BY_DATE, Date.valueOf(date));
     }
 
     /**
@@ -61,8 +64,7 @@ public class EventDaoImpl implements EventDao {
      */
     @Override
     public Event save(Event event) {
-        String query = "INSERT INTO events (movie_id, date, seance_id) VALUES (?, ?, ?)";
-        return simpleDao.save(event, query, event.getMovie().getId(), Date.valueOf(event.getDate()), event.getSeance().getId());
+        return simpleDao.save(event, INSERT_EVENT, event.getMovie().getId(), Date.valueOf(event.getDate()), event.getSeance().getId());
     }
 
     /**
@@ -70,7 +72,6 @@ public class EventDaoImpl implements EventDao {
      */
     @Override
     public boolean delete(int id) {
-        String query = "DELETE FROM events WHERE eid=?";
-        return simpleDao.delete(query, id);
+        return simpleDao.delete(DELETE_EVENT, id);
     }
 }

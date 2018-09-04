@@ -5,7 +5,9 @@ import com.elesson.pioneer.dao.TicketDao;
 import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.service.TicketService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
 
@@ -45,8 +47,9 @@ public class TicketServiceImpl implements TicketService {
      */
     @Override
     public List<Ticket> getAllTicketsByUserId(Integer id) {
-        //TODO date after today
-        return ticketDao.getAllByUserId(id);
+        return ticketDao.getAllByUserId(id).stream()
+                .filter(m -> m.getEvent().getDate().isAfter(LocalDate.now().minusDays(1)))
+                .collect(Collectors.toList());
     }
 
     /**
