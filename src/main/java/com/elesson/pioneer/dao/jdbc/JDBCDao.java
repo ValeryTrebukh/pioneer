@@ -118,36 +118,22 @@ public class JDBCDao implements Dao {
     @Override
     public <T extends Entity> int save(String query, Object[][] values) {
         int count = 0;
-        DBConnection con = ConnectionPool.getPool().getConnection();
-        try {
-            PreparedStatement pst;
-            con.setAutoCommit(false);
+
+        try (DBConnection con = ConnectionPool.getPool().getConnection()) {
+            PreparedStatement pst = con.prepareStatement(query);
             for(Object[] ob : values) {
-                pst = con.prepareInsertStatement(query, ob);
-                pst.executeUpdate();
+                con.setValues(pst, ob);
+                pst.addBatch();
                 count++;
             }
-            con.commit();
+            pst.executeBatch();
         } catch (SQLException e) {
             if(e.getMessage().contains("Duplicate")) {
                 logger.error(e);
                 throw new DuplicateEntityException();
             }
             logger.error(e);
-            try {
-                con.rollback();
-            } catch (SQLException e1) {
-                logger.error(e1);
-            }
             throw new DBException("Unable to save new records");
-        }
-        finally {
-            try {
-                con.setAutoCommit(true);
-                con.close();
-            } catch (SQLException e) {
-                logger.error(e);
-            }
         }
         return count;
     }

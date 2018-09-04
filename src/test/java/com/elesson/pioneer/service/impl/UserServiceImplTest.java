@@ -70,8 +70,8 @@ public class UserServiceImplTest {
 
     @Test(expected = DBException.class)
     public void getThrowsDBException() {
-        when(dao.getById(11)).thenThrow(DBException.class);
-        service.getById(11);
+        when(dao.getById(-11)).thenThrow(DBException.class);
+        service.getById(-11);
     }
 
     @Test

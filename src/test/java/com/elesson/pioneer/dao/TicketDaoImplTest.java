@@ -35,7 +35,8 @@ public class TicketDaoImplTest {
     public void save() {
         List<Ticket> l = new ArrayList<>();
         l.add(TICKET_9);
+        l.add(TICKET_10);
         ticketDao.save(l);
-        assertArrayEquals(new Ticket[]{TICKET_7, TICKET_8, TICKET_9}, ticketDao.getAllByUserId(5).toArray());
+        assertArrayEquals(new Ticket[]{TICKET_7, TICKET_8, TICKET_9, TICKET_10}, ticketDao.getAllByUserId(5).toArray());
     }
 }

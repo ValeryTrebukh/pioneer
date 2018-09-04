@@ -42,4 +42,5 @@ public class TestData {
     static final Ticket TICKET_7 = new Ticket(7, 5, 1, 4 ,5);
     static final Ticket TICKET_8 = new Ticket(8, 5, 1, 4 ,6);
     static final Ticket TICKET_9 = new Ticket(9, 5, 1, 4 ,7);
+    static final Ticket TICKET_10 = new Ticket(10, 5, 1, 4 ,8);
 }

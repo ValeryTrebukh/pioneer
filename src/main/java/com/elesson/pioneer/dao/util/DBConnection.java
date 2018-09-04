@@ -124,7 +124,7 @@ public class DBConnection implements AutoCloseable {
         return pst;
     }
 
-    private void setValues(PreparedStatement pst, Object[] values) throws SQLException {
+    public void setValues(PreparedStatement pst, Object[] values) throws SQLException {
         if(values == null) {
             return;
         }
