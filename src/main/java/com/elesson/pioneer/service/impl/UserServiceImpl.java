@@ -92,6 +92,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAll() {
-        return userDao.getAll();
+
+        if(UserCache.getUsers().isEmpty()) {
+            UserCache.setUsers(userDao.getAll());
+        }
+        return UserCache.getUsers();
     }
 }

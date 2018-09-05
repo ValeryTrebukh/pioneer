@@ -1,6 +1,5 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.DaoEntityFactory;
 import com.elesson.pioneer.model.User;
 
 import java.util.ArrayList;
@@ -16,17 +15,14 @@ public class UserCache {
     private static volatile List<User> users = new ArrayList<>();
 
     public static List<User> getUsers() {
-        if(users.isEmpty()) {
-            synchronized (UserCache.class) {
-                if(users.isEmpty()) {
-                    users = DaoEntityFactory.getUserDao().getAll();
-                }
-            }
-        }
         return users;
     }
 
-    public static synchronized void invalidate() {
+    public static void setUsers(List<User> users) {
+        UserCache.users = users;
+    }
+
+    public static void invalidate() {
         users.clear();
     }
 }

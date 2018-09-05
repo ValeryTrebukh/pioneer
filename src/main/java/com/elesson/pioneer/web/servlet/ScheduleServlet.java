@@ -40,7 +40,10 @@ public class ScheduleServlet extends HttpServlet {
         String date = req.getParameter(A_DATE);
         try {
             LocalDate localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
-            localDate = localDate.isBefore(LocalDate.now()) ? LocalDate.now() : localDate;
+            if(localDate.isBefore(LocalDate.now()) || localDate.isAfter(LocalDate.now().plusDays(7))) {
+                logger.warn("requested date is iou of allowed interval");
+                resp.setStatus(404);
+            }
 
             req.setAttribute(A_EVENTS, service.getEvents(localDate));
             req.setAttribute(A_NEXT_WEEK, getNextWeek());

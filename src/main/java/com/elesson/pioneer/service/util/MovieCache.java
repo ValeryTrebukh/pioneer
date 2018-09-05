@@ -1,12 +1,9 @@
 package com.elesson.pioneer.service.util;
 
-import com.elesson.pioneer.dao.DaoEntityFactory;
-import com.elesson.pioneer.dao.impl.MovieDaoImpl;
 import com.elesson.pioneer.model.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -18,21 +15,14 @@ public class MovieCache {
     private static volatile List<Movie> movies = new ArrayList<>();
 
     public static List<Movie> getMovies() {
-        if(movies.isEmpty()) {
-            synchronized (UserCache.class) {
-                if(movies.isEmpty()) {
-                    movies = DaoEntityFactory.getMovieDao().getAll();
-                }
-            }
-        }
         return movies;
     }
 
-    public static List<Movie> getActiveMovies() {
-        return getMovies().stream().filter(Movie::isActive).collect(Collectors.toList());
+    public static void setMovies(List<Movie> movies) {
+        MovieCache.movies = movies;
     }
 
-    public static synchronized void invalidate() {
+    public static void invalidate() {
         movies.clear();
     }
 }

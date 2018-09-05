@@ -5,7 +5,6 @@ import com.elesson.pioneer.model.Movie;
 import com.elesson.pioneer.service.MovieService;
 import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
-import com.elesson.pioneer.service.util.MovieCache;
 import com.elesson.pioneer.service.util.Paginator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +70,7 @@ public class MovieManagerServlet extends HttpServlet {
     private void setPageDataToRequest(HttpServletRequest req) {
         int pageSize = Integer.parseInt(req.getServletContext().getInitParameter(A_PAGE_SIZE));
         Paginator<Movie> paginator = new Paginator<>(pageSize);
-        List<Movie> movies = MovieCache.getMovies();
+        List<Movie> movies = ServiceFactory.getMovieService().getAllMovies();
         String sPage = req.getParameter(A_PAGE);
         int page = sPage !=null ? Integer.parseInt(sPage) : 1;
         int pagesCount = paginator.getPageCount(movies);

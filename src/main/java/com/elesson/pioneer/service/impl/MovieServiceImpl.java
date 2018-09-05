@@ -7,6 +7,7 @@ import com.elesson.pioneer.service.MovieService;
 import com.elesson.pioneer.service.util.MovieCache;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFound;
 import static com.elesson.pioneer.service.util.ServiceValidation.checkNotFoundWithId;
@@ -77,7 +78,20 @@ public class MovieServiceImpl implements MovieService {
      */
     @Override
     public List<Movie> getAllMovies() {
-        return movieDao.getAll();
+        if(MovieCache.getMovies().isEmpty()) {
+            MovieCache.setMovies(movieDao.getAll());
+        }
+        return MovieCache.getMovies();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Movie> getActiveMovies() {
+        if(MovieCache.getMovies().isEmpty()) {
+            MovieCache.setMovies(movieDao.getAll());
+        }
+        return MovieCache.getMovies().stream().filter(Movie::isActive).collect(Collectors.toList());
+    }
 }

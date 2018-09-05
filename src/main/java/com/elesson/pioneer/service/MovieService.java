@@ -57,4 +57,12 @@ public interface MovieService {
      */
     List<Movie> getAllMovies() throws DBException;
 
+    /**
+     * Returns a list of movies which have parameter 'active' set to true.
+     *
+     * @return the list of {@code Movie} class objects
+     * @throws DBException the general exception to cover all SQL exceptions
+     */
+    List<Movie> getActiveMovies() throws DBException;
+
 }

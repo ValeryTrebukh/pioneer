@@ -6,16 +6,17 @@ import com.elesson.pioneer.model.User;
 import com.elesson.pioneer.service.ServiceFactory;
 import com.elesson.pioneer.service.UserService;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
+import com.elesson.pioneer.service.util.UserCache;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.elesson.pioneer.dao.TestData.*;
-import static com.elesson.pioneer.dao.TestData.USER_5;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
@@ -94,12 +95,13 @@ public class UserServiceImplTest {
     @Test
     public void update() {
         when(dao.save(USER_1)).thenReturn(USER_1);
+        UserCache.setUsers(new ArrayList<>(Arrays.asList(USER_1, USER_2)));
         service.update(USER_1);
     }
 
     @Test
     public void getAll() {
-        when(dao.getAll()).thenAnswer(i -> Arrays.asList(USER_1, USER_2, USER_3, USER_4, USER_5));
+        when(dao.getAll()).thenAnswer(i -> new ArrayList<>(Arrays.asList(USER_1, USER_2, USER_3, USER_4, USER_5)));
         assertArrayEquals(new User[]{USER_1, USER_2, USER_3, USER_4, USER_5}, service.getAll().toArray());
     }
 }
