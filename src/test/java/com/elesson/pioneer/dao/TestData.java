@@ -16,13 +16,14 @@ public class TestData {
     static final User USER_6_2 = new User("Ромашова Ирина", "ri@gmail.com", "test", User.Role.CLIENT);
     static final User USER_7 = new User(2, "Смирнова Екатерина", "te@gmail.com", "test", User.Role.CLIENT);
 
-    static final Movie MOVIE_1 = new Movie(1, "Terminator", "science-fiction action", 107, 1984, true);
-    static final Movie MOVIE_2 = new Movie(2, "Titanic", "epic romance", 195, 1997, true);
+    public static final Movie MOVIE_1 = new Movie(1, "Terminator", "science-fiction action", 107, 1984, true);
+    public static final Movie MOVIE_2 = new Movie(2, "Titanic", "epic romance", 195, 1997, true);
     static final Movie MOVIE_3 = new Movie(3, "Fifty Shades of Grey", "erotic romantic drama", 125, 2015, true);
     static final Movie MOVIE_4 = new Movie(4, "Monsters, Inc.", "computer-animated comedy", 92, 2001, true);
     static final Movie MOVIE_5 = new Movie(5, "Левиафан", "драма", 142, 2014, true);
     static final Movie MOVIE_6 = new Movie("Terminator: Judgement Day", "science-fiction action", 137, 1991, true);
     static final Movie MOVIE_7 = new Movie(2, "Титаник", "фильм-катастрофа", 195, 1997, true);
+    public static final Movie INACTIVE = new Movie(5, "Левиафан", "драма", 142, 2014, false);
 
     static final Seance SEANCE_1 = new Seance(1, LocalTime.of(9, 0));
     static final Seance SEANCE_2 = new Seance(2, LocalTime.of(13, 0));
