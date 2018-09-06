@@ -6,6 +6,7 @@ import com.elesson.pioneer.model.Ticket;
 import com.elesson.pioneer.service.TicketService;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,7 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> getAllTicketsByUserId(Integer id) {
         return ticketDao.getAllByUserId(id).stream()
                 .filter(m -> m.getEvent().getDate().isAfter(LocalDate.now().minusDays(1)))
+                .sorted()
                 .collect(Collectors.toList());
     }
 

@@ -89,7 +89,8 @@ INSERT INTO events (movie_id, date, seance_id) VALUES
   (7, '2018-09-13', 1),
   (7, '2018-09-14', 1),
   (7, '2018-09-15', 1),
-  (4, '2018-09-16', 1);
+  (4, '2018-09-16', 1),
+  (4, '2018-09-12', 1);
 
 INSERT INTO tickets (event_id, user_id, row, seat) VALUES
   (2, 2, 4, 4),

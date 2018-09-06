@@ -100,7 +100,7 @@ div#logout {
     font-size: 18px;
 }
 
-div span {
+span {
     font-size: 14px;
 }
 
@@ -133,6 +133,94 @@ div#shownDay, div#shownPage {
 
 #shownDay div a{
     text-decoration: none;
+}
+
+.info-film {
+    min-height: 260px;
+    padding: 16px 0 0 16px;
+}
+
+.info-film > img {
+    float: left;
+    width: 200px;
+    height: 300px;
+    position: relative;
+}
+
+.info-film-content {
+    position: relative;
+    padding-bottom: 15px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.info-film .title-page {
+    text-align: left;
+    border: none;
+    position: relative;
+    margin-top: -5px;
+    padding: 0;
+}
+
+.title-page {
+    font-size: 24px;
+    padding: 20px 0 20px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid #d6d5d3;
+    margin-bottom: 10px;
+}
+
+.info-film p {
+    line-height: 16px;
+}
+.info-film .info {
+    font-size: 15px;
+    color: #010000;
+    font-style: italic;
+}
+
+ul {
+    list-style: none;
+    display: block;
+    margin: 0;
+    padding-left: 20px;
+}
+
+.data-film li {
+    padding: 3px 0;
+    width: 220px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.info-film-content .data-film p {
+    font-size: 15px;
+    margin: 3px;
+}
+.data-film .title-data-film {
+    float: left;
+    font-weight: bold;
+    padding-left: 0;
+}
+
+.seats {
+    padding-left: 16px;
+    padding-top: 30px;
+}
+
+.seats h4, .seats td {
+    text-align: center;
+}
+
+.seats div {
+    margin-left: 17%;
+    width: 66%;
+    border-top: darkcyan 2px solid;
+    padding-top: 60px;
 }
 
 /*            TABLES            */

@@ -41,15 +41,15 @@ public class ScheduleServlet extends HttpServlet {
         try {
             LocalDate localDate = date==null ? LocalDate.now() : LocalDate.parse(date);
             if(localDate.isBefore(LocalDate.now()) || localDate.isAfter(LocalDate.now().plusDays(7))) {
-                logger.warn("requested date is iou of allowed interval");
+                logger.warn("requested date is out of allowed interval");
                 resp.setStatus(404);
+            } else {
+                req.setAttribute(A_EVENTS, service.getEvents(localDate));
+                req.setAttribute(A_NEXT_WEEK, getNextWeek());
+                req.setAttribute(A_DATE, localDate);
+
+                req.getRequestDispatcher(SCHEDULE_JSP).forward(req, resp);
             }
-
-            req.setAttribute(A_EVENTS, service.getEvents(localDate));
-            req.setAttribute(A_NEXT_WEEK, getNextWeek());
-            req.setAttribute(A_DATE, localDate);
-
-            req.getRequestDispatcher(SCHEDULE_JSP).forward(req, resp);
         } catch (DateTimeParseException e) {
             logger.warn("Incorrect date input");
             resp.setStatus(404);

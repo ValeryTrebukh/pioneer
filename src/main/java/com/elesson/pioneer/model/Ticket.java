@@ -6,7 +6,7 @@ import java.util.Objects;
  * Represents a row in the &quot;tickets&quot; database table,
  * with each column mapped to a property of this class.
  */
-public class Ticket extends Entity {
+public class Ticket extends Entity implements Comparable<Ticket> {
 
     private Integer userId;
     private Integer eventId;
@@ -161,7 +161,16 @@ public class Ticket extends Entity {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(super.hashCode(), userId, eventId, row, seat);
+    }
+
+    @Override
+    public int compareTo(Ticket o) {
+        if(!event.getDate().equals(o.event.getDate())) {
+            return event.getDate().compareTo(o.event.getDate());
+        } else {
+            return event.getSeance().getId().compareTo(o.getEvent().getSeance().getId());
+        }
+
     }
 }

@@ -63,16 +63,22 @@ public class EventServlet extends HttpServlet {
                     break;
                 case VIEW:
                     int eventId = Integer.parseInt(eid);
-                    req.setAttribute(A_EVENT, service.getEvent(eventId));
+                    Event event = service.getEvent(eventId);
+                    if(event.getDate().isBefore(LocalDate.now()) || event.getDate().isAfter(LocalDate.now().plusDays(7))) {
+                        logger.warn("requested date is out of allowed interval");
+                        resp.setStatus(404);
+                    } else {
+                        req.setAttribute(A_EVENT, service.getEvent(eventId));
 
-                    int rows = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_ROWS));
-                    int seats = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_SEATS));
-                    Hall hall = new Hall(rows, seats);
-                    hall.place(tService.getAllTicketsByEventId(eventId));
-                    validatePreorders(req);
-                    hall.place((List<Ticket>) req.getSession().getAttribute(A_TICKETS));
-                    req.setAttribute(A_HALL, hall);
-                    req.getRequestDispatcher(EVENT_VIEW_JSP).forward(req, resp);
+                        int rows = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_ROWS));
+                        int seats = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_SEATS));
+                        Hall hall = new Hall(rows, seats);
+                        hall.place(tService.getAllTicketsByEventId(eventId));
+                        validatePreorders(req);
+                        hall.place((List<Ticket>) req.getSession().getAttribute(A_TICKETS));
+                        req.setAttribute(A_HALL, hall);
+                        req.getRequestDispatcher(EVENT_VIEW_JSP).forward(req, resp);
+                    }
                     break;
                 default:
                     resp.sendRedirect(SCHEDULE);
