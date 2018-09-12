@@ -21,8 +21,8 @@ public class DBHelper {
         if(appRB.getString("app.db_reset").equals("true")) {
             dLogger.info("Re-initializing database");
             if(dLogger.isDebugEnabled()) dLogger.debug("Initializing database started");
-            try {
-                Statement st = ConnectionPool.getPool().getConnection().createStatement();
+            try(DBConnection con = ConnectionPool.getPool().getConnection()) {
+                Statement st = con.createStatement();
                 Scanner sc = new Scanner(DBHelper.class.getResourceAsStream(appRB.getString("app.initdb")));
                 StringBuilder sb = new StringBuilder();
 
