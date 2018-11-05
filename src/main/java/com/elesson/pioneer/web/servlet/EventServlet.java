@@ -120,7 +120,7 @@ public class EventServlet extends HttpServlet {
         } catch (DuplicateEntityException de) {
             logger.warn(de);
             req.setAttribute(A_DUPLICATE, true);
-            req.setAttribute(A_MOVIES, ServiceFactory.getMovieService().getActiveMovies());
+            req.setAttribute(A_MOVIES, movieService.getActiveMovies());
             req.setAttribute(A_EVENT, event);
             req.getRequestDispatcher(EVENT_FORM_JSP).forward(req, resp);
         } catch (DBException e) {

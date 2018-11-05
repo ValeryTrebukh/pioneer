@@ -1,11 +1,10 @@
 package com.elesson.pioneer.web.servlet;
 
-import com.elesson.pioneer.dao.exception.DBException;
+import com.elesson.pioneer.dao.exception.*;
 import com.elesson.pioneer.model.*;
-import com.elesson.pioneer.service.EventService;
-import com.elesson.pioneer.service.MovieService;
-import com.elesson.pioneer.service.TicketService;
+import com.elesson.pioneer.service.*;
 import com.elesson.pioneer.service.exception.NotFoundEntityException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,15 +13,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -42,10 +38,21 @@ public class EventServletTest {
     @InjectMocks
     private EventServlet eventServlet = new EventServlet();
 
-    @Test
-    public void createAction_shouldNotCreateForNullUserInSession() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
+    @Before
+    public void setup() {
         when(request.getSession()).thenReturn(session);
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getParameter("action")).thenReturn("create");
+        when(request.getParameter("date")).thenReturn("2018-09-13");
+        when(session.getAttribute("authUser")).thenReturn(aUser);
+        when(request.getHeader("referer")).thenReturn("schedule?");
+        when(request.getParameter("eid")).thenReturn("5");
+        when(request.getParameter("mid")).thenReturn("1");
+        when(request.getParameter("sid")).thenReturn("1");
+    }
+
+    @Test
+    public void doGet_createAction_shouldNotCreateForNullUserInSession() throws Exception {
         when(session.getAttribute("authUser")).thenReturn(null);
 
         eventServlet.doGet(request, response);
@@ -58,10 +65,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void createAction_shouldNotCreateForNonAdminUserInSession() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_createAction_shouldNotCreateForNonAdminUserInSession() throws Exception {
         when(aUser.getRole()).thenReturn(User.Role.CLIENT);
 
         eventServlet.doGet(request, response);
@@ -74,11 +78,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void createAction_shouldRedirectToCreateForm() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getParameter("date")).thenReturn("2018-09-13");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_createAction_shouldRedirectToCreateForm() throws Exception {
         when(aUser.getRole()).thenReturn(User.Role.ADMIN);
         List<Movie> movieList = new ArrayList<>();
         when(movieService.getActiveMovies()).thenReturn(movieList);
@@ -93,13 +93,9 @@ public class EventServletTest {
     }
 
     @Test
-    public void deleteAction_shouldCallServiceDeleteMethod() throws Exception {
-        when(request.getParameter("eid")).thenReturn("5");
+    public void doGet_deleteAction_shouldCallServiceDeleteMethod() throws Exception {
         when(request.getParameter("action")).thenReturn("delete");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
         when(aUser.getRole()).thenReturn(User.Role.ADMIN);
-        when(request.getHeader("referer")).thenReturn("schedule?");
 
         eventServlet.doGet(request, response);
 
@@ -108,13 +104,9 @@ public class EventServletTest {
     }
 
     @Test
-    public void viewAction_shouldReturn404ForPastDate() throws Exception {
-        when(request.getParameter("eid")).thenReturn("5");
+    public void doGet_viewAction_shouldReturn404ForPastDate() throws Exception {
         when(request.getParameter("action")).thenReturn("view");
-        when(request.getParameter("date")).thenReturn("2018-09-13");
         when(service.getEvent(5)).thenReturn(new Event(LocalDate.now().minusDays(2)));
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
 
         eventServlet.doGet(request, response);
 
@@ -122,13 +114,9 @@ public class EventServletTest {
     }
 
     @Test
-    public void viewAction_shouldReturn404ForAnyDateAbove7Days() throws Exception {
-        when(request.getParameter("eid")).thenReturn("5");
+    public void doGet_viewAction_shouldReturn404ForAnyDateAbove7Days() throws Exception {
         when(request.getParameter("action")).thenReturn("view");
-        when(request.getParameter("date")).thenReturn("fake data");
         when(service.getEvent(5)).thenReturn(new Event(LocalDate.now().plusDays(8)));
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
 
         eventServlet.doGet(request, response);
 
@@ -136,17 +124,14 @@ public class EventServletTest {
     }
 
     @Test
-    public void viewAction_shouldRedirectToViewPageForCorrectDate() throws Exception {
-        when(request.getParameter("eid")).thenReturn("5");
+    public void doGet_viewAction_shouldRedirectToViewPageForCorrectDate() throws Exception {
         when(request.getParameter("action")).thenReturn("view");
-        when(request.getParameter("date")).thenReturn("2018-09-13");
         when(service.getEvent(5)).thenReturn(new Event(LocalDate.now()));
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
-        when(request.getServletContext()).thenReturn(servletContext);
         when(servletContext.getInitParameter(anyString())).thenReturn("5");
         when(tService.getAllTicketsByEventId(anyInt())).thenReturn(new ArrayList<>());
-        when(session.getAttribute("tickets")).thenReturn(new ArrayList<>());
+        List<Ticket> ticketList = new ArrayList<>();
+        ticketList.add(new Ticket(1, 1, 1));
+        when(session.getAttribute("tickets")).thenReturn(ticketList);
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
 
         eventServlet.doGet(request, response);
@@ -157,10 +142,8 @@ public class EventServletTest {
     }
 
     @Test
-    public void shouldRedirectToSelfForIncorrectAction() throws Exception {
+    public void doGet_shouldRedirectToSelfForIncorrectAction() throws Exception {
         when(request.getParameter("action")).thenReturn("default");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
 
         eventServlet.doGet(request, response);
 
@@ -168,10 +151,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void shouldReturn404ForDateTimeParseException() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_shouldReturn404ForDateTimeParseException() throws Exception {
         when(aUser.getRole()).thenThrow(new DateTimeParseException("", "", 1));
 
         eventServlet.doGet(request, response);
@@ -180,10 +160,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void shouldReturn404ForNumberFormatException() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_shouldReturn404ForNumberFormatException() throws Exception {
         when(aUser.getRole()).thenThrow(new NumberFormatException());
 
         eventServlet.doGet(request, response);
@@ -192,10 +169,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void shouldReturn404ForNotFoundEntityException() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_shouldReturn404ForNotFoundEntityException() throws Exception {
         when(aUser.getRole()).thenThrow(new NotFoundEntityException(""));
 
         eventServlet.doGet(request, response);
@@ -204,10 +178,7 @@ public class EventServletTest {
     }
 
     @Test
-    public void shouldReturn500ForDBException() throws Exception {
-        when(request.getParameter("action")).thenReturn("create");
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authUser")).thenReturn(aUser);
+    public void doGet_shouldReturn500ForDBException() throws Exception {
         when(aUser.getRole()).thenThrow(new DBException(""));
 
         eventServlet.doGet(request, response);
@@ -215,5 +186,50 @@ public class EventServletTest {
         verify(response).setStatus(500);
     }
 
+    @Test
+    public void doPost_shouldSaveNewEntity() throws Exception {
+        eventServlet.doPost(request, response);
 
+        verify(service).save(any(Event.class));
+        verify(response).sendRedirect(anyString());
+    }
+
+    @Test
+    public void doPost_shouldReturn404ForDateTimeParseException() throws Exception {
+        when(request.getHeader("referer")).thenThrow(new DateTimeParseException("", "", 1));
+
+        eventServlet.doPost(request, response);
+
+        verify(response).setStatus(404);
+    }
+
+    @Test
+    public void doPost_shouldReturn404ForNumberFormatException() throws Exception {
+        when(request.getHeader("referer")).thenThrow(new NumberFormatException(""));
+
+        eventServlet.doPost(request, response);
+
+        verify(response).setStatus(404);
+    }
+
+    @Test
+    public void doPost_shouldRedirectToSelfForDuplicateEntityException() throws Exception {
+        when(request.getHeader("referer")).thenThrow(new DuplicateEntityException());
+        when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
+        when(movieService.getActiveMovies()).thenReturn(Collections.emptyList());
+
+        eventServlet.doPost(request, response);
+
+        verify(request).getRequestDispatcher("jsp/eventForm.jsp");
+        verify(requestDispatcher).forward(request, response);
+    }
+
+    @Test
+    public void doPost_shouldReturn500ForDBException() throws Exception {
+        when(request.getHeader("referer")).thenThrow(new DBException(""));
+
+        eventServlet.doPost(request, response);
+
+        verify(response).setStatus(500);
+    }
 }
