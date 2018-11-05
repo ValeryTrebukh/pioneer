@@ -32,12 +32,12 @@ import static com.elesson.pioneer.web.util.Helper.getBackReference;
  */
 public class EventServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(EventServlet.class);
+    private MovieService movieService = ServiceFactory.getMovieService();
+    private EventService service = ServiceFactory.getEventService();
+    private TicketService tService = ServiceFactory.getTicketService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        EventService service = ServiceFactory.getEventService();
-        TicketService tService = ServiceFactory.getTicketService();
 
         String action = req.getParameter(A_ACTION);
         String eid = req.getParameter(A_EID);
@@ -50,8 +50,8 @@ public class EventServlet extends HttpServlet {
                 case CREATE:
                     if(aUser!=null && aUser.getRole()==User.Role.ADMIN) {
                         req.setAttribute(A_EVENT, new Event(LocalDate.parse(date)));
+                        req.setAttribute(A_MOVIES, movieService.getActiveMovies());
                         req.setAttribute(A_ACTION, action);
-                        req.setAttribute(A_MOVIES, ServiceFactory.getMovieService().getActiveMovies());
                         req.getRequestDispatcher(EVENT_FORM_JSP).forward(req, resp);
                     }
                     break;
@@ -68,7 +68,7 @@ public class EventServlet extends HttpServlet {
                         logger.warn("requested date is out of allowed interval");
                         resp.setStatus(404);
                     } else {
-                        req.setAttribute(A_EVENT, service.getEvent(eventId));
+                        req.setAttribute(A_EVENT, event);
 
                         int rows = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_ROWS));
                         int seats = Integer.parseInt(req.getServletContext().getInitParameter(A_HALL_SEATS));
@@ -108,7 +108,6 @@ public class EventServlet extends HttpServlet {
         String sid = req.getParameter(A_SID);
         String date = req.getParameter(A_DATE);
 
-        EventService service = ServiceFactory.getEventService();
         Event event = null;
         try{
             event = new Event(null, LocalDate.parse(date),
