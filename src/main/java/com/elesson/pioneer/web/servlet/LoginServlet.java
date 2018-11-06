@@ -24,13 +24,13 @@ import static com.elesson.pioneer.web.util.Constants.*;
  */
 public class LoginServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(LoginServlet.class);
+    private UserService userService = ServiceFactory.getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String authEmail = req.getParameter(A_AUTH_USER_EMAIL);
 
         try{
-            UserService userService = ServiceFactory.getUserService();
             User aUser = userService.getByEmail(authEmail);
             if(aUser!=null && aUser.getPassword().equals(encrypt(req.getParameter(A_AUTH_USER_PASS)))) {
                 HttpSession session = req.getSession();

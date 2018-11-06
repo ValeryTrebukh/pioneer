@@ -23,12 +23,12 @@ import static com.elesson.pioneer.web.util.Constants.*;
  */
 public class MyServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(MyServlet.class);
+    private TicketService service = ServiceFactory.getTicketService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         User aUser = (User)session.getAttribute(A_AUTH_USER);
-        TicketService service = ServiceFactory.getTicketService();
 
         if(aUser!=null) {
             try {
