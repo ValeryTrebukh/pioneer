@@ -11,7 +11,7 @@ set +x
 echo 'The following complex command extracts the value of the <name/> element'
 echo 'within <project/> of your Java/Maven project''s "pom.xml" file.'
 set -x
-NAME=`mvn help:evaluate -Dexpression=project.finalName | grep "^[^\[]"`
+NAME=`mvn help:evaluate -Dexpression=project.name | grep "^[^\[]"`
 set +x
 
 echo 'The following complex command behaves similarly to the previous one but'
@@ -23,4 +23,5 @@ set +x
 echo 'The following command runs and outputs the execution of your Java'
 echo 'application (which Jenkins built using Maven) to the Jenkins UI.'
 set -x
-mv target/${NAME}.war /home/john/work/${NAME}.war
+ls -a ../
+ls -a ../../

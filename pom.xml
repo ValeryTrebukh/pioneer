@@ -9,7 +9,7 @@
     <version>1.0</version>
     <packaging>war</packaging>
 
-    <name>Pioneer</name>
+    <name>pioneer</name>
     <!--<url>TBD</url>-->
 
     <properties>
@@ -21,7 +21,6 @@
     </properties>
 
     <build>
-        <finalName>pioneer</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
