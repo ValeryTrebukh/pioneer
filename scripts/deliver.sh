@@ -23,5 +23,4 @@ set +x
 echo 'The following command runs and outputs the execution of your Java'
 echo 'application (which Jenkins built using Maven) to the Jenkins UI.'
 set -x
-ls -a ../
-ls -a ../../
+mv target/${NAME}-${VERSION}.war /opt/tomcat-9.0.7/webapps/${NAME}-${VERSION}.war
