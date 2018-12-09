@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh 'echo "tbd"'
+                sh 'pwd'
             }
         }
     }
